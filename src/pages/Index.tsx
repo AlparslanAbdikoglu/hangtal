@@ -1,6 +1,7 @@
 import { Hero } from "@/components/Hero";
 import { CategoryCard } from "@/components/CategoryCard";
 import { ProductCard } from "@/components/ProductCard";
+import { Footer } from "@/components/Footer";
 
 const categories = [
   { title: "Handpans", image: "/placeholder.svg" },
@@ -37,7 +38,7 @@ const products = [
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Hero />
       
       <section className="container py-16">
@@ -57,6 +58,8 @@ const Index = () => {
           ))}
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 };
