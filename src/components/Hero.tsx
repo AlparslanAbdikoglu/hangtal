@@ -22,7 +22,7 @@ export const Hero = () => {
           
           <div className="relative h-[400px] rounded-lg overflow-hidden">
             <img 
-              src="/lovable-uploads/8538687f-9e29-4beb-9a97-1b97579cc051.png"
+              src="/placeholder.svg"
               alt="Meinl Sonic Energy Instruments"
               className="w-full h-full object-cover"
             />
