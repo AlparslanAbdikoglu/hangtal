@@ -1,7 +1,9 @@
+
 import { Hero } from "@/components/Hero";
 import { CategoryCard } from "@/components/CategoryCard";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 const categories = [
   { title: "Handpans", image: "/placeholder.svg" },
@@ -34,6 +36,26 @@ const products = [
     hasVideo: true,
     hasAudio: true,
   },
+  {
+    title: "MEINL Sonic Energy Crystal Singing Bowl Set, Clear Quartz",
+    price: 799.00,
+    image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
+    hasVideo: true,
+    hasAudio: true,
+  },
+  {
+    title: "MEINL Sonic Energy Handpan in D Celtic Minor",
+    price: 1299.00,
+    image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
+    hasVideo: true,
+    hasAudio: true,
+  },
+  {
+    title: "MEINL Sonic Energy Kalimba, Professional Series",
+    price: 129.00,
+    image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
+    hasAudio: true,
+  },
 ];
 
 const Index = () => {
@@ -52,11 +74,17 @@ const Index = () => {
 
       <section className="container py-16 bg-muted">
         <h2 className="text-3xl font-bold mb-8">Featured Products</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product) => (
-            <ProductCard key={product.title} {...product} />
-          ))}
-        </div>
+        <Carousel className="w-full max-w-6xl mx-auto">
+          <CarouselContent>
+            {products.map((product) => (
+              <CarouselItem key={product.title} className="md:basis-1/2 lg:basis-1/3">
+                <ProductCard {...product} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       </section>
 
       <Footer />

@@ -1,10 +1,11 @@
+
 import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="font-bold text-lg mb-4">About Us</h3>
             <p className="text-sm opacity-90">
@@ -39,18 +40,6 @@ export const Footer = () => {
               <li>Address: 123 Sound Street</li>
               <li>Harmony City, HC 12345</li>
             </ul>
-          </div>
-          
-          <div>
-            <h3 className="font-bold text-lg mb-4">Newsletter</h3>
-            <p className="text-sm mb-4">
-              Subscribe to receive updates about new products and special offers.
-            </p>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="w-full px-3 py-2 text-primary bg-white rounded-md"
-            />
           </div>
         </div>
         
