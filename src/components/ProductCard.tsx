@@ -1,6 +1,8 @@
+
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { Music, Video } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 interface ProductCardProps {
   title: string;
@@ -19,6 +21,16 @@ export const ProductCard = ({
   hasAudio = false,
   available = true,
 }: ProductCardProps) => {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart({
+      title,
+      price,
+      image,
+    });
+  };
+
   return (
     <Card className="overflow-hidden group transition-all duration-300 hover:shadow-lg">
       <CardHeader className="relative p-0">
@@ -48,7 +60,11 @@ export const ProductCard = ({
         )}
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <Button className="w-full bg-primary hover:bg-primary/90">
+        <Button 
+          className="w-full bg-primary hover:bg-primary/90"
+          onClick={handleAddToCart}
+          disabled={!available}
+        >
           Add to Cart
         </Button>
       </CardFooter>

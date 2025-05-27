@@ -3,6 +3,7 @@ import { Hero } from "@/components/Hero";
 import { CategoryCard } from "@/components/CategoryCard";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
+import { CartDrawer } from "@/components/CartDrawer";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -81,6 +82,11 @@ const socialLinks = [
 const Index = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* Cart button positioned in top right */}
+      <div className="fixed top-4 right-4 z-50">
+        <CartDrawer />
+      </div>
+      
       <Hero />
       
       <section className="container py-16">
