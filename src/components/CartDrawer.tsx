@@ -3,9 +3,11 @@ import { Button } from "./ui/button";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "./ui/drawer";
 import { ShoppingCart, Plus, Minus, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useTranslation } from 'react-i18next';
 
 export const CartDrawer = () => {
   const { items, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
+  const { t } = useTranslation();
 
   return (
     <Drawer>
@@ -22,10 +24,10 @@ export const CartDrawer = () => {
       <DrawerContent className="max-h-[80vh]">
         <DrawerHeader>
           <DrawerTitle className="flex justify-between items-center">
-            Shopping Cart ({itemCount} items)
+            {t('cart.title')} ({t('cart.items', { count: itemCount })})
             {items.length > 0 && (
               <Button variant="outline" size="sm" onClick={clearCart}>
-                Clear All
+                {t('cart.clearAll')}
               </Button>
             )}
           </DrawerTitle>
@@ -34,7 +36,7 @@ export const CartDrawer = () => {
           {items.length === 0 ? (
             <div className="text-center py-8">
               <ShoppingCart className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">Your cart is empty</p>
+              <p className="text-muted-foreground">{t('cart.empty')}</p>
             </div>
           ) : (
             <>
@@ -82,10 +84,10 @@ export const CartDrawer = () => {
               </div>
               <div className="border-t pt-4 mt-4">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-lg font-bold">Total: €{totalPrice.toFixed(2)}</span>
+                  <span className="text-lg font-bold">{t('cart.total', { amount: totalPrice.toFixed(2) })}</span>
                 </div>
                 <Button className="w-full bg-primary hover:bg-primary/90">
-                  Proceed to Checkout
+                  {t('cart.checkout')}
                 </Button>
               </div>
             </>

@@ -1,13 +1,17 @@
 
-import { Menu, ShoppingCart, User, X } from "lucide-react";
+import { Menu, User, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { CartDrawer } from "./CartDrawer";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useTranslation } from 'react-i18next';
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useIsMobile();
+  const { t } = useTranslation();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -32,26 +36,25 @@ export const Navbar = () => {
           {/* Desktop navigation */}
           <div className="hidden md:flex space-x-6">
             <Link to="/" className="text-primary hover:text-secondary transition-colors">
-              Home
+              {t('navbar.home')}
             </Link>
             <Link to="/products" className="text-primary hover:text-secondary transition-colors">
-              Products
+              {t('navbar.products')}
             </Link>
             <Link to="/about" className="text-primary hover:text-secondary transition-colors">
-              About
+              {t('navbar.about')}
             </Link>
             <Link to="/contact" className="text-primary hover:text-secondary transition-colors">
-              Contact
+              {t('navbar.contact')}
             </Link>
           </div>
           
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <LanguageSwitcher />
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon">
-              <ShoppingCart className="h-5 w-5" />
-            </Button>
+            <CartDrawer />
           </div>
         </div>
 
@@ -64,28 +67,28 @@ export const Navbar = () => {
                 className="text-primary hover:text-secondary transition-colors px-2 py-1"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Home
+                {t('navbar.home')}
               </Link>
               <Link 
                 to="/products" 
                 className="text-primary hover:text-secondary transition-colors px-2 py-1"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Products
+                {t('navbar.products')}
               </Link>
               <Link 
                 to="/about" 
                 className="text-primary hover:text-secondary transition-colors px-2 py-1"
                 onClick={() => setIsMenuOpen(false)}
               >
-                About
+                {t('navbar.about')}
               </Link>
               <Link 
                 to="/contact" 
                 className="text-primary hover:text-secondary transition-colors px-2 py-1"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Contact
+                {t('navbar.contact')}
               </Link>
             </div>
           </div>

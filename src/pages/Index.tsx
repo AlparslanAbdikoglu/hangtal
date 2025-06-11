@@ -3,10 +3,11 @@ import { Hero } from "@/components/Hero";
 import { CategoryCard } from "@/components/CategoryCard";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
-import { CartDrawer } from "@/components/CartDrawer";
+import { Navbar } from "@/components/Navbar";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from 'react-i18next';
 
 const categories = [
   { title: "Handpans", image: "/placeholder.svg" },
@@ -80,17 +81,15 @@ const socialLinks = [
 ];
 
 const Index = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Cart button positioned in top right */}
-      <div className="fixed top-4 right-4 z-50">
-        <CartDrawer />
-      </div>
-      
+      <Navbar />
       <Hero />
       
       <section className="container py-16">
-        <h2 className="text-3xl font-bold mb-8">Categories</h2>
+        <h2 className="text-3xl font-bold mb-8">{t('categories.title')}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {categories.map((category) => (
             <CategoryCard key={category.title} {...category} />
@@ -99,7 +98,7 @@ const Index = () => {
       </section>
 
       <section className="container py-16 bg-muted">
-        <h2 className="text-3xl font-bold mb-8">Featured Products</h2>
+        <h2 className="text-3xl font-bold mb-8">{t('products.featured')}</h2>
         <Carousel className="w-full max-w-6xl mx-auto">
           <CarouselContent>
             {products.map((product) => (
@@ -114,7 +113,7 @@ const Index = () => {
       </section>
 
       <section className="container py-12 text-center">
-        <h2 className="text-2xl font-bold mb-6">Follow Us</h2>
+        <h2 className="text-2xl font-bold mb-6">{t('footer.followUs')}</h2>
         <div className="flex justify-center gap-6">
           {socialLinks.map((link) => (
             <a

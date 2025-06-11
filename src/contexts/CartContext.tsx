@@ -1,6 +1,6 @@
-
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
 
 interface CartItem {
   id: string;
@@ -25,6 +25,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const addToCart = (product: Omit<CartItem, 'quantity' | 'id'>) => {
     const id = `${product.title}-${Date.now()}`;
@@ -37,8 +38,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
     
     toast({
-      title: "Added to cart",
-      description: `${product.title} has been added to your cart.`,
+      title: t('cart.addedToCart'),
+      description: t('cart.addedDescription', { title: product.title }),
     });
   };
 
