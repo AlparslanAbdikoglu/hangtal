@@ -1,0 +1,66 @@
+version: '3'
+
+# Define persistent volumes for database and WordPress data
+volumes:
+  db_data: {}
+  wordpress_data: {}
+  # letsencrypt: {} # Not needed here as Traefik is external
+
+services:
+  # MariaDB Database Service for WordPress/WooCommerce
+  db:
+    image: mariadb:10.6 # Using MariaDB, a drop-in replacement for MySQL
+    container_name: woocommerce_db
+    environment: # Database credentials from .env
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql # Persistent volume for database data
+    networks:
+      - internal # Connect to an internal network for backend communication
+    restart: unless-stopped
+
+  # WordPress/WooCommerce Backend Service
+  wordpress:
+    image: wordpress:latest # Official WordPress Docker image
+    container_name: woocommerce_app
+    depends_on:
+      - db # WordPress depends on the database being up
+    environment: # WordPress database configuration from .env
+      WORDPRESS_DB_HOST: db:3306 # Service name 'db' and default MariaDB/MySQL port
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_TABLE_PREFIX: wp_ # Optional: change if you prefer a different table prefix
+      JWT_AUTH_SECRET_KEY: ${JWT_AUTH_SECRET_KEY} # JWT secret key for the WordPress plugin (from .env)
+    volumes:
+      - wordpress_data:/var/www/html # Persistent volume for WordPress files
+      # Mount your custom Clerk WooCommerce JWT Bridge plugin
+      - ./wp-content/plugins/clerk-woo-jwt-bridge:/var/www/html/wp-content/plugins/clerk-woo-jwt-bridge
+    networks:
+      - web # For public access via existing Traefik instance
+      - internal # For secure communication with the database
+    restart: unless-stopped
+    labels: # Traefik labels for routing to WordPress API and Admin (read by your existing Traefik)
+      - "traefik.enable=true"
+      # Rule to route specific WordPress paths (API, admin, content) to this service
+      - "traefik.http.routers.wordpress-api.rule=Host(`${YOUR_DOMAIN}`) && (PathPrefix(`/wp-json`) || PathPrefix(`/wp-admin`) || PathPrefix(`/wp-content`) || PathPrefix(`/wp-includes`))"
+      - "traefik.http.routers.wordpress-api.entrypoints=websecure"
+      - "traefik.http.routers.wordpress-api.tls.certresolver=myresolver" # Uses existing Traefik's resolver
+      - "traefik.http.services.wordpress-api-service.loadbalancer.server.port=80" # WordPress runs on port 80 inside the container
+      - "traefik.docker.network=web"
+      # Higher priority to ensure WordPress paths are handled before the React app's catch-all
+      - "traefik.http.routers.wordpress-api.priority=200"
+
+    # Your React App Frontend Service
+
+
+
+  # Define Docker Networks
+networks:
+  web:
+    external: true # This network MUST already exist and be managed by your external Traefik setup
+  internal:
+    internal: true # This is an isolated network for backend services (db, wordpress)    

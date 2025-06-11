@@ -22,3 +22,16 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Docker and Secrets
+.env
+volumes/
+letsencrypt/ # Keeping this just in case, even if Traefik is external
+
+# Frontend specific ignores
+frontend/node_modules/
+frontend/build/
+frontend/.env          # Ignore any .env file directly in frontend/ (should be empty for production builds anyway)
+frontend/.env.local    # Ignore local development env files
+
+# WordPress specific ignores (if not managed by Docker volumes)
+# wp-content/uploads/ # Uncomment if your uploads are not in a Docker volume
