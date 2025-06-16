@@ -1,6 +1,3 @@
-
-// my-webshop/frontend/src/components/ProductCard.tsx
-
 import { Button } from "./ui/button"; // Assuming path to Shadcn UI components
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card"; // Assuming path to Shadcn UI components
 import { Music, Video } from "lucide-react"; // Assuming Lucide icons
@@ -40,7 +37,6 @@ export const ProductCard = ({
   const handleAddToCart = () => {
     // Pass relevant product data to your cart context's addToCart function
     addToCart({
-      id,
       title,
       price,
       image,
