@@ -1,4 +1,3 @@
-
 import { Menu, User, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
@@ -7,6 +6,9 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { CartDrawer } from "./CartDrawer";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from 'react-i18next';
+
+// Clerk imports
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,7 +36,7 @@ export const Navbar = () => {
           </Button>
 
           {/* Desktop navigation */}
-          <div className="hidden md:flex space-x-6">
+          <div className="hidden md:flex space-x-6 items-center">
             <Link to="/" className="text-primary hover:text-secondary transition-colors">
               {t('navbar.home')}
             </Link>
@@ -47,13 +49,21 @@ export const Navbar = () => {
             <Link to="/contact" className="text-primary hover:text-secondary transition-colors">
               {t('navbar.contact')}
             </Link>
-          </div>
-          
-          <div className="flex items-center space-x-2">
+
             <LanguageSwitcher />
-            <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
-            </Button>
+
+            {/* Clerk Auth Buttons */}
+            <SignedOut>
+              <SignInButton mode="modal">
+                <Button variant="ghost" size="icon" aria-label="Sign in">
+                  <User className="h-5 w-5" />
+                </Button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+
             <CartDrawer />
           </div>
         </div>
@@ -90,6 +100,21 @@ export const Navbar = () => {
               >
                 {t('navbar.contact')}
               </Link>
+
+              {/* Mobile Clerk buttons */}
+              <div className="flex space-x-2 px-2 pt-2">
+                <SignedOut>
+                  <SignInButton mode="modal">
+                    <Button variant="ghost" className="w-full flex items-center justify-center gap-2">
+                      <User className="h-5 w-5" />
+                      {t('navbar.login')}
+                    </Button>
+                  </SignInButton>
+                </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              </div>
             </div>
           </div>
         )}
