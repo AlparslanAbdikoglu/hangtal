@@ -1,13 +1,12 @@
-
 // my-webshop/frontend/src/api/woocommerce.js
 
 import axios from 'axios';
 
-// Ensure the VITE_WOO_API_URL environment variable is set
-const WOO_API_URL = import.meta.env.VITE_WOO_API_URL;
+// Ensure the REACT_APP_WOO_API_URL environment variable is set
+const WOO_API_URL = process.env.REACT_APP_WOO_API_URL;
 
 if (!WOO_API_URL) {
-    console.error("VITE_WOO_API_URL is not defined. Please check your environment variables.");
+    console.error("REACT_APP_WOO_API_URL is not defined. Please check your Dockerfile/docker-compose.yml.");
 }
 
 const woocommerceApi = axios.create({
