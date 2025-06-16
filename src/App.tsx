@@ -5,10 +5,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
+import { ClerkProvider } from "@clerk/clerk-react";
 
-import { ClerkProvider } from '@clerk/clerk-react';
-
-import { Navbar } from "./components/Navbar"; // Adjust path if needed
 
 // Pages
 import Index from "./pages/Index";
@@ -25,21 +23,13 @@ if (!PUBLISHABLE_KEY) {
 }
 
 const App = () => (
-  <ClerkProvider
-    publishableKey={PUBLISHABLE_KEY}
-    afterSignInUrl="/"
-    afterSignUpUrl="/"
-    afterSignOutUrl="/"
-  >
+  <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
     <QueryClientProvider client={queryClient}>
       <CartProvider>
         <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            {/* Render Navbar once here */}
-            
-            
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/products" element={<Products />} />
