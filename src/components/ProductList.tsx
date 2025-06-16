@@ -1,3 +1,4 @@
+
 // my-webshop/frontend/src/components/ProductList.jsx
 
 import React, { useEffect, useState } from 'react';
@@ -225,16 +226,13 @@ const ProductList = () => {
             {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
-                id={product.id} // Pass product ID
-                title={product.name} // Map WC name to title
-                price={parseFloat(product.price)} // Ensure price is a number
-                image={product.images && product.images.length > 0 ? product.images[0].src : ''} // Get first image URL
-                description={product.short_description} // Pass short description
-                category={product.categories && product.categories.length > 0 ? product.categories[0].name : 'Uncategorized'} // Get first category name
-                // hasVideo and hasAudio would need custom fields in WooCommerce, defaulting to false for now
+                id={product.id}
+                title={product.name}
+                price={parseFloat(product.price)}
+                image={product.images && product.images.length > 0 ? product.images[0].src : ''}
+                description={product.short_description}
                 hasVideo={false} 
                 hasAudio={false}
-                available={product.stock_status === 'instock'} // Determine availability from stock status
               />
             ))}
           </div>
