@@ -14,8 +14,8 @@ interface ProductCardProps {
   title: string;
   price: number;
   image: string; // URL of the product image
-  description: string; // Short description, will be stripped of HTML
-  category: string; // Main category name
+  description?: string; // Short description, will be stripped of HTML - make optional
+  category?: string; // Main category name - make optional
   hasVideo?: boolean; // Custom flag, might need a custom field in WP
   hasAudio?: boolean; // Custom flag, might need a custom field in WP
   available?: boolean; // Derived from stock status
@@ -26,8 +26,8 @@ export const ProductCard = ({
   title,
   price,
   image,
-  description, // Added for consistency with ProductList data
-  category,    // Added for consistency with ProductList data
+  description = "", // Default value for optional prop
+  category = "", // Default value for optional prop
   hasVideo = false,
   hasAudio = false,
   available = true, // Default to true if not explicitly set
@@ -40,10 +40,10 @@ export const ProductCard = ({
   const handleAddToCart = () => {
     // Pass relevant product data to your cart context's addToCart function
     addToCart({
+      id,
       title,
       price,
       image,
-      quantity: 1, // Default quantity
     });
   };
 
