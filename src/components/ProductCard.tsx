@@ -1,3 +1,4 @@
+
 // my-webshop/frontend/src/components/ProductCard.tsx
 
 import { Button } from "./ui/button"; // Assuming path to Shadcn UI components
@@ -39,7 +40,6 @@ export const ProductCard = ({
   const handleAddToCart = () => {
     // Pass relevant product data to your cart context's addToCart function
     addToCart({
-      id, // Pass product ID for unique identification in cart
       title,
       price,
       image,
