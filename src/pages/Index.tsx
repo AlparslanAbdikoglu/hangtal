@@ -20,6 +20,7 @@ const categories = [
 
 const products = [
   {
+    id: "1",
     title: "MEINL Sonic Energy 16\" Octave Steel Tongue Drum, D Kurd, 9 Notes, 440 Hz, Lasered Floral Design, Black",
     price: 369.00,
     image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
@@ -27,6 +28,7 @@ const products = [
     hasAudio: true,
   },
   {
+    id: "2",
     title: "MEINL Sonic Energy 16\" Octave Steel Tongue Drum, D Amara, 9 Notes, 440 Hz, Lasered Floral Design, Navy Blue",
     price: 369.00,
     image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
@@ -34,6 +36,7 @@ const products = [
     hasAudio: true,
   },
   {
+    id: "3",
     title: "MEINL Sonic Energy 16\" Octave Steel Tongue Drum, D Kurd, 9 Notes, 440 Hz, Black",
     price: 349.00,
     image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
@@ -41,6 +44,7 @@ const products = [
     hasAudio: true,
   },
   {
+    id: "4",
     title: "MEINL Sonic Energy Crystal Singing Bowl Set, Clear Quartz",
     price: 799.00,
     image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
@@ -48,6 +52,7 @@ const products = [
     hasAudio: true,
   },
   {
+    id: "5",
     title: "MEINL Sonic Energy Handpan in D Celtic Minor",
     price: 1299.00,
     image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
@@ -55,6 +60,7 @@ const products = [
     hasAudio: true,
   },
   {
+    id: "6",
     title: "MEINL Sonic Energy Kalimba, Professional Series",
     price: 129.00,
     image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
@@ -102,7 +108,7 @@ const Index = () => {
         <Carousel className="w-full max-w-6xl mx-auto">
           <CarouselContent>
             {products.map((product) => (
-              <CarouselItem key={product.title} className="md:basis-1/2 lg:basis-1/3">
+              <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-1/3">
                 <ProductCard {...product} />
               </CarouselItem>
             ))}

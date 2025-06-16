@@ -1,4 +1,4 @@
-// src/api/woocommerce.js or .ts
+
 import axios from "axios";
 
 const woocommerceApi = axios.create({
