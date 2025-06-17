@@ -11,8 +11,8 @@ import { ClerkProvider } from "@clerk/clerk-react";
 // Pages
 import Index from "./pages/Index";
 import Products from "./pages/Products";
-import Contact from "./pages/Contact";
 import About from "./pages/About";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 

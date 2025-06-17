@@ -1,7 +1,6 @@
-
 {
   "navbar": {
-    "home": "Főoldal",
+    "home": "Kezdőlap",
     "products": "Termékek",
     "about": "Rólunk",
     "contact": "Kapcsolat",
@@ -18,6 +17,55 @@
   },
   "cart": {
     "addedToCart": "Kosárba helyezve",
-    "addedDescription": "{{title}} hozzáadva a kosárhoz"
+    "addedDescription": "{{title}} hozzáadva a kosaradhoz"
+  },
+  "contact": {
+    "title": "Kapcsolat",
+    "description": "Itt vagyunk, hogy támogassuk hangterápiás utadat. Kérdésekkel, visszajelzéssel vagy együttműködési ötletekkel keress minket bátran.",
+    "formTitle": "Írj nekünk üzenetet",
+    "label": {
+      "name": "Név",
+      "email": "Email",
+      "subject": "Tárgy",
+      "message": "Üzenet"
+    },
+    "placeholder": {
+      "name": "Add meg a neved",
+      "email": "Add meg az email címed",
+      "subject": "Üzeneted tárgya",
+      "message": "Miben segíthetünk?"
+    },
+    "sendButton": "Üzenet küldése",
+    "sending": "Küldés...",
+    "successTitle": "Üzenet elküldve!",
+    "successDesc": "24 órán belül válaszolunk.",
+    "helpTitle": "Miben segíthetünk?",
+    "reasons": {
+      "learn": {
+        "title": "Hangterápia útmutatás",
+        "content": "Kérdésed van a hangterápiás alkalmakról vagy módszereinkről?"
+      },
+      "community": {
+        "title": "Közösség",
+        "content": "Szeretnél kapcsolatba lépni más hangterápia iránt érdeklődőkkel?"
+      },
+      "feedback": {
+        "title": "Visszajelzés",
+        "content": "Oszd meg tapasztalataidat vagy javaslataidat."
+      },
+      "partnership": {
+        "title": "Együttműködés",
+        "content": "Érdekel az együttműködés vagy esemény szervezése?"
+      }
+    },
+    "quickContactTitle": "Gyors kapcsolat",
+    "quickContactDesc": "Sürgős ügyekben vagy gyors válaszért írj közvetlenül e-mailt.",
+    "supportedLanguages": "Magyar & Angol támogatott"
+  },
+  "hero": {
+    "title": "Üdvözlünk a Hangtalon",
+    "description1": "Fedezd fel az új módját a kapcsolódásnak és a pillanatok megosztásának.",
+    "description2": "Csatlakozz közösségünkhöz, és kezdd el az utazásod még ma.",
+    "imageAlt": "Hős szekció illusztráció"
   }
 }

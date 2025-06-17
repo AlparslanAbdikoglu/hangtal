@@ -1,4 +1,3 @@
-
 {
   "navbar": {
     "home": "Home",
@@ -19,5 +18,114 @@
   "cart": {
     "addedToCart": "Added to Cart",
     "addedDescription": "{{title}} has been added to your cart"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "description": "We're here to support your sound therapy journey. Reach out with questions, feedback, or partnership ideas.",
+    "formTitle": "Send us a message",
+    "label": {
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message"
+    },
+    "placeholder": {
+      "name": "Enter your name",
+      "email": "Enter your email address",
+      "subject": "Subject of your message",
+      "message": "How can we help you?"
+    },
+    "sendButton": "Send Message",
+    "sending": "Sending...",
+    "successTitle": "Message sent!",
+    "successDesc": "We'll get back to you within 24 hours.",
+    "helpTitle": "How Can We Help?",
+    "reasons": {
+      "learn": {
+        "title": "Sound Therapy Guidance",
+        "content": "Questions about sound therapy sessions or our methods?"
+      },
+      "community": {
+        "title": "Community",
+        "content": "Want to connect with others interested in sound healing?"
+      },
+      "feedback": {
+        "title": "Feedback",
+        "content": "Share your experience or suggest improvements."
+      },
+      "partnership": {
+        "title": "Partnership",
+        "content": "Interested in collaborating or organizing an event?"
+      }
+    },
+    "quickContactTitle": "Quick Contact",
+    "quickContactDesc": "For urgent matters or quick responses, send us an email directly.",
+    "supportedLanguages": "English & Hungarian supported"
+  },
+  "hero": {
+    "title": "Welcome to Hangtal",
+    "description1": "Discover a new way to connect and share your moments.",
+    "description2": "Join our community and start your journey today.",
+    "imageAlt": "Hero section illustration"
+  },
+  "about": {
+    "title": "About Sound Therapy",
+    "subtitle": "We're a dedicated team passionate about harnessing the power of sound for holistic well-being.",
+    "storyTitle": "Our Story",
+    "story1": "Founded in 2020, our mission is to make sound therapy accessible to everyone. We believe in the transformative power of sound to heal, relax, and inspire.",
+    "story2": "Today, we help people worldwide discover the benefits of sound therapy through innovative tools and expert guidance.",
+    "clients": "Happy Clients",
+    "valuesTitle": "Our Values",
+    "values": [
+      {
+        "title": "Holistic Approach",
+        "description": "We address mind, body, and spirit through sound."
+      },
+      {
+        "title": "Community",
+        "description": "We foster a supportive and inclusive environment."
+      },
+      {
+        "title": "Expertise",
+        "description": "Our team consists of certified sound therapists and researchers."
+      },
+      {
+        "title": "Innovation",
+        "description": "We use the latest technology to enhance sound therapy experiences."
+      }
+    ],
+    "expertiseTitle": "Our Expertise",
+    "expertiseDesc": "We combine traditional sound healing techniques with modern science to deliver effective and enjoyable experiences.",
+    "skills": [
+      "Sound Baths",
+      "Binaural Beats",
+      "Guided Meditation",
+      "Mindfulness",
+      "Music Therapy",
+      "Vibrational Healing",
+      "Workshops",
+      "Research",
+      "Community Events",
+      "Personalized Programs"
+    ],
+    "faqTitle": "Frequently Asked Questions",
+    "faq": [
+      {
+        "q": "What is sound therapy?",
+        "a": "Sound therapy uses music, voice, and instruments to promote relaxation, healing, and well-being."
+      },
+      {
+        "q": "Who can benefit from sound therapy?",
+        "a": "Anyone seeking stress relief, improved sleep, or emotional balance can benefit from sound therapy."
+      },
+      {
+        "q": "Do I need experience to join a session?",
+        "a": "No experience is needed. Our sessions are open to everyone."
+      },
+      {
+        "q": "How do I get started?",
+        "a": "Contact us or explore our programs to begin your sound therapy journey."
+      }
+    ]
   }
 }
