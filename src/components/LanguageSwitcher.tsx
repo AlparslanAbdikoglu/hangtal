@@ -1,6 +1,12 @@
-
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { useTranslation } from 'react-i18next';
+
+const flags: Record<string, string> = {
+  en: "🇬🇧",
+  de: "🇩🇪",
+  hu: "🇭🇺",
+  sk: "🇸🇰",
+};
 
 export const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
@@ -11,14 +17,14 @@ export const LanguageSwitcher = () => {
 
   return (
     <Select value={i18n.language} onValueChange={handleLanguageChange}>
-      <SelectTrigger className="w-20">
+      <SelectTrigger className="w-28">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="en">EN</SelectItem>
-        <SelectItem value="de">DE</SelectItem>
-        <SelectItem value="hu">HU</SelectItem>
-        <SelectItem value="sk">SK</SelectItem>
+        <SelectItem value="en">{flags.en} EN</SelectItem>
+        <SelectItem value="de">{flags.de} DE</SelectItem>
+        <SelectItem value="hu">{flags.hu} HU</SelectItem>
+        <SelectItem value="sk">{flags.sk} SK</SelectItem>
       </SelectContent>
     </Select>
   );
