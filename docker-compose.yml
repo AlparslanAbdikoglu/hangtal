@@ -40,7 +40,10 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wordpress.rule=Host(`${YOUR_DOMAIN}`) && (PathPrefix(`/wp-json`) || PathPrefix(`/wp-admin`) || PathPrefix(`/wp-content`) || PathPrefix(`/wp-includes`))"
+      # Corrected Host rule: Use backticks (`) for string literals, not $ followed by curly braces for direct string.
+      # If you're using an environment variable like YOUR_DOMAIN, it should be `${YOUR_DOMAIN}`.
+      # Since you specified 'lifeisnatural.eu' directly, use it as a string.
+      - "traefik.http.routers.wordpress.rule=Host(`lifeisnatural.eu`) && (PathPrefix(`/wp-json`) || PathPrefix(`/wp-admin`) || PathPrefix(`/wp-content`) || PathPrefix(`/wp-includes`))"
       - "traefik.http.routers.wordpress.entrypoints=websecure"
       - "traefik.http.routers.wordpress.tls.certresolver=myresolver"
       - "traefik.http.routers.wordpress.priority=200"
@@ -51,6 +54,8 @@ services:
   frontend:
     build:
       context: ./frontend
+      # It's good practice to explicitly define the Dockerfile name if it's not 'Dockerfile'
+      # dockerfile: Dockerfile
     container_name: react_frontend
     environment:
       - CLERK_PUBLISHABLE_KEY=${CLERK_PUBLISHABLE_KEY}
@@ -63,10 +68,14 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react.rule=Host(`${YOUR_DOMAIN}`)" # Adjust for subdomain or main domain
+      # Corrected Host rule: Use backticks (`) for string literals.
+      # If you're using an environment variable like YOUR_DOMAIN, it should be `${YOUR_DOMAIN}`.
+      # Since you specified 'lifeisnatural.eu' directly, use it as a string.
+      - "traefik.http.routers.react.rule=Host(`lifeisnatural.eu`)"
       - "traefik.http.routers.react.entrypoints=websecure"
       - "traefik.http.routers.react.tls.certresolver=myresolver"
-      - "traefik.http.services.react.loadbalancer.server.port=3000"
+      # Changed from 3000 to 80 as requested, assuming Nginx or similar serving built React app
+      - "traefik.http.services.react.loadbalancer.server.port=80"
       - "traefik.docker.network=web"
 
 networks:
