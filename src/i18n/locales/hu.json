@@ -67,5 +67,65 @@
     "description1": "Fedezd fel az új módját a kapcsolódásnak és a pillanatok megosztásának.",
     "description2": "Csatlakozz közösségünkhöz, és kezdd el az utazásod még ma.",
     "imageAlt": "Hős szekció illusztráció"
+  },
+  "about": {
+    "title": "A hangterápiáról",
+    "subtitle": "Elkötelezett csapat vagyunk, akik szenvedéllyel használják a hang erejét a holisztikus jóllét érdekében.",
+    "storyTitle": "Történetünk",
+    "story1": "2020-ban alapítottuk azzal a céllal, hogy a hangterápiát mindenki számára elérhetővé tegyük. Hiszünk a hang átalakító erejében, amely gyógyít, ellazít és inspirál.",
+    "story2": "Ma már világszerte segítünk az embereknek felfedezni a hangterápia előnyeit innovatív eszközökön és szakértői útmutatáson keresztül.",
+    "clients": "Elégedett ügyfelek",
+    "valuesTitle": "Értékeink",
+    "values": [
+      {
+        "title": "Holisztikus megközelítés",
+        "description": "A testet, lelket és szellemet egyaránt megszólítjuk a hang által."
+      },
+      {
+        "title": "Közösség",
+        "description": "Támogató és befogadó környezetet teremtünk."
+      },
+      {
+        "title": "Szakértelem",
+        "description": "Csapatunk minősített hangterapeutákból és kutatókból áll."
+      },
+      {
+        "title": "Innováció",
+        "description": "A legújabb technológiákat alkalmazzuk a hangterápiás élmények fokozására."
+      }
+    ],
+    "expertiseTitle": "Szakértelmünk",
+    "expertiseDesc": "A hagyományos hanggyógyító technikákat ötvözzük a modern tudománnyal, hogy hatékony és élvezetes élményeket nyújtsunk.",
+    "skills": [
+      "Hangfürdők",
+      "Binaurális ütemek",
+      "Vezetett meditáció",
+      "Tudatosság",
+      "Zeneterápia",
+      "Vibrációs gyógyítás",
+      "Workshopok",
+      "Kutatás",
+      "Közösségi események",
+      "Személyre szabott programok"
+    ],
+    "faqTitle": "Gyakran Ismételt Kérdések",
+    "faq": [
+      {
+        "q": "Mi az a hangterápia?",
+        "a": "A hangterápia zenét, hangot és hangszereket használ a relaxáció, gyógyulás és jóllét elősegítésére."
+      },
+      {
+        "q": "Kiknek ajánlott a hangterápia?",
+        "a": "Bárkinek, aki stresszoldásra, jobb alvásra vagy érzelmi egyensúlyra vágyik."
+      },
+      {
+        "q": "Szükséges tapasztalat a részvételhez?",
+        "a": "Nem szükséges. Mindenki számára nyitottak a foglalkozásaink."
+      },
+      {
+        "q": "Hogyan kezdhetem el?",
+        "a": "Vedd fel velünk a kapcsolatot, vagy fedezd fel programjainkat, hogy elindulj a hangterápiás úton."
+      }
+    ]
   }
 }
