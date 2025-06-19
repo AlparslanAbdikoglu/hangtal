@@ -40,43 +40,52 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      # Corrected Host rule: Use backticks (`) for string literals, not $ followed by curly braces for direct string.
-      # If you're using an environment variable like YOUR_DOMAIN, it should be `${YOUR_DOMAIN}`.
-      # Since you specified 'lifeisnatural.eu' directly, use it as a string.
-      - "traefik.http.routers.wordpress.rule=Host(`lifeisnatural.eu`) && (PathPrefix(`/wp-json`) || PathPrefix(`/wp-admin`) || PathPrefix(`/wp-content`) || PathPrefix(`/wp-includes`))"
+      # Rule to match both lifeisnatural.eu and www.lifeisnatural.eu for WP paths
+      - "traefik.http.routers.wordpress.rule=(Host(`api.lifeisnatural.eu`) || Host(`www.api.lifeisnatural.eu`)) && (PathPrefix(`/wp-json`) || PathPrefix(`/wp-admin`) || PathPrefix(`/wp-content`) || PathPrefix(`/wp-includes`))"
       - "traefik.http.routers.wordpress.entrypoints=websecure"
-      - "traefik.http.routers.wordpress.tls.certresolver=myresolver"
-      - "traefik.http.routers.wordpress.priority=200"
+      - "traefik.http.routers.wordpress.tls.certresolver=cloudflare"
+      - "traefik.http.routers.wordpress.priority=200" # High priority for backend paths
       - "traefik.http.services.wordpress.loadbalancer.server.port=80"
       - "traefik.docker.network=web"
 
-  # React Frontend (Dockerize later)
-  frontend:
+  # Your existing Hangakademia React App
+  hangakademia-react-app:
     build:
-      context: ./frontend
-      # It's good practice to explicitly define the Dockerfile name if it's not 'Dockerfile'
-      # dockerfile: Dockerfile
-    container_name: react_frontend
-    environment:
-      - CLERK_PUBLISHABLE_KEY=${CLERK_PUBLISHABLE_KEY}
-      - WOO_API_URL=${WOO_API_URL}
-    depends_on:
-      - wordpress
-    networks:
-      - web
-      - internal
-    restart: unless-stopped
+      context: ./hangakademia # Points to the hangakademia folder
+      dockerfile: Dockerfile
+    container_name: hangakademia
+    restart: always
     labels:
       - "traefik.enable=true"
-      # Corrected Host rule: Use backticks (`) for string literals.
-      # If you're using an environment variable like YOUR_DOMAIN, it should be `${YOUR_DOMAIN}`.
-      # Since you specified 'lifeisnatural.eu' directly, use it as a string.
-      - "traefik.http.routers.react.rule=Host(`lifeisnatural.eu`)"
-      - "traefik.http.routers.react.entrypoints=websecure"
-      - "traefik.http.routers.react.tls.certresolver=myresolver"
-      # Changed from 3000 to 80 as requested, assuming Nginx or similar serving built React app
-      - "traefik.http.services.react.loadbalancer.server.port=80"
+      - "traefik.http.routers.hangakademia-https.entrypoints=websecure"
+      # Rule for test.lifeisnatural.eu subdomain
+      - "traefik.http.routers.hangakademia-https.rule=Host(`test.lifeisnatural.eu`) || Host(`www.test.lifeisnatural.eu`)"
+      - "traefik.http.routers.hangakademia-https.tls=true"
+      - "traefik.http.routers.hangakademia-https.tls.certresolver=cloudflare"
+      - "traefik.http.services.hangakademia-service.loadbalancer.server.port=80" # Internal port for Nginx/serving
       - "traefik.docker.network=web"
+
+  # Your NEW React App (The WooCommerce Frontend)
+  webshop-react-app:
+    build:
+      context: ./hangtal # Points to the hangtal folder
+      dockerfile: Dockerfile
+    container_name: hangtal
+    restart: always
+    depends_on:
+      - wordpress # The webshop frontend depends on the wordpress backend for data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hangtal-https.entrypoints=websecure"
+      # Rule for the main domain, lifeisnatural.eu. Lower priority than wordpress paths.
+      - "traefik.http.routers.hangtal-https.rule=Host(`api.lifeisnatural.eu`) || Host(`www.api.lifeisnatural.eu`)"
+      - "traefik.http.routers.hangtal-https.tls=true"
+      - "traefik.http.routers.hangtal-https.tls.certresolver=cloudflare"
+      - "traefik.http.services.hangtal-service.loadbalancer.server.port=80" # Internal port for Nginx/serving
+    networks:
+      - web         # For Traefik routing
+      - internal    # For direct communication with the wordpress backend
+      # Note: No 'priority' label here, so it defaults to 0, ensuring wordpress paths are matched first.
 
 networks:
   web:
