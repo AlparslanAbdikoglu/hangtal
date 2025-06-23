@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
-    <footer className="bg-primary text-primary-foreground">
+    <footer className="bg-[#dfd4c6] text-foreground">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
@@ -43,7 +43,7 @@ export const Footer = () => {
           </div>
         </div>
         
-        <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-sm">
+        <div className="border-t border-foreground/20 mt-8 pt-8 text-center text-sm">
           <p>© 2024 MEINL Sonic Energy. All rights reserved.</p>
         </div>
       </div>

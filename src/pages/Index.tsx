@@ -3,7 +3,10 @@ import { Hero } from "@/components/Hero";
 import { CategoryCard } from "@/components/CategoryCard";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
+import { CartDrawer } from "@/components/CartDrawer";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Facebook, Instagram, Youtube } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const categories = [
   { title: "Handpans", image: "/placeholder.svg" },
@@ -58,9 +61,32 @@ const products = [
   },
 ];
 
+const socialLinks = [
+  {
+    name: "Facebook",
+    icon: <Facebook className="h-5 w-5" />,
+    url: "https://facebook.com/meinlsonic",
+  },
+  {
+    name: "Instagram",
+    icon: <Instagram className="h-5 w-5" />,
+    url: "https://instagram.com/meinlsonic",
+  },
+  {
+    name: "YouTube",
+    icon: <Youtube className="h-5 w-5" />,
+    url: "https://youtube.com/meinlsonic",
+  },
+];
+
 const Index = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* Cart button positioned in top right */}
+      <div className="fixed top-4 right-4 z-50">
+        <CartDrawer />
+      </div>
+      
       <Hero />
       
       <section className="container py-16">
@@ -85,6 +111,26 @@ const Index = () => {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
+      </section>
+
+      <section className="container py-12 text-center">
+        <h2 className="text-2xl font-bold mb-6">Follow Us</h2>
+        <div className="flex justify-center gap-6">
+          {socialLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:text-secondary transition-colors"
+            >
+              <Button variant="ghost" size="icon">
+                {link.icon}
+                <span className="sr-only">{link.name}</span>
+              </Button>
+            </a>
+          ))}
+        </div>
       </section>
 
       <Footer />
