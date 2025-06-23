@@ -1,13 +1,9 @@
 
+import { Hero } from "@/components/Hero";
 import { CategoryCard } from "@/components/CategoryCard";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
-import { Navbar } from "@/components/Navbar";
-import { Hero } from "@/components/Hero";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Facebook, Instagram, Youtube } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useTranslation } from 'react-i18next';
 
 const categories = [
   { title: "Handpans", image: "/placeholder.svg" },
@@ -62,34 +58,13 @@ const products = [
   },
 ];
 
-const socialLinks = [
-  {
-    name: "Facebook",
-    icon: <Facebook className="h-5 w-5" />,
-    url: "https://facebook.com/meinlsonic",
-  },
-  {
-    name: "Instagram",
-    icon: <Instagram className="h-5 w-5" />,
-    url: "https://instagram.com/meinlsonic",
-  },
-  {
-    name: "YouTube",
-    icon: <Youtube className="h-5 w-5" />,
-    url: "https://youtube.com/meinlsonic",
-  },
-];
-
 const Index = () => {
-  const { t } = useTranslation();
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Navbar />
       <Hero />
       
       <section className="container py-16">
-        <h2 className="text-3xl font-bold mb-8">{t('categories.title')}</h2>
+        <h2 className="text-3xl font-bold mb-8">Categories</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {categories.map((category) => (
             <CategoryCard key={category.title} {...category} />
@@ -98,7 +73,7 @@ const Index = () => {
       </section>
 
       <section className="container py-16 bg-muted">
-        <h2 className="text-3xl font-bold mb-8">{t('products.featured')}</h2>
+        <h2 className="text-3xl font-bold mb-8">Featured Products</h2>
         <Carousel className="w-full max-w-6xl mx-auto">
           <CarouselContent>
             {products.map((product) => (
@@ -110,26 +85,6 @@ const Index = () => {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-      </section>
-
-      <section className="container py-12 text-center">
-        <h2 className="text-2xl font-bold mb-6">{t('footer.followUs')}</h2>
-        <div className="flex justify-center gap-6">
-          {socialLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:text-secondary transition-colors"
-            >
-              <Button variant="ghost" size="icon">
-                {link.icon}
-                <span className="sr-only">{link.name}</span>
-              </Button>
-            </a>
-          ))}
-        </div>
       </section>
 
       <Footer />
