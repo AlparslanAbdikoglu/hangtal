@@ -1,4 +1,3 @@
-
 {
   "navbar": {
     "home": "Home",
@@ -8,7 +7,9 @@
   },
   "hero": {
     "title": "Discover the Healing Power of Sound",
-    "subtitle": "Transform your mind, body, and spirit with our carefully curated collection of sound healing instruments."
+    "subtitle": "Transform your mind, body, and spirit with our carefully curated collection of sound healing instruments.",
+    "description": "Experience the transformative power of sound with our unique selection of instruments designed for relaxation, focus, and well-being.",
+    "imageAlt": "Sound healing instruments"
   },
   "categories": {
     "title": "Categories",
@@ -55,26 +56,43 @@
   },
   "about": {
     "title": "About Marcus Weber",
+    "intro1": "Marcus Weber is dedicated to bringing the healing power of sound to everyone. With years of experience in sound therapy, he curates instruments that inspire relaxation and well-being.",
+    "intro2": "Our mission is to help you discover the transformative effects of sound, whether you are a beginner or an experienced practitioner.",
+    "imageAlt": "Portrait of Marcus Weber",
     "mission": "Our Mission",
+    "missionText": "We strive to provide high-quality sound healing instruments and resources to support your journey towards balance and harmony.",
     "faq": "Frequently Asked Questions",
     "faqItems": {
       "soundHealing": "What is sound healing?",
       "chooseInstrument": "How do I choose the right instrument?",
       "workshops": "Do you offer workshops?",
       "benefits": "What are the benefits of sound therapy?"
+    },
+    "faqAnswers": {
+      "soundHealing": "Sound healing is a practice that uses vibrations from instruments to promote physical and emotional well-being.",
+      "chooseInstrument": "Consider your intention and personal preference. We are happy to guide you in finding the perfect instrument.",
+      "workshops": "Yes, we offer workshops for all levels. Check our events page for upcoming sessions.",
+      "benefits": "Sound therapy can help reduce stress, improve focus, and support overall health."
     }
   },
   "contact": {
     "title": "Contact Us",
-    "subtitle": "We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
-    "name": "Name",
-    "email": "Email",
-    "message": "Message",
-    "send": "Send Message",
-    "success": "Message sent successfully!",
-    "successDescription": "We'll get back to you as soon as possible."
+    "subtitle": "Have questions about our sound healing instruments? We'd love to hear from you. Send us an email and we'll respond as soon as possible.",
+    "infoTitle": "Contact Information",
+    "formTitle": "Send an Email",
+    "emailPrompt": "Click the button below to send us an email. We'll get back to you as soon as possible.",
+    "sendEmail": "Send Email"
   },
   "footer": {
-    "followUs": "Follow Us"
+    "aboutTitle": "About Us",
+    "aboutText": "MEINL Sonic Energy offers high-quality sound therapy instruments for meditation, relaxation, and sound healing.",
+    "quickLinks": "Quick Links",
+    "shipping": "Shipping Info",
+    "contactTitle": "Contact",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "city": "Harmony City, HC 12345",
+    "copyright": "© 2024 MEINL Sonic Energy. All rights reserved."
   }
 }

@@ -1,4 +1,3 @@
-
 {
   "navbar": {
     "home": "Főoldal",
@@ -8,7 +7,9 @@
   },
   "hero": {
     "title": "Fedezd fel a hang gyógyító erejét",
-    "subtitle": "Alakítsd át lelkedet, testedet és szellemedet gondosan összeválogatott hanggyógyító hangszereinkkel."
+    "subtitle": "Alakítsd át elmédet, testedet és lelkedet gondosan válogatott hangterápiás hangszereinkkel.",
+    "description": "Tapasztald meg a hang átalakító erejét egyedi hangszerkínálatunkkal, amelyet relaxációhoz, fókuszhoz és jólléthez terveztünk.",
+    "imageAlt": "Hangterápiás hangszerek"
   },
   "categories": {
     "title": "Kategóriák",
@@ -54,27 +55,44 @@
     "addedDescription": "{{title}} hozzáadva a kosárhoz."
   },
   "about": {
-    "title": "Marcus Weber névjegye",
+    "title": "Weber Márkus bemutatása",
+    "intro1": "Weber Márkus elkötelezett abban, hogy a hang gyógyító erejét mindenkihez eljuttassa. Sokéves hangterápiás tapasztalattal válogat olyan hangszereket, amelyek elősegítik a relaxációt és a jóllétet.",
+    "intro2": "Küldetésünk, hogy segítsünk felfedezni a hang átalakító hatását, akár kezdő, akár tapasztalt gyakorló vagy.",
+    "imageAlt": "Weber Márkus portréja",
     "mission": "Küldetésünk",
-    "faq": "Gyakran ismételt kérdések",
+    "missionText": "Célunk, hogy kiváló minőségű hangterápiás hangszereket és forrásokat biztosítsunk az egyensúly és harmónia eléréséhez.",
+    "faq": "Gyakran Ismételt Kérdések",
     "faqItems": {
-      "soundHealing": "Mi az a hanggyógyászat?",
+      "soundHealing": "Mi az a hangterápia?",
       "chooseInstrument": "Hogyan válasszam ki a megfelelő hangszert?",
-      "workshops": "Tartanak workshopokat?",
-      "benefits": "Mik a hangterápia előnyei?"
+      "workshops": "Tartotok workshopokat?",
+      "benefits": "Milyen előnyei vannak a hangterápiának?"
+    },
+    "faqAnswers": {
+      "soundHealing": "A hangterápia olyan módszer, amely hangszerek rezgéseit használja a testi és lelki jóllét elősegítésére.",
+      "chooseInstrument": "Fontos a szándék és a személyes preferencia. Szívesen segítünk megtalálni a számodra tökéletes hangszert.",
+      "workshops": "Igen, minden szinten tartunk workshopokat. Nézd meg eseményeinket a részletekért.",
+      "benefits": "A hangterápia segíthet a stressz csökkentésében, a fókusz javításában és az általános egészség támogatásában."
     }
   },
   "contact": {
     "title": "Kapcsolat",
-    "subtitle": "Szeretnénk hallani rólad. Küldj üzenetet és amint lehetséges, válaszolunk.",
-    "name": "Név",
-    "email": "E-mail",
-    "message": "Üzenet",
-    "send": "Üzenet küldése",
-    "success": "Üzenet sikeresen elküldve!",
-    "successDescription": "Amint lehetséges, válaszolunk."
+    "subtitle": "Kérdése van hangterápiás hangszereinkkel kapcsolatban? Örömmel várjuk üzenetét. Küldjön nekünk e-mailt, és hamarosan válaszolunk.",
+    "infoTitle": "Elérhetőségek",
+    "formTitle": "E-mail küldése",
+    "emailPrompt": "Kattintson az alábbi gombra, hogy e-mailt küldjön nekünk. Hamarosan válaszolunk.",
+    "sendEmail": "E-mail küldése"
   },
   "footer": {
-    "followUs": "Kövess minket"
+    "aboutTitle": "Rólunk",
+    "aboutText": "A MEINL Sonic Energy kiváló minőségű hangterápiás hangszereket kínál meditációhoz, relaxációhoz és hangterápiához.",
+    "quickLinks": "Gyorslinkek",
+    "shipping": "Szállítási információk",
+    "contactTitle": "Kapcsolat",
+    "email": "E-mail",
+    "phone": "Telefon",
+    "address": "Cím",
+    "city": "Harmony City, HC 12345",
+    "copyright": "© 2024 MEINL Sonic Energy. Minden jog fenntartva."
   }
 }
