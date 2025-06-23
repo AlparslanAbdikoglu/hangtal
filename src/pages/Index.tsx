@@ -1,9 +1,9 @@
 
-import { Hero } from "@/components/Hero";
 import { CategoryCard } from "@/components/CategoryCard";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
+import { Hero } from "@/components/Hero";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";

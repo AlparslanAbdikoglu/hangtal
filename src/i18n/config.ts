@@ -6,6 +6,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import en from './locales/en.json';
 import hu from './locales/hu.json';
 import sk from './locales/sk.json';
+import de from './locales/de.json';
 
 i18n
   .use(LanguageDetector)
@@ -15,6 +16,7 @@ i18n
       en: { translation: en },
       hu: { translation: hu },
       sk: { translation: sk },
+      de: { translation: de },
     },
     fallbackLng: 'en',
     debug: false,
