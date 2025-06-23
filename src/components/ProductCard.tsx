@@ -1,8 +1,8 @@
-
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { Music, Video } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useTranslation } from 'react-i18next';
 
 interface ProductCardProps {
   title: string;
@@ -22,6 +22,7 @@ export const ProductCard = ({
   available = true,
 }: ProductCardProps) => {
   const { addToCart } = useCart();
+  const { t } = useTranslation();
 
   const handleAddToCart = () => {
     addToCart({
@@ -56,7 +57,7 @@ export const ProductCard = ({
         <CardTitle className="text-lg font-medium line-clamp-2">{title}</CardTitle>
         <p className="text-2xl font-bold mt-2">€{price.toFixed(2)}</p>
         {available && (
-          <p className="text-green-500 text-sm mt-1">Available immediately</p>
+          <p className="text-green-500 text-sm mt-1">{t('products.available')}</p>
         )}
       </CardContent>
       <CardFooter className="p-4 pt-0">
@@ -65,7 +66,7 @@ export const ProductCard = ({
           onClick={handleAddToCart}
           disabled={!available}
         >
-          Add to Cart
+          {t('cart.addToCart')}
         </Button>
       </CardFooter>
     </Card>

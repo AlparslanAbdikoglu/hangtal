@@ -1,4 +1,3 @@
-
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
@@ -6,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Search, Filter, Grid, List } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 const products = [
   {
@@ -78,20 +78,21 @@ const products = [
   }
 ];
 
-const categories = ["All", "Steel Tongue Drums", "Handpans", "Kalimbas", "Crystal Singing Bowls", "Singing Bowls", "Wind Chimes"];
-const priceRanges = [
-  { label: "All Prices", min: 0, max: Infinity },
-  { label: "Under €100", min: 0, max: 100 },
-  { label: "€100 - €500", min: 100, max: 500 },
-  { label: "Over €500", min: 500, max: Infinity }
-];
-
 const Products = () => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedPriceRange, setSelectedPriceRange] = useState(priceRanges[0]);
+  const [selectedPriceRange, setSelectedPriceRange] = useState({ label: "All Prices", min: 0, max: Infinity });
   const [sortBy, setSortBy] = useState("featured");
   const [viewMode, setViewMode] = useState("grid");
+
+  const categories = [t('products.filters.all'), "Steel Tongue Drums", "Handpans", "Kalimbas", "Crystal Singing Bowls", "Singing Bowls", "Wind Chimes"];
+  const priceRanges = [
+    { label: t('products.filters.allPrices'), min: 0, max: Infinity },
+    { label: t('products.filters.under100'), min: 0, max: 100 },
+    { label: t('products.filters.100to500'), min: 100, max: 500 },
+    { label: t('products.filters.over500'), min: 500, max: Infinity }
+  ];
 
   const filteredProducts = products
     .filter(product => {
@@ -118,10 +119,9 @@ const Products = () => {
       <div className="container py-12">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-primary mb-4">Sound Healing Instruments</h1>
+          <h1 className="text-5xl font-bold text-primary mb-4">{t('products.title')}</h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Discover our carefully curated collection of premium sound healing instruments. 
-            Each piece is crafted to bring harmony, peace, and therapeutic vibrations to your life.
+            {t('products.subtitle')}
           </p>
         </div>
 
@@ -132,7 +132,7 @@ const Products = () => {
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
-                placeholder="Search instruments..."
+                placeholder={t('products.search')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -169,10 +169,10 @@ const Products = () => {
                 onChange={(e) => setSortBy(e.target.value)}
                 className="border border-input rounded-md px-3 py-2 text-sm bg-background"
               >
-                <option value="featured">Featured</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="name">Name: A to Z</option>
+                <option value="featured">{t('products.filters.featured')}</option>
+                <option value="price-low">{t('products.filters.priceLowHigh')}</option>
+                <option value="price-high">{t('products.filters.priceHighLow')}</option>
+                <option value="name">{t('products.filters.nameAZ')}</option>
               </select>
 
               <div className="flex border border-input rounded-md overflow-hidden">
@@ -194,13 +194,13 @@ const Products = () => {
 
           {/* Active Filters */}
           <div className="flex flex-wrap gap-2 mt-4">
-            {selectedCategory !== "All" && (
+            {selectedCategory !== t('products.filters.all') && (
               <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm flex items-center gap-2">
                 {selectedCategory}
-                <button onClick={() => setSelectedCategory("All")} className="hover:text-primary/70">×</button>
+                <button onClick={() => setSelectedCategory(t('products.filters.all'))} className="hover:text-primary/70">×</button>
               </span>
             )}
-            {selectedPriceRange.label !== "All Prices" && (
+            {selectedPriceRange.label !== t('products.filters.allPrices') && (
               <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm flex items-center gap-2">
                 {selectedPriceRange.label}
                 <button onClick={() => setSelectedPriceRange(priceRanges[0])} className="hover:text-primary/70">×</button>
@@ -218,7 +218,7 @@ const Products = () => {
         {/* Results */}
         <div className="flex justify-between items-center mb-6">
           <p className="text-muted-foreground">
-            Showing {filteredProducts.length} of {products.length} products
+            {t('products.showing', { count: filteredProducts.length, total: products.length })}
           </p>
           
           {filteredProducts.length === 0 && (
@@ -226,11 +226,11 @@ const Products = () => {
               variant="outline" 
               onClick={() => {
                 setSearchTerm("");
-                setSelectedCategory("All");
+                setSelectedCategory(t('products.filters.all'));
                 setSelectedPriceRange(priceRanges[0]);
               }}
             >
-              Clear All Filters
+              {t('products.clearFilters')}
             </Button>
           )}
         </div>
@@ -248,19 +248,19 @@ const Products = () => {
         ) : (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🎵</div>
-            <h3 className="text-2xl font-bold text-primary mb-2">No instruments found</h3>
+            <h3 className="text-2xl font-bold text-primary mb-2">{t('products.noResults')}</h3>
             <p className="text-muted-foreground mb-6">
-              Try adjusting your filters or search terms to find the perfect instrument.
+              {t('products.noResultsText')}
             </p>
             <Button 
               onClick={() => {
                 setSearchTerm("");
-                setSelectedCategory("All");
+                setSelectedCategory(t('products.filters.all'));
                 setSelectedPriceRange(priceRanges[0]);
               }}
               className="bg-primary hover:bg-primary/90"
             >
-              View All Products
+              {t('products.viewAll')}
             </Button>
           </div>
         )}

@@ -1,0 +1,80 @@
+
+{
+  "navbar": {
+    "home": "Home",
+    "products": "Products",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Discover the Healing Power of Sound",
+    "subtitle": "Transform your mind, body, and spirit with our carefully curated collection of sound healing instruments."
+  },
+  "categories": {
+    "title": "Categories",
+    "handpans": "Handpans",
+    "steelTongueDrums": "Steel Tongue Drums",
+    "kalimbas": "Kalimbas",
+    "crystalSingingBowls": "Crystal Singing Bowls",
+    "crystalSingingChalices": "Crystal Singing Chalices",
+    "singingBowls": "Singing Bowls"
+  },
+  "products": {
+    "title": "Sound Healing Instruments",
+    "subtitle": "Discover our carefully curated collection of premium sound healing instruments. Each piece is crafted to bring harmony, peace, and therapeutic vibrations to your life.",
+    "featured": "Featured Products",
+    "search": "Search instruments...",
+    "filters": {
+      "all": "All",
+      "allPrices": "All Prices",
+      "under100": "Under €100",
+      "100to500": "€100 - €500",
+      "over500": "Over €500",
+      "featured": "Featured",
+      "priceLowHigh": "Price: Low to High",
+      "priceHighLow": "Price: High to Low",
+      "nameAZ": "Name: A to Z"
+    },
+    "showing": "Showing {{count}} of {{total}} products",
+    "clearFilters": "Clear All Filters",
+    "viewAll": "View All Products",
+    "noResults": "No instruments found",
+    "noResultsText": "Try adjusting your filters or search terms to find the perfect instrument.",
+    "available": "Available immediately"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "items": "{{count}} items",
+    "empty": "Your cart is empty",
+    "clearAll": "Clear All",
+    "total": "Total: €{{amount}}",
+    "checkout": "Proceed to Checkout",
+    "addToCart": "Add to Cart",
+    "addedToCart": "Added to cart",
+    "addedDescription": "{{title}} has been added to your cart."
+  },
+  "about": {
+    "title": "About Marcus Weber",
+    "mission": "Our Mission",
+    "faq": "Frequently Asked Questions",
+    "faqItems": {
+      "soundHealing": "What is sound healing?",
+      "chooseInstrument": "How do I choose the right instrument?",
+      "workshops": "Do you offer workshops?",
+      "benefits": "What are the benefits of sound therapy?"
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send Message",
+    "success": "Message sent successfully!",
+    "successDescription": "We'll get back to you as soon as possible."
+  },
+  "footer": {
+    "followUs": "Follow Us"
+  }
+}
