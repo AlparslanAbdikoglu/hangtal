@@ -6,15 +6,13 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
-
-// Import Clerk components
 import { ClerkProvider, SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
 
 // Import your pages
 import Index from "./pages/Index";
-import Products from "./pages/Products"; // This page will handle WooCommerce authentication and product display
-import Contact from "./pages/Contact";
+import Products from "./pages/Products";
 import About from "./pages/About";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -27,10 +25,9 @@ if (!PUBLISHABLE_KEY) {
 }
 
 const App = () => (
-  // Wrap your entire application with ClerkProvider
   <ClerkProvider
     publishableKey={PUBLISHABLE_KEY}
-    afterSignInUrl="/" // Adjust redirect URLs as needed
+    afterSignInUrl="/"
     afterSignUpUrl="/"
     afterSignOutUrl="/"
   >
@@ -69,5 +66,3 @@ const App = () => (
     </QueryClientProvider>
   </ClerkProvider>
 );
-
-export default App;
