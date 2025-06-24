@@ -20,7 +20,7 @@ services:
       - internal
     restart: unless-stopped
 
-  # WordPress / WooCommerce Backend
+  # WordPress / WooCommerce Backend (PHP-FPM)
   wordpress:
     build:
       context: ./wordpress-custom
@@ -43,6 +43,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
+      # Routes /wp-admin and /wp-login to WP backend PHP-FPM on port 9000
       - "traefik.http.routers.wordpress-backend.rule=(Host(`${WORDPRESS_SITE_URL_HOST}`) || Host(`www.${WORDPRESS_SITE_URL_HOST}`)) && (PathPrefix(`/wp-admin`) || PathPrefix(`/wp-login`))"
       - "traefik.http.routers.wordpress-backend.entrypoints=websecure"
       - "traefik.http.routers.wordpress-backend.tls.certresolver=cloudflare"
@@ -68,10 +69,12 @@ services:
       - internal
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.webshop-frontend.rule=Host(`${WORDPRESS_SITE_URL_HOST}`) || Host(`www.${WORDPRESS_SITE_URL_HOST}`)"
+      # All other routes excluding /wp-admin and /wp-login go to React frontend on port 80
+      - "traefik.http.routers.webshop-frontend.rule=(Host(`${WORDPRESS_SITE_URL_HOST}`) || Host(`www.${WORDPRESS_SITE_URL_HOST}`)) && !PathPrefix(`/wp-admin`) && !PathPrefix(`/wp-login`)"
       - "traefik.http.routers.webshop-frontend.entrypoints=websecure"
       - "traefik.http.routers.webshop-frontend.tls=true"
       - "traefik.http.routers.webshop-frontend.tls.certresolver=cloudflare"
+      - "traefik.http.routers.webshop-frontend.priority=10"
       - "traefik.http.services.webshop-frontend-service.loadbalancer.server.port=80"
       - "traefik.docker.network=web"
 
