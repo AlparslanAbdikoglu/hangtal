@@ -1,3 +1,4 @@
+
 {
   "navbar": {
     "home": "Főoldal",
@@ -83,16 +84,169 @@
     "emailPrompt": "Kattintson az alábbi gombra, hogy e-mailt küldjön nekünk. Hamarosan válaszolunk.",
     "sendEmail": "E-mail küldése"
   },
+  "privacy": {
+    "title": "Adatvédelmi szabályzat",
+    "subtitle": "Általános szerződési feltételek",
+    "documentTitle": "Adatvédelmi szabályzat dokumentum",
+    "lastUpdated": "Utolsó frissítés: 2024. december | 2.1 verzió",
+    "description": "Átfogó adatvédelmi szabályzatunk bemutatja, hogyan gyűjti, használja és védi a MEINL Sonic Energy az Ön személyes adatait. Elkötelezettek vagyunk az adatvédelem legmagasabb szintjének fenntartása és az átláthatóság iránt.",
+    "viewPDF": "Adatvédelmi szabályzat megtekintése (PDF)",
+    "downloadPDF": "PDF letöltése",
+    "whatsCovered": "Mit tartalmaz",
+    "quickSummary": "Gyors összefoglaló",
+    "keyHighlights": "Fő adatvédelmi kiemelések",
+    "dataCollection": "Adatgyűjtés",
+    "dataUsage": "Adatfelhasználás",
+    "yourRights": "Az Ön jogai",
+    "policyUpdates": "Szabályzat frissítések",
+    "privacyQuestions": "Adatvédelmi kérdései vannak?",
+    "contactInfo": "Kapcsolattartási információk",
+    "responseTime": "Válaszidő",
+    "coveredItems": {
+      "practices": "Adatgyűjtési és felhasználási gyakorlatok",
+      "cookies": "Cookie szabályzat és követési technológiák",
+      "thirdParty": "Harmadik féllel való integrációk és partnerségek",
+      "rights": "Az Ön jogai és választási lehetőségei az adataival kapcsolatban",
+      "transfers": "Nemzetközi adattovábbítások",
+      "security": "Biztonsági intézkedések és adatvédelem",
+      "contact": "Kapcsolattartási információk adatvédelmi kérdésekhez"
+    },
+    "summaryItems": {
+      "necessary": "Csak a szükséges információkat gyűjtjük",
+      "noSelling": "Az Ön adatait soha nem adjuk el harmadik félnek",
+      "deletion": "Bármikor kérheti adatai törlését",
+      "encryption": "Minden adat titkosított és biztonságosan tárolva",
+      "compliant": "GDPR és CCPA megfelelő",
+      "audits": "Rendszeres biztonsági auditok és frissítések",
+      "transparent": "Átlátható kommunikáció a változásokról"
+    },
+    "collectionItems": {
+      "contact": "Kapcsolattartási információk",
+      "orderHistory": "Rendelési előzmények",
+      "websiteUsage": "Weboldal használati adatok",
+      "payment": "Fizetési információk (biztonságosan feldolgozva)"
+    },
+    "usageItems": {
+      "orders": "Rendelések és fizetések feldolgozása",
+      "support": "Ügyfélszolgálat és kommunikáció",
+      "improvement": "Termékeink és szolgáltatásaink fejlesztése",
+      "compliance": "Jogi megfelelés és biztonság"
+    },
+    "rightsItems": {
+      "access": "Hozzáférés személyes adataihoz",
+      "correct": "Pontatlan információk javítása",
+      "delete": "Adatok törlésének kérése",
+      "optOut": "Kilépés a marketing kommunikációból"
+    },
+    "updates": {
+      "v21": "2.1 verzió - 2024. december",
+      "v21Description": "Frissített adatmegőrzési szabályzatok és fokozott biztonsági intézkedések",
+      "v20": "2.0 verzió - 2024. szeptember",
+      "v20Description": "CCPA megfelelés hozzáadása és javított cookie kezelés",
+      "v15": "1.5 verzió - 2024. május",
+      "v15Description": "Fokozott GDPR megfelelés és felhasználói jogok tisztázása"
+    },
+    "dpoDescription": "Adatvédelmi tisztviselőnk rendelkezésre áll, hogy segítsen bármilyen adatvédelemmel kapcsolatos kérdésben vagy aggodalomban.",
+    "contactDetails": {
+      "email": "E-mail: privacy@meinlsonic.com",
+      "phone": "Telefon: +1 (555) 123-4570",
+      "mail": "Levél: Adatvédelmi tisztviselő, 123 Sound Street, Harmony City"
+    },
+    "responseDetails": {
+      "inquiry": "72 órán belül válaszolunk az adatvédelmi megkeresésekre",
+      "requests": "Adatkérések 30 napon belül feldolgozva",
+      "emergency": "Sürgős adatvédelmi ügyek: Azonnali válasz"
+    }
+  },
+  "shipping": {
+    "title": "Szállítási információk",
+    "standardShipping": "Normál szállítás",
+    "standardDescription": "Megbízható kézbesítés minden rendeléshez",
+    "expressShipping": "Expressz szállítás",
+    "expressDescription": "Gyors kézbesítés, amikor szüksége van rá",
+    "shippingZones": "Szállítási zónák",
+    "packagingHandling": "Csomagolás és kezelés",
+    "shippingProtection": "Szállítási védelem",
+    "returnsExchanges": "Visszatérítések és cserék",
+    "needHelp": "Segítségre van szüksége?",
+    "standardFeatures": {
+      "freeShipping": "Ingyenes szállítás 100 € feletti rendeléseknél",
+      "shippingFee": "9,99 € szállítási díj 100 € alatti rendeléseknél",
+      "delivery": "Kézbesítés 5-7 munkanapon belül",
+      "tracking": "Nyomkövetési információk biztosítva"
+    },
+    "expressFeatures": {
+      "fee": "19,99 € expressz szállítási díj",
+      "delivery": "Kézbesítés 2-3 munkanapon belül",
+      "priority": "Prioritásos kezelés és feldolgozás",
+      "realTimeTracking": "Valós idejű nyomkövetési frissítések"
+    },
+    "zones": {
+      "zone1": "1. zóna: EU",
+      "zone1Countries": "Ausztria, Belgium, Franciaország, Németország, Hollandia, Luxemburg",
+      "zone1Time": "3-5 munkanap",
+      "zone2": "2. zóna: Kiterjesztett EU",
+      "zone2Countries": "Olaszország, Spanyolország, Portugália, Lengyelország, Csehország, Szlovákia, Magyarország",
+      "zone2Time": "5-7 munkanap",
+      "zone3": "3. zóna: Nemzetközi",
+      "zone3Countries": "Egyesült Királyság, Svájc, Norvégia, USA, Kanada",
+      "zone3Time": "7-14 munkanap"
+    },
+    "packaging": {
+      "securePackaging": "Biztonságos csomagolás",
+      "wrapping": "Minden hangszert gondosan védőanyagba csomagolunk",
+      "foam": "Egyedi habszivacs betétek kényes tárgyakhoz",
+      "boxes": "Erős kartondobozok, amelyeket hangszerekhez terveztek",
+      "labels": "Törékeny kezelés címkék minden csomagokon",
+      "processingTime": "Feldolgozási idő",
+      "processing": "Rendelések 1-2 munkanapon belül feldolgozva",
+      "quality": "Minőségellenőrzés szállítás előtt",
+      "confirmation": "E-mail megerősítés nyomkövetési számmal",
+      "custom": "Speciális kezelés egyedi rendeléseknél"
+    },
+    "protection": {
+      "insurance": "Biztosítási fedezet",
+      "insuranceDescription": "Minden szállítmány automatikusan biztosított teljes értékére, Önnek semmilyen extra költség nélkül.",
+      "replacement": "Teljes csere sérült tárgyakért",
+      "coverage": "Fedezet elveszett csomagokért",
+      "claims": "Gyors kárrendezés",
+      "guarantee": "Kézbesítési garancia",
+      "guaranteeDescription": "Garantáljuk a biztonságos kézbesítést, vagy visszatérítjük a pénzét.",
+      "signature": "Aláírás szükséges magas értékű tárgyaknál",
+      "photo": "Fényképes kézbesítési bizonyíték",
+      "support": "Ügyfélszolgálat kézbesítési problémákhoz"
+    },
+    "returns": {
+      "description": "Szeretnénk, hogy teljesen elégedett legyen a vásárlásával. Ha nem elégedett a hangterápiás hangszerével, ajánljuk:",
+      "returnPolicy": "Visszatérítési szabályzat",
+      "window": "30 napos visszatérítési időszak",
+      "condition": "A tárgyaknak eredeti állapotban kell lenniük",
+      "freeReturn": "Ingyenes visszaküldés hibás tárgyaknál",
+      "refund": "Teljes visszatérítés ellenőrzés után",
+      "exchangeProcess": "Csere folyamat",
+      "authorization": "Forduljon az ügyfélszolgálathoz engedélyért",
+      "label": "Előre fizetett visszaküldési címke kézhez kapása",
+      "quickProcessing": "Gyors cserék feldolgozása",
+      "priorityShipping": "Prioritásos szállítás csere tárgyakhoz"
+    },
+    "help": {
+      "description": "Kérdései vannak a szállítással kapcsolatban, vagy nyomon szeretné követni rendelését?",
+      "customerService": "Ügyfélszolgálat",
+      "email": "E-mail: shipping@meinlsonic.com",
+      "phone": "Telefon: +1 (555) 123-4567",
+      "businessHours": "Nyitvatartás",
+      "weekdays": "Hétfő - Péntek: 9:00 - 18:00 CET",
+      "saturday": "Szombat: 10:00 - 16:00 CET"
+    }
+  },
   "footer": {
     "aboutTitle": "Rólunk",
     "aboutText": "A MEINL Sonic Energy kiváló minőségű hangterápiás hangszereket kínál meditációhoz, relaxációhoz és hangterápiához.",
     "quickLinks": "Gyorslinkek",
     "shipping": "Szállítási információk",
+    "privacy": "Adatvédelmi szabályzat",
     "contactTitle": "Kapcsolat",
     "email": "E-mail",
-    "phone": "Telefon",
-    "address": "Cím",
-    "city": "Harmony City, HC 12345",
     "copyright": "© 2024 MEINL Sonic Energy. Minden jog fenntartva.",
     "followUs": "Kövess minket"
   }

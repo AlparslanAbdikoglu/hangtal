@@ -8,7 +8,9 @@
   },
   "hero": {
     "title": "Objavte liečivú silu zvuku",
-    "subtitle": "Transformujte svoju myseľ, telo a ducha s našou starostlivo vyskladanou kolekciou zvukových liečivých nástrojov."
+    "subtitle": "Transformujte svoju myseľ, telo a ducha s našou starostlivo vyskladanou kolekciou zvukových liečivých nástrojov.",
+    "description": "Zažite transformačnú silu zvuku s našou jedinečnou kolekciou nástrojov navrhnutých pre relaxáciu, sústredenosť a pohodu.",
+    "imageAlt": "Zvukové liečivé nástroje"
   },
   "categories": {
     "title": "Kategórie",
@@ -55,26 +57,197 @@
   },
   "about": {
     "title": "O Marcusovi Weberovi",
+    "intro1": "Marcus Weber sa venuje prinášaniu liečivej sily zvuku každému. So skúsenosťami so zvukovou terapiou vyberá nástroje, ktoré inšpirujú relaxáciu a pohodu.",
+    "intro2": "Naším poslaním je pomôcť vám objaviť transformačné účinky zvuku, či už ste začiatočník alebo skúsený praktik.",
+    "imageAlt": "Portrét Marcusa Webera",
     "mission": "Naše poslanie",
+    "missionText": "Snažíme sa poskytovať vysokokvalitné zvukové liečivé nástroje a zdroje na podporu vašej cesty k rovnováhe a harmónii.",
     "faq": "Často kladené otázky",
     "faqItems": {
       "soundHealing": "Čo je zvukové liečenie?",
       "chooseInstrument": "Ako si vybrať správny nástroj?",
       "workshops": "Ponúkate workshopy?",
       "benefits": "Aké sú výhody zvukovej terapie?"
+    },
+    "faqAnswers": {
+      "soundHealing": "Zvukové liečenie je prax, ktorá používa vibrácie z nástrojov na podporu fyzickej a emocionálnej pohody.",
+      "chooseInstrument": "Zvážte svoj zámer a osobné preferencie. Radi vám pomôžeme nájsť dokonalý nástroj.",
+      "workshops": "Áno, ponúkame workshopy pre všetky úrovne. Pozrite si našu stránku udalostí pre nadchádzajúce relácie.",
+      "benefits": "Zvuková terapia môže pomôcť znížiť stres, zlepšiť sústredenosť a podporiť celkové zdravie."
     }
   },
   "contact": {
     "title": "Kontaktujte nás",
-    "subtitle": "Radi by sme o vás počuli. Pošlite nám správu a odpovieme čo najskôr.",
-    "name": "Meno",
-    "email": "E-mail",
-    "message": "Správa",
-    "send": "Poslať správu",
-    "success": "Správa úspešne odoslaná!",
-    "successDescription": "Ozveme sa vám čo najskôr."
+    "subtitle": "Máte otázky o našich zvukových liečivých nástrojoch? Radi by sme o vás počuli. Pošlite nám e-mail a odpovieme čo najskôr.",
+    "infoTitle": "Kontaktné informácie",
+    "formTitle": "Poslať e-mail",
+    "emailPrompt": "Kliknite na tlačidlo nižšie a pošlite nám e-mail. Ozveme sa vám čo najskôr.",
+    "sendEmail": "Poslať e-mail"
+  },
+  "privacy": {
+    "title": "Zásady ochrany osobných údajov",
+    "subtitle": "Všeobecné obchodné podmienky",
+    "documentTitle": "Dokument zásad ochrany osobných údajov",
+    "lastUpdated": "Posledná aktualizácia: december 2024 | Verzia 2.1",
+    "description": "Naše komplexné zásady ochrany osobných údajov objasňujú, ako MEINL Sonic Energy zhromažďuje, používa a chráni vaše osobné informácie. Sme odhodlaní udržiavať najvyššie štandardy ochrany súkromia a transparentnosti.",
+    "viewPDF": "Zobraziť zásady ochrany osobných údajov (PDF)",
+    "downloadPDF": "Stiahnuť PDF",
+    "whatsCovered": "Čo je pokryté",
+    "quickSummary": "Rýchle zhrnutie",
+    "keyHighlights": "Kľúčové body ochrany súkromia",
+    "dataCollection": "Zhromažďovanie údajov",
+    "dataUsage": "Používanie údajov",
+    "yourRights": "Vaše práva",
+    "policyUpdates": "Aktualizácie zásad",
+    "privacyQuestions": "Máte otázky o súkromí?",
+    "contactInfo": "Kontaktné informácie",
+    "responseTime": "Čas odpovede",
+    "coveredItems": {
+      "practices": "Praktiky zhromažďovania a používania údajov",
+      "cookies": "Zásady súborov cookie a sledovacie technológie",
+      "thirdParty": "Integrácie tretích strán a partnerstvá",
+      "rights": "Vaše práva a možnosti týkajúce sa vašich údajov",
+      "transfers": "Medzinárodné prenosy údajov",
+      "security": "Bezpečnostné opatrenia a ochrana údajov",
+      "contact": "Kontaktné informácie pre otázky súkromia"
+    },
+    "summaryItems": {
+      "necessary": "Zhromažďujeme len potrebné informácie",
+      "noSelling": "Vaše údaje nikdy nepredávame tretím stranám",
+      "deletion": "Môžete kedykoľvek požiadať o vymazanie údajov",
+      "encryption": "Všetky údaje sú šifrované a bezpečne uložené",
+      "compliant": "V súlade s GDPR a CCPA",
+      "audits": "Pravidelné bezpečnostné audity a aktualizácie",
+      "transparent": "Transparentná komunikácia o zmenách"
+    },
+    "collectionItems": {
+      "contact": "Kontaktné informácie",
+      "orderHistory": "História objednávok",
+      "websiteUsage": "Údaje o používaní webových stránok",
+      "payment": "Platobné informácie (bezpečne spracovávané)"
+    },
+    "usageItems": {
+      "orders": "Spracovanie objednávok a platieb",
+      "support": "Zákaznícka podpora a komunikácia",
+      "improvement": "Zlepšovanie našich produktov a služieb",
+      "compliance": "Právne dodržiavanie a bezpečnosť"
+    },
+    "rightsItems": {
+      "access": "Prístup k vašim osobným údajom",
+      "correct": "Oprava nesprávnych informácií",
+      "delete": "Žiadosť o vymazanie údajov",
+      "optOut": "Odhlásenie z marketingovej komunikácie"
+    },
+    "updates": {
+      "v21": "Verzia 2.1 - december 2024",
+      "v21Description": "Aktualizované zásady uchovávania údajov a vylepšené bezpečnostné opatrenia",
+      "v20": "Verzia 2.0 - september 2024",
+      "v20Description": "Pridaná CCPA zhoda a vylepšené spravovanie súborov cookie",
+      "v15": "Verzia 1.5 - máj 2024",
+      "v15Description": "Vylepšená GDPR zhoda a objasnenie práv používateľov"
+    },
+    "dpoDescription": "Náš úradník pre ochranu údajov je k dispozícii na pomoc s akýmikoľvek otázkami alebo obavami súvisiacimi so súkromím.",
+    "contactDetails": {
+      "email": "E-mail: privacy@meinlsonic.com",
+      "phone": "Telefón: +1 (555) 123-4570",
+      "mail": "Pošta: Úradník pre ochranu údajov, 123 Sound Street, Harmony City"
+    },
+    "responseDetails": {
+      "inquiry": "Na otázky súkromia odpovedáme do 72 hodín",
+      "requests": "Žiadosti o údaje spracované do 30 dní",
+      "emergency": "Núdzové otázky súkromia: Okamžitá odpoveď"
+    }
+  },
+  "shipping": {
+    "title": "Informácie o doprave",
+    "standardShipping": "Štandardná doprava",
+    "standardDescription": "Spoľahlivé doručenie pre všetky objednávky",
+    "expressShipping": "Expresná doprava",
+    "expressDescription": "Rýchle doručenie, keď ho potrebujete",
+    "shippingZones": "Zóny dopravy",
+    "packagingHandling": "Balenie a manipulácia",
+    "shippingProtection": "Ochrana dopravy",
+    "returnsExchanges": "Vrátenie a výmeny",
+    "needHelp": "Potrebujete pomoc?",
+    "standardFeatures": {
+      "freeShipping": "Bezplatná doprava pri objednávkach nad 100 €",
+      "shippingFee": "Poplatok za dopravu 9,99 € pri objednávkach pod 100 €",
+      "delivery": "Doručenie do 5-7 pracovných dní",
+      "tracking": "Poskytnuté informácie o sledovaní"
+    },
+    "expressFeatures": {
+      "fee": "Poplatok za expresnú dopravu 19,99 €",
+      "delivery": "Doručenie do 2-3 pracovných dní",
+      "priority": "Prioritné spracovanie a manipulácia",
+      "realTimeTracking": "Aktualizácie sledovania v reálnom čase"
+    },
+    "zones": {
+      "zone1": "Zóna 1: EÚ",
+      "zone1Countries": "Rakúsko, Belgicko, Francúzsko, Nemecko, Holandsko, Luxemburg",
+      "zone1Time": "3-5 pracovných dní",
+      "zone2": "Zóna 2: Rozšírená EÚ",
+      "zone2Countries": "Taliansko, Španielsko, Portugalsko, Poľsko, Česká republika, Slovensko, Maďarsko",
+      "zone2Time": "5-7 pracovných dní",
+      "zone3": "Zóna 3: Medzinárodné",
+      "zone3Countries": "Spojené kráľovstvo, Švajčiarsko, Nórsko, USA, Kanada",
+      "zone3Time": "7-14 pracovných dní"
+    },
+    "packaging": {
+      "securePackaging": "Bezpečné balenie",
+      "wrapping": "Každý nástroj je starostlivo zabalený do ochranného materiálu",
+      "foam": "Vlastné penové vložky pre krehké predmety",
+      "boxes": "Pevné kartónové krabice navrhnuté pre hudobné nástroje",
+      "labels": "Štítky pre krehké manipulovanie na všetkých balíkoch",
+      "processingTime": "Čas spracovania",
+      "processing": "Objednávky spracované do 1-2 pracovných dní",
+      "quality": "Kontrola kvality pred odoslaním",
+      "confirmation": "E-mailové potvrdenie s číslom sledovania",
+      "custom": "Špeciálne spracovanie pre vlastné objednávky"
+    },
+    "protection": {
+      "insurance": "Poistné krytie",
+      "insuranceDescription": "Všetky zásielky sú automaticky poistené až do ich plnej hodnoty bez dodatočných nákladov pre vás.",
+      "replacement": "Úplná náhrada za poškodené predmety",
+      "coverage": "Krytie pre stratené balíky",
+      "claims": "Rýchle spracovanie nárokov",
+      "guarantee": "Záruka doručenia",
+      "guaranteeDescription": "Garantujeme bezpečné doručenie alebo vrátenie peňazí.",
+      "signature": "Podpis potrebný pre vysoko hodnotné predmety",
+      "photo": "Fotografický dôkaz doručenia",
+      "support": "Zákaznícka podpora pre problémy s doručením"
+    },
+    "returns": {
+      "description": "Chceme, aby ste boli úplne spokojní s vašou kúpou. Ak nie ste spokojní s vaším zvukovým liečivým nástrojom, ponúkame:",
+      "returnPolicy": "Zásady vrátenia",
+      "window": "30-dňové okno vrátenia",
+      "condition": "Predmety musia byť v pôvodnom stave",
+      "freeReturn": "Bezplatné vrátenie dopravy pre chybné predmety",
+      "refund": "Úplné vrátenie peňazí po kontrole",
+      "exchangeProcess": "Proces výmeny",
+      "authorization": "Kontaktujte zákaznícky servis pre autorizáciu",
+      "label": "Získajte predplatenú etiketu na vrátenie",
+      "quickProcessing": "Rýchle spracovanie výmen",
+      "priorityShipping": "Prioritná doprava pre náhradné predmety"
+    },
+    "help": {
+      "description": "Máte otázky o doprave alebo potrebujete sledovať svoju objednávku?",
+      "customerService": "Zákaznícky servis",
+      "email": "E-mail: shipping@meinlsonic.com",
+      "phone": "Telefón: +1 (555) 123-4567",
+      "businessHours": "Pracovné hodiny",
+      "weekdays": "Pondelok - Piatok: 9:00 - 18:00 CET",
+      "saturday": "Sobota: 10:00 - 16:00 CET"
+    }
   },
   "footer": {
+    "aboutTitle": "O nás",
+    "aboutText": "MEINL Sonic Energy ponúka vysokokvalitné nástroje zvukovej terapie pre meditáciu, relaxáciu a zvukové liečenie.",
+    "quickLinks": "Rýchle odkazy",
+    "shipping": "Informácie o doprave",
+    "privacy": "Zásady ochrany osobných údajov",
+    "contactTitle": "Kontakt",
+    "email": "E-mail",
+    "copyright": "© 2024 MEINL Sonic Energy. Všetky práva vyhradené.",
     "followUs": "Sledujte nás"
   }
 }
