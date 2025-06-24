@@ -8,7 +8,7 @@ services:
   # MariaDB Database Service
   db:
     image: mariadb:10.6
-    container_name: woocommerce_db # Hardcoded name
+    container_name: woocommerce_db
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -19,16 +19,14 @@ services:
     networks:
       - internal
     restart: unless-stopped
-    
 
-  # WordPress / WooCommerce Backend (Custom Image with Plugin Pre-installed)
+  # WordPress / WooCommerce Backend
   wordpress:
     build:
       context: ./wordpress-custom
-    container_name: woocommerce_app # Hardcoded name
+    container_name: woocommerce_app
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: ${MYSQL_USER}
@@ -52,18 +50,18 @@ services:
       - "traefik.http.services.wordpress-service.loadbalancer.server.port=9000"
       - "traefik.docker.network=web"
 
-  # React App (The WooCommerce Frontend)
+  # React App (WooCommerce Frontend)
   webshop-react-app:
     build:
-      context: ./webshop-react-app
+      context: .
       args:
-        - REACT_APP_CLERK_PUBLISHABLE_KEY=${REACT_APP_CLERK_PUBLISHABLE_KEY}
-        - REACT_APP_WORDPRESS_API_URL=${WORDPRESS_SITE_URL}/wp-json
-    container_name: hangtal # Hardcoded name
+        VITE_CLERK_PUBLISHABLE_KEY: ${VITE_CLERK_PUBLISHABLE_KEY}
+        VITE_WOO_API_URL: ${VITE_WOO_API_URL}
+        VITE_STRIPE_PUBLISHABLE_KEY: ${VITE_STRIPE_PUBLISHABLE_KEY}
+    container_name: hangtal
     restart: always
     depends_on:
-      wordpress:
-        condition: service_started
+      - wordpress
     networks:
       - web
       - internal
