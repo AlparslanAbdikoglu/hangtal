@@ -1,0 +1,83 @@
+version: '3'
+
+volumes:
+  db_data: {}
+  wordpress_data: {}
+
+services:
+  # MariaDB Database Service
+  db:
+    image: mariadb:10.6
+    container_name: woocommerce_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - internal
+    restart: unless-stopped
+
+  # WordPress / WooCommerce Backend
+  wordpress:
+    image: wordpress:latest
+    container_name: woocommerce_app
+    depends_on:
+      - db
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_TABLE_PREFIX: wp_
+      # Explicitly set the site URL to ensure redirects and asset URLs are correct.
+      WORDPRESS_SITEURL: "https://api.lifeisnatural.eu"
+      WORDPRESS_HOME: "https://api.lifeisnatural.eu"
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - web       # For Traefik routing
+      - internal  # DB connection
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # Rule to route backend paths (admin, login, api) to WordPress
+      - "traefik.http.routers.wordpress-backend.rule=(Host(`api.lifeisnatural.eu`) || Host(`www.api.lifeisnatural.eu`)) && (PathPrefix(`/wp-admin`) || PathPrefix(`/wp-login.php`) || PathPrefix(`/wp-json`) || PathPrefix(`/wp-content`) || PathPrefix(`/wp-includes`))"
+      - "traefik.http.routers.wordpress-backend.entrypoints=websecure"
+      - "traefik.http.routers.wordpress-backend.tls.certresolver=cloudflare"
+      - "traefik.http.routers.wordpress-backend.priority=20" # High priority for backend paths
+      - "traefik.http.services.wordpress-service.loadbalancer.server.port=80"
+      - "traefik.docker.network=web"
+
+  # NEW React App (The WooCommerce Frontend)
+  webshop-react-app:
+    build:
+      context: ./hangtal # Points to the hangtal folder
+      dockerfile: Dockerfile
+    container_name: hangtal
+    restart: always
+    depends_on:
+      - wordpress
+    networks:
+      - web
+      - internal
+    labels:
+      - "traefik.enable=true"
+      # This rule catches all traffic for the domain.
+      # Because the wordpress-backend router has a higher priority,
+      # Traefik will check for its paths first (`/wp-admin`, etc.).
+      # If no backend path matches, this router will handle the request.
+      - "traefik.http.routers.webshop-frontend.rule=Host(`api.lifeisnatural.eu`) || Host(`www.api.lifeisnatural.eu`)"
+      - "traefik.http.routers.webshop-frontend.entrypoints=websecure"
+      - "traefik.http.routers.webshop-frontend.tls=true"
+      - "traefik.http.routers.webshop-frontend.tls.certresolver=cloudflare"
+      - "traefik.http.services.webshop-frontend-service.loadbalancer.server.port=80"
+      - "traefik.docker.network=web"
+
+networks:
+  web:
+    external: true
+  internal:
+    internal: true
