@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -29,6 +30,9 @@ export const Footer = () => {
               </li>
               <li>
                 <Link to="/shipping" className="text-sm hover:opacity-80">{t("footer.shipping")}</Link>
+              </li>
+              <li>
+                <Link to="/privacy" className="text-sm hover:opacity-80">Privacy Policy</Link>
               </li>
             </ul>
           </div>
