@@ -32,7 +32,7 @@ export const Footer = () => {
                 <Link to="/shipping" className="text-sm hover:opacity-80">{t("footer.shipping")}</Link>
               </li>
               <li>
-                <Link to="/privacy" className="text-sm hover:opacity-80">Privacy Policy</Link>
+                <Link to="/privacy" className="text-sm hover:opacity-80">{t("footer.privacy")}</Link>
               </li>
             </ul>
           </div>
@@ -41,9 +41,6 @@ export const Footer = () => {
             <h3 className="font-bold text-lg mb-4">{t("footer.contactTitle")}</h3>
             <ul className="space-y-2 text-sm">
               <li>{t("footer.email")}: info@meinlsonic.com</li>
-              <li>{t("footer.phone")}: +1 (555) 123-4567</li>
-              <li>{t("footer.address")}: 123 Sound Street</li>
-              <li>{t("footer.city")}: Harmony City, HC 12345</li>
             </ul>
           </div>
         </div>

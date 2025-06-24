@@ -8,7 +8,9 @@
   },
   "hero": {
     "title": "Entdecken Sie die heilende Kraft des Klangs",
-    "subtitle": "Verwandeln Sie Ihren Geist, Körper und Ihre Seele mit unserer sorgfältig kuratierten Sammlung von Klangheitung-Instrumenten."
+    "subtitle": "Verwandeln Sie Ihren Geist, Körper und Ihre Seele mit unserer sorgfältig kuratierten Sammlung von Klangheitung-Instrumenten.",
+    "description": "Erleben Sie die transformative Kraft des Klangs mit unserer einzigartigen Auswahl an Instrumenten für Entspannung, Fokus und Wohlbefinden.",
+    "imageAlt": "Klangheitung-Instrumente"
   },
   "categories": {
     "title": "Kategorien",
@@ -55,26 +57,197 @@
   },
   "about": {
     "title": "Über Marcus Weber",
+    "intro1": "Marcus Weber widmet sich der Aufgabe, die heilende Kraft des Klangs allen zugänglich zu machen. Mit jahrelanger Erfahrung in der Klangtherapie kuratiert er Instrumente, die Entspannung und Wohlbefinden fördern.",
+    "intro2": "Unsere Mission ist es, Ihnen zu helfen, die transformativen Effekte des Klangs zu entdecken, egal ob Sie Anfänger oder erfahrener Praktiker sind.",
+    "imageAlt": "Porträt von Marcus Weber",
     "mission": "Unsere Mission",
+    "missionText": "Wir streben danach, hochwertige Klangheitung-Instrumente und Ressourcen bereitzustellen, um Ihre Reise zu Gleichgewicht und Harmonie zu unterstützen.",
     "faq": "Häufig gestellte Fragen",
     "faqItems": {
       "soundHealing": "Was ist Klangheitung?",
       "chooseInstrument": "Wie wähle ich das richtige Instrument?",
       "workshops": "Bieten Sie Workshops an?",
       "benefits": "Was sind die Vorteile der Klangtherapie?"
+    },
+    "faqAnswers": {
+      "soundHealing": "Klangheitung ist eine Praxis, die Vibrationen von Instrumenten nutzt, um körperliches und emotionales Wohlbefinden zu fördern.",
+      "chooseInstrument": "Berücksichtigen Sie Ihre Absicht und persönliche Vorliebe. Wir helfen Ihnen gerne dabei, das perfekte Instrument zu finden.",
+      "workshops": "Ja, wir bieten Workshops für alle Niveaus an. Schauen Sie auf unserer Veranstaltungsseite nach kommenden Sitzungen.",
+      "benefits": "Klangtherapie kann helfen, Stress zu reduzieren, die Konzentration zu verbessern und die allgemeine Gesundheit zu unterstützen."
     }
   },
   "contact": {
     "title": "Kontaktieren Sie uns",
-    "subtitle": "Wir würden gerne von Ihnen hören. Senden Sie uns eine Nachricht und wir antworten so schnell wie möglich.",
-    "name": "Name",
-    "email": "E-Mail",
-    "message": "Nachricht",
-    "send": "Nachricht senden",
-    "success": "Nachricht erfolgreich gesendet!",
-    "successDescription": "Wir melden uns so schnell wie möglich bei Ihnen."
+    "subtitle": "Haben Sie Fragen zu unseren Klangheitung-Instrumenten? Wir würden gerne von Ihnen hören. Senden Sie uns eine E-Mail und wir antworten so schnell wie möglich.",
+    "infoTitle": "Kontaktinformationen",
+    "formTitle": "E-Mail senden",
+    "emailPrompt": "Klicken Sie auf die Schaltfläche unten, um uns eine E-Mail zu senden. Wir melden uns so schnell wie möglich bei Ihnen.",
+    "sendEmail": "E-Mail senden"
+  },
+  "privacy": {
+    "title": "Datenschutzrichtlinie",
+    "subtitle": "Allgemeine Geschäftsbedingungen",
+    "documentTitle": "Datenschutzrichtlinie Dokument",
+    "lastUpdated": "Zuletzt aktualisiert: Dezember 2024 | Version 2.1",
+    "description": "Unsere umfassende Datenschutzrichtlinie erläutert, wie MEINL Sonic Energy Ihre persönlichen Daten sammelt, verwendet und schützt. Wir sind verpflichtet, die höchsten Standards des Datenschutzes und der Transparenz aufrechtzuerhalten.",
+    "viewPDF": "Datenschutzrichtlinie anzeigen (PDF)",
+    "downloadPDF": "PDF herunterladen",
+    "whatsCovered": "Was abgedeckt ist",
+    "quickSummary": "Kurze Zusammenfassung",
+    "keyHighlights": "Wichtige Datenschutz-Highlights",
+    "dataCollection": "Datensammlung",
+    "dataUsage": "Datenverwendung",
+    "yourRights": "Ihre Rechte",
+    "policyUpdates": "Richtlinien-Updates",
+    "privacyQuestions": "Haben Sie Datenschutzfragen?",
+    "contactInfo": "Kontaktinformationen",
+    "responseTime": "Antwortzeit",
+    "coveredItems": {
+      "practices": "Datensammlung und Nutzungspraktiken",
+      "cookies": "Cookie-Richtlinie und Tracking-Technologien",
+      "thirdParty": "Drittanbieter-Integrationen und Partnerschaften",
+      "rights": "Ihre Rechte und Wahlmöglichkeiten bezüglich Ihrer Daten",
+      "transfers": "Internationale Datenübertragungen",
+      "security": "Sicherheitsmaßnahmen und Datenschutz",
+      "contact": "Kontaktinformationen für Datenschutzanfragen"
+    },
+    "summaryItems": {
+      "necessary": "Wir sammeln nur notwendige Informationen",
+      "noSelling": "Ihre Daten werden niemals an Dritte verkauft",
+      "deletion": "Sie können jederzeit die Löschung Ihrer Daten beantragen",
+      "encryption": "Alle Daten sind verschlüsselt und sicher gespeichert",
+      "compliant": "DSGVO und CCPA konform",
+      "audits": "Regelmäßige Sicherheitsaudits und Updates",
+      "transparent": "Transparente Kommunikation über Änderungen"
+    },
+    "collectionItems": {
+      "contact": "Kontaktinformationen",
+      "orderHistory": "Bestellhistorie",
+      "websiteUsage": "Website-Nutzungsdaten",
+      "payment": "Zahlungsinformationen (sicher verarbeitet)"
+    },
+    "usageItems": {
+      "orders": "Bestellungen und Zahlungen verarbeiten",
+      "support": "Kundensupport und Kommunikation",
+      "improvement": "Verbesserung unserer Produkte und Dienstleistungen",
+      "compliance": "Rechtskonformität und Sicherheit"
+    },
+    "rightsItems": {
+      "access": "Zugang zu Ihren persönlichen Daten",
+      "correct": "Unrichtige Informationen korrigieren",
+      "delete": "Löschung der Daten beantragen",
+      "optOut": "Abmeldung von Marketing-Kommunikation"
+    },
+    "updates": {
+      "v21": "Version 2.1 - Dezember 2024",
+      "v21Description": "Aktualisierte Datenaufbewahrungsrichtlinien und verbesserte Sicherheitsmaßnahmen",
+      "v20": "Version 2.0 - September 2024",
+      "v20Description": "CCPA-Konformität hinzugefügt und verbessertes Cookie-Management",
+      "v15": "Version 1.5 - Mai 2024",
+      "v15Description": "Verbesserte DSGVO-Konformität und Klärung der Benutzerrechte"
+    },
+    "dpoDescription": "Unser Datenschutzbeauftragter steht zur Verfügung, um bei allen datenschutzbezogenen Fragen oder Bedenken zu helfen.",
+    "contactDetails": {
+      "email": "E-Mail: privacy@meinlsonic.com",
+      "phone": "Telefon: +1 (555) 123-4570",
+      "mail": "Post: Datenschutzbeauftragter, 123 Sound Street, Harmony City"
+    },
+    "responseDetails": {
+      "inquiry": "Wir antworten auf Datenschutzanfragen innerhalb von 72 Stunden",
+      "requests": "Datenanfragen werden innerhalb von 30 Tagen bearbeitet",
+      "emergency": "Notfall-Datenschutzprobleme: Sofortige Antwort"
+    }
+  },
+  "shipping": {
+    "title": "Versandinformationen",
+    "standardShipping": "Standardversand",
+    "standardDescription": "Zuverlässige Lieferung für alle Bestellungen",
+    "expressShipping": "Expressversand",
+    "expressDescription": "Schnelle Lieferung, wenn Sie sie benötigen",
+    "shippingZones": "Versandzonen",
+    "packagingHandling": "Verpackung & Handhabung",
+    "shippingProtection": "Versandschutz",
+    "returnsExchanges": "Rücksendungen & Umtausch",
+    "needHelp": "Benötigen Sie Hilfe?",
+    "standardFeatures": {
+      "freeShipping": "Kostenloser Versand bei Bestellungen über €100",
+      "shippingFee": "€9,99 Versandgebühr bei Bestellungen unter €100",
+      "delivery": "Lieferung innerhalb von 5-7 Werktagen",
+      "tracking": "Tracking-Informationen bereitgestellt"
+    },
+    "expressFeatures": {
+      "fee": "€19,99 Expressversandgebühr",
+      "delivery": "Lieferung innerhalb von 2-3 Werktagen",
+      "priority": "Prioritätsbehandlung und -verarbeitung",
+      "realTimeTracking": "Echtzeit-Tracking-Updates"
+    },
+    "zones": {
+      "zone1": "Zone 1: EU",
+      "zone1Countries": "Österreich, Belgien, Frankreich, Deutschland, Niederlande, Luxemburg",
+      "zone1Time": "3-5 Werktage",
+      "zone2": "Zone 2: Erweiterte EU",
+      "zone2Countries": "Italien, Spanien, Portugal, Polen, Tschechische Republik, Slowakei, Ungarn",
+      "zone2Time": "5-7 Werktage",
+      "zone3": "Zone 3: International",
+      "zone3Countries": "Vereinigtes Königreich, Schweiz, Norwegen, USA, Kanada",
+      "zone3Time": "7-14 Werktage"
+    },
+    "packaging": {
+      "securePackaging": "Sichere Verpackung",
+      "wrapping": "Jedes Instrument wird sorgfältig in Schutzmaterial verpackt",
+      "foam": "Maßgeschneiderte Schaumstoffeinsätze für empfindliche Gegenstände",
+      "boxes": "Stabile Kartons, die für Musikinstrumente entwickelt wurden",
+      "labels": "Zerbrechlich-Etiketten auf allen Paketen",
+      "processingTime": "Bearbeitungszeit",
+      "processing": "Bestellungen werden innerhalb von 1-2 Werktagen bearbeitet",
+      "quality": "Qualitätskontrolle vor dem Versand",
+      "confirmation": "E-Mail-Bestätigung mit Tracking-Nummer",
+      "custom": "Spezielle Behandlung für Sonderbestellungen"
+    },
+    "protection": {
+      "insurance": "Versicherungsschutz",
+      "insuranceDescription": "Alle Sendungen sind automatisch bis zu ihrem vollen Wert versichert, ohne zusätzliche Kosten für Sie.",
+      "replacement": "Vollständiger Ersatz für beschädigte Artikel",
+      "coverage": "Abdeckung für verlorene Pakete",
+      "claims": "Schnelle Schadensbearbeitung",
+      "guarantee": "Liefergarantie",
+      "guaranteeDescription": "Wir garantieren sichere Lieferung oder Ihr Geld zurück.",
+      "signature": "Unterschrift erforderlich für hochwertige Artikel",
+      "photo": "Fotonachweis der Lieferung",
+      "support": "Kundensupport für Lieferprobleme"
+    },
+    "returns": {
+      "description": "Wir möchten, dass Sie mit Ihrem Kauf vollständig zufrieden sind. Wenn Sie mit Ihrem Klangheitung-Instrument nicht zufrieden sind, bieten wir:",
+      "returnPolicy": "Rückgaberichtlinie",
+      "window": "30-tägiges Rückgabefenster",
+      "condition": "Artikel müssen im Originalzustand sein",
+      "freeReturn": "Kostenloser Rückversand für defekte Artikel",
+      "refund": "Vollständige Rückerstattung nach Prüfung",
+      "exchangeProcess": "Umtauschprozess",
+      "authorization": "Kontaktieren Sie den Kundendienst für eine Autorisierung",
+      "label": "Erhalten Sie ein vorausbezahltes Rücksendeetikett",
+      "quickProcessing": "Schnelle Bearbeitung von Umtauschen",
+      "priorityShipping": "Prioritätsversand für Ersatzartikel"
+    },
+    "help": {
+      "description": "Haben Sie Fragen zum Versand oder müssen Sie Ihre Bestellung verfolgen?",
+      "customerService": "Kundendienst",
+      "email": "E-Mail: shipping@meinlsonic.com",
+      "phone": "Telefon: +1 (555) 123-4567",
+      "businessHours": "Geschäftszeiten",
+      "weekdays": "Montag - Freitag: 9:00 - 18:00 MEZ",
+      "saturday": "Samstag: 10:00 - 16:00 MEZ"
+    }
   },
   "footer": {
+    "aboutTitle": "Über uns",
+    "aboutText": "MEINL Sonic Energy bietet hochwertige Klangtherapie-Instrumente für Meditation, Entspannung und Klangheitung.",
+    "quickLinks": "Schnelllinks",
+    "shipping": "Versandinfo",
+    "privacy": "Datenschutzrichtlinie",
+    "contactTitle": "Kontakt",
+    "email": "E-Mail",
+    "copyright": "© 2024 MEINL Sonic Energy. Alle Rechte vorbehalten.",
     "followUs": "Folgen Sie uns"
   }
 }
