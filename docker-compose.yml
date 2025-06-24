@@ -43,7 +43,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wordpress-backend.rule=(Host(`${WORDPRESS_SITE_URL_HOST}`) || Host(`www.${WORDPRESS_SITE_URL_HOST}`)) && (PathPrefix(`/wp-admin`) || PathPrefix(`/wp-login.php`) || PathPrefix(`/wp-json`) || PathPrefix(`/wp-content`) || PathPrefix(`/wp-includes`))"
+      - "traefik.http.routers.wordpress-backend.rule=(Host(`${WORDPRESS_SITE_URL_HOST}`) || Host(`www.${WORDPRESS_SITE_URL_HOST}`)) && (PathPrefix(`/wp-admin`) || PathPrefix(`/wp-login`))"
       - "traefik.http.routers.wordpress-backend.entrypoints=websecure"
       - "traefik.http.routers.wordpress-backend.tls.certresolver=cloudflare"
       - "traefik.http.routers.wordpress-backend.priority=20"
@@ -54,6 +54,7 @@ services:
   webshop-react-app:
     build:
       context: .
+      dockerfile: Dockerfile
       args:
         VITE_CLERK_PUBLISHABLE_KEY: ${VITE_CLERK_PUBLISHABLE_KEY}
         VITE_WOO_API_URL: ${VITE_WOO_API_URL}
