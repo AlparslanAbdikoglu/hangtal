@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  wp-backend:
+    image: wordpress:latest
+    container_name: wp-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}
+      - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
+      - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
+      - WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
+      - WORDPRESS_SITE_URL=${WORDPRESS_SITE_URL}
+      - WORDPRESS_HOME_URL=${WORDPRESS_HOME_URL}
+    volumes:
+      - ./wp-backend/wp-content:/var/www/html/wp-content
+    networks:
+      - web
+      - internal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wordpress-backend.rule=(Host(`${WORDPRESS_SITE_URL_HOST}`) || Host(`www.${WORDPRESS_SITE_URL_HOST}`)) && (PathPrefix(`/wp-admin`) || PathPrefix(`/wp-login`) || PathPrefix(`/wp-json`) || PathPrefix(`/wp-content`) || PathPrefix(`/wp-includes`))"
+      - "traefik.http.routers.wordpress-backend.entrypoints=websecure"
+      - "traefik.http.routers.wordpress-backend.tls.certresolver=cloudflare"
+      - "traefik.http.services.wordpress-service.loadbalancer.server.port=80"
+      - "traefik.docker.network=web"
+
+  wp-db:
+    image: mariadb:10.11
+    container_name: wp-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - wp-db-data:/var/lib/mysql
+    networks:
+      - internal
+
+volumes:
+  wp-db-data:
+
+networks:
+  web:
+    external: true
+  internal:
+    internal: true

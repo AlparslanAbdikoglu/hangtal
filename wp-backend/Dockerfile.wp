@@ -1,0 +1,47 @@
+# Stage 1: Install PHP dependencies with Composer
+FROM composer:2 AS composer-stage
+WORKDIR /app
+COPY wp-content/plugins/composer.json wp-content/plugins/composer.lock* ./wp-content/plugins/
+RUN composer install --no-dev --optimize-autoloader -d wp-content/plugins/
+
+# Stage 2: Build WordPress image with PHP extensions and your plugin
+FROM wordpress:6.5.4-php8.2-fpm-alpine
+
+RUN apk add --no-cache --virtual .build-deps \
+        git \
+        unzip \
+    && apk add --no-cache \
+        php82-bcmath \
+        php82-curl \
+        php82-dom \
+        php82-gd \
+        php82-gmp \
+        php82-intl \
+        php82-json \
+        php82-mbstring \
+        php82-mysqli \
+        php82-opcache \
+        php82-pdo_mysql \
+        php82-soap \
+        php82-xml \
+        php82-xmlreader \
+        php82-xmlwriter \
+        php82-zip \
+    && apk del .build-deps
+
+# COPY mu-plugins if you add this folder in the future
+# COPY wp-content/mu-plugins /var/www/html/wp-content/mu-plugins/
+
+# Copy your custom plugin source code
+COPY wp-content/plugins /var/www/html/wp-content/plugins/
+
+# Copy Composer dependencies for the plugin
+COPY --from=composer-stage /app/wp-content/plugins/vendor /var/www/html/wp-content/plugins/vendor
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && find /var/www/html -type d -exec chmod g+s {} \; \
+    && chmod -R 755 /var/www/html \
+    && chmod -R 644 /var/www/html/wp-content/plugins/vendor
+
+EXPOSE 9000
