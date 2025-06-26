@@ -1,4 +1,3 @@
-
 {
   "navbar": {
     "home": "Főoldal",
@@ -14,12 +13,13 @@
   },
   "categories": {
     "title": "Kategóriák",
-    "handpans": "Handpanok",
+    "all": "Összes",
     "steelTongueDrums": "Acél nyelv dobok",
+    "handpans": "Handpanok",
     "kalimbas": "Kalimbák",
     "crystalSingingBowls": "Kristály énekes tálak",
-    "crystalSingingChalices": "Kristály énekes kehelyek",
-    "singingBowls": "Énekes tálak"
+    "singingBowls": "Énekes tálak",
+    "windChimes": "Szélcsengők"
   },
   "products": {
     "title": "Hanggyógyító hangszerek",
@@ -40,9 +40,13 @@
     "showing": "{{count}} / {{total}} termék megjelenítése",
     "clearFilters": "Összes szűrő törlése",
     "viewAll": "Összes termék megtekintése",
-    "noResults": "Nem találhatók hangszerek",
+    "noResults": "Nem található termék (404).",
     "noResultsText": "Próbáld meg módosítani a szűrőket vagy keresési kifejezéseket a tökéletes hangszer megtalálásához.",
-    "available": "Azonnal elérhető"
+    "available": "Azonnal elérhető",
+    "view": {
+      "grid": "Rács",
+      "list": "Lista"
+    }
   },
   "cart": {
     "title": "Bevásárló kosár",
@@ -249,5 +253,13 @@
     "email": "E-mail",
     "copyright": "© 2024 MEINL Sonic Energy. Minden jog fenntartva.",
     "followUs": "Kövess minket"
+  },
+  "auth": {
+    "loginRequired": "Bejelentkezés szükséges",
+    "pleaseLoginToAddToCart": "Kérjük, jelentkezzen be, hogy ezt a terméket a kosárba helyezhesse.",
+    "login": "Bejelentkezés"
+  },
+  "common": {
+    "close": "Bezárás"
   }
 }

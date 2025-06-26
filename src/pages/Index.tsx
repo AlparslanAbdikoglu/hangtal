@@ -1,4 +1,3 @@
-
 import { CategoryCard } from "@/components/CategoryCard";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
@@ -8,6 +7,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from 'react-i18next';
+import { Link } from "react-router-dom";
 
 const categories = [
   { title: "Handpans", image: "/placeholder.svg" },
@@ -20,6 +20,7 @@ const categories = [
 
 const products = [
   {
+    id: "1",
     title: "MEINL Sonic Energy 16\" Octave Steel Tongue Drum, D Kurd, 9 Notes, 440 Hz, Lasered Floral Design, Black",
     price: 369.00,
     image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
@@ -27,6 +28,7 @@ const products = [
     hasAudio: true,
   },
   {
+    id: "2",
     title: "MEINL Sonic Energy 16\" Octave Steel Tongue Drum, D Amara, 9 Notes, 440 Hz, Lasered Floral Design, Navy Blue",
     price: 369.00,
     image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
@@ -34,6 +36,7 @@ const products = [
     hasAudio: true,
   },
   {
+    id: "3",
     title: "MEINL Sonic Energy 16\" Octave Steel Tongue Drum, D Kurd, 9 Notes, 440 Hz, Black",
     price: 349.00,
     image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
@@ -41,6 +44,7 @@ const products = [
     hasAudio: true,
   },
   {
+    id: "4",
     title: "MEINL Sonic Energy Crystal Singing Bowl Set, Clear Quartz",
     price: 799.00,
     image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
@@ -48,6 +52,7 @@ const products = [
     hasAudio: true,
   },
   {
+    id: "5",
     title: "MEINL Sonic Energy Handpan in D Celtic Minor",
     price: 1299.00,
     image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
@@ -55,6 +60,7 @@ const products = [
     hasAudio: true,
   },
   {
+    id: "6",
     title: "MEINL Sonic Energy Kalimba, Professional Series",
     price: 129.00,
     image: "/lovable-uploads/f380d7a1-7aa0-404f-abff-0e416a61eacd.png",
@@ -92,7 +98,9 @@ const Index = () => {
         <h2 className="text-3xl font-bold mb-8">{t('categories.title')}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {categories.map((category) => (
-            <CategoryCard key={category.title} {...category} />
+            <Link key={category.title} to={`/products?category=${encodeURIComponent(category.title)}`}>
+              <CategoryCard {...category} />
+            </Link>
           ))}
         </div>
       </section>
@@ -110,6 +118,13 @@ const Index = () => {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
+        <div className="flex justify-center mt-8">
+          <Link to="/products">
+            <button className="bg-primary text-white px-6 py-2 rounded hover:bg-primary/90">
+              {t('products.viewAll') || "View All Products"}
+            </button>
+          </Link>
+        </div>
       </section>
 
       <section className="container py-12 text-center">

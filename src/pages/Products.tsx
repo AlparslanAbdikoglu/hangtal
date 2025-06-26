@@ -3,16 +3,14 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "@clerk/clerk-react";
 
 const Products = () => {
   const { t } = useTranslation();
-  const { getToken } = useAuth();
 
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPriceRange, setSelectedPriceRange] = useState({
     label: "All Prices",
     min: 0,
@@ -23,15 +21,20 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const categories = [
-    t("products.filters.all"),
-    "Steel Tongue Drums",
-    "Handpans",
-    "Kalimbas",
-    "Crystal Singing Bowls",
-    "Singing Bowls",
-    "Wind Chimes",
+  const categoryKeys = [
+    "all",
+    "steelTongueDrums",
+    "handpans",
+    "kalimbas",
+    "crystalSingingBowls",
+    "singingBowls",
+    "windChimes",
   ];
+
+  const categories = categoryKeys.map((key) => ({
+    key,
+    label: key === "all" ? t("products.filters.all") : t(`categories.${key}`),
+  }));
 
   const priceRanges = [
     { label: t("products.filters.allPrices"), min: 0, max: Infinity },
@@ -43,14 +46,20 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const token = await getToken();
-        const res = await fetch("https://api.lifeisnatural.eu/wp-json/react-woo/v1/products", {
+        const consumerKey = import.meta.env.VITE_WOO_CONSUMER_KEY;
+        const consumerSecret = import.meta.env.VITE_WOO_CONSUMER_SECRET;
+        const apiUrl = import.meta.env.VITE_WOO_API_URL;
+
+        const auth = btoa(`${consumerKey}:${consumerSecret}`);
+
+        const res = await fetch(`${apiUrl}/products`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Basic ${auth}`,
+            "Content-Type": "application/json",
           },
         });
 
-        if (!res.ok) throw new Error("Failed to fetch");
+        if (!res.ok) throw new Error("Failed to fetch products");
 
         const data = await res.json();
         setProducts(data);
@@ -63,7 +72,7 @@ const Products = () => {
     };
 
     fetchProducts();
-  }, [getToken]);
+  }, []);
 
   useEffect(() => {
     const filtered = products
@@ -73,8 +82,8 @@ const Products = () => {
           (product.description || "").toLowerCase().includes(searchTerm.toLowerCase());
 
         const matchesCategory =
-          selectedCategory === t("products.filters.all") ||
-          product.categories?.includes(selectedCategory);
+          selectedCategory === "all" ||
+          product.categories?.some((c) => c.slug === selectedCategory || c.name === selectedCategory);
 
         const matchesPrice =
           parseFloat(product.price) >= selectedPriceRange.min &&
@@ -96,30 +105,80 @@ const Products = () => {
       });
 
     setFilteredProducts(filtered);
-  }, [products, searchTerm, selectedCategory, selectedPriceRange, sortBy, t]);
+  }, [products, searchTerm, selectedCategory, selectedPriceRange, sortBy]);
 
   if (loading) return <div className="p-12 text-center">Loading products...</div>;
   if (error) return <div className="p-12 text-center text-red-500">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen flex flex-col justify-between bg-background">
       <Navbar />
 
-      {/* You can insert your filters/search UI above this if needed */}
-
-      <div className={`grid ${viewMode === "grid" ? "grid-cols-2 md:grid-cols-4 gap-6" : "grid-cols-1"} p-4`}>
-        {filteredProducts.map((product: any) => (
-          <ProductCard
-            key={product.id}
-            title={product.name}
-            price={parseFloat(product.price)}
-            image={product.images?.[0]?.src || "/placeholder.jpg"}
-            hasVideo={product.meta_data?.some((m: any) => m.key === "has_video" && m.value === "yes")}
-            hasAudio={product.meta_data?.some((m: any) => m.key === "has_audio" && m.value === "yes")}
-            available={product.stock_status === "instock"}
+      <main className="flex-grow">
+        <div className="p-4 flex flex-col md:flex-row gap-4 justify-between items-center">
+          <input
+            type="text"
+            placeholder={t("search product") || "Search products..."}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="border px-3 py-2 rounded w-full md:w-1/3"
           />
-        ))}
-      </div>
+
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="border px-3 py-2 rounded"
+          >
+            {categories.map((cat) => (
+              <option key={cat.key} value={cat.key}>
+                {cat.label}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={selectedPriceRange.label}
+            onChange={(e) => {
+              const selected = priceRanges.find((r) => r.label === e.target.value);
+              if (selected) setSelectedPriceRange(selected);
+            }}
+            className="border px-3 py-2 rounded"
+          >
+            {priceRanges.map((range) => (
+              <option key={range.label} value={range.label}>
+                {range.label}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="border px-3 py-2 rounded"
+          >
+            <option value="featured">Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="name">Name</option>
+          </select>
+        </div>
+
+        <div className={`grid ${viewMode === "grid" ? "grid-cols-2 md:grid-cols-4 gap-6" : "grid-cols-1"} p-4`}>
+          {filteredProducts.map((product: any) => (
+            <ProductCard
+              key={product.id}
+              title={product.name}
+              price={parseFloat(product.price)}
+              image={product.images?.[0]?.src || "/placeholder.jpg"}
+              hasVideo={product.meta_data?.some((m: any) => m.key === "has_video" && m.value === "yes")}
+              hasAudio={product.meta_data?.some((m: any) => m.key === "has_audio" && m.value === "yes")}
+              available={product.stock_status === "instock"}
+              id={String(product.id)}
+              description={product.short_description || product.description}
+            />
+          ))}
+        </div>
+      </main>
 
       <Footer />
     </div>

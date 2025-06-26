@@ -1,4 +1,3 @@
-
 import { Button } from "./ui/button";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "./ui/drawer";
 import { ShoppingCart, Plus, Minus, X } from "lucide-react";
@@ -8,6 +7,12 @@ import { useTranslation } from 'react-i18next';
 export const CartDrawer = () => {
   const { items, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
   const { t } = useTranslation();
+
+  // Add this function inside your component
+  const handleCheckout = () => {
+    // Redirect to WooCommerce checkout page
+    window.location.href = `${import.meta.env.VITE_WOO_SITE_URL}/checkout`;
+  };
 
   return (
     <Drawer>
@@ -86,7 +91,10 @@ export const CartDrawer = () => {
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-lg font-bold">{t('cart.total', { amount: totalPrice.toFixed(2) })}</span>
                 </div>
-                <Button className="w-full bg-primary hover:bg-primary/90">
+                <Button 
+                  className="w-full bg-primary hover:bg-primary/90"
+                  onClick={handleCheckout}  // <-- Add onClick here
+                >
                   {t('cart.checkout')}
                 </Button>
               </div>
