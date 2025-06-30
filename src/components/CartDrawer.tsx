@@ -1,21 +1,42 @@
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "./ui/drawer";
 import { ShoppingCart, Plus, Minus, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useTranslation } from 'react-i18next';
 
-export const CartDrawer = () => {
+export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChange?: (open: boolean) => void }) => {
   const { items, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
   const { t } = useTranslation();
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
-  // Add this function inside your component
-  const handleCheckout = () => {
-    // Redirect to WooCommerce checkout page
-    window.location.href = `${import.meta.env.VITE_WOO_SITE_URL}/checkout`;
+  const handleCheckout = async () => {
+    setIsCheckingOut(true);
+    try {
+      for (const item of items) {
+        await fetch(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/wc/store/cart/add-item`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            id: item.id,
+            quantity: item.quantity,
+          }),
+        });
+      }
+
+      window.location.href = `${import.meta.env.VITE_WOO_SITE_URL}/checkout`;
+    } catch (error) {
+      console.error("Cart sync failed", error);
+      alert(t('cart.syncError') || "Something went wrong syncing your cart!");
+      setIsCheckingOut(false);
+    }
   };
 
   return (
-    <Drawer>
+    <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerTrigger asChild>
         <Button variant="outline" size="icon" className="relative">
           <ShoppingCart className="h-4 w-4" />
@@ -31,7 +52,7 @@ export const CartDrawer = () => {
           <DrawerTitle className="flex justify-between items-center">
             {t('cart.title')} ({t('cart.items', { count: itemCount })})
             {items.length > 0 && (
-              <Button variant="outline" size="sm" onClick={clearCart}>
+              <Button variant="outline" size="sm" onClick={clearCart} disabled={isCheckingOut}>
                 {t('cart.clearAll')}
               </Button>
             )}
@@ -48,9 +69,9 @@ export const CartDrawer = () => {
               <div className="space-y-4">
                 {items.map((item) => (
                   <div key={item.id} className="flex items-center gap-4 p-4 border rounded-lg">
-                    <img 
-                      src={item.image} 
-                      alt={item.title} 
+                    <img
+                      src={item.image}
+                      alt={item.title}
                       className="w-16 h-16 object-cover rounded"
                     />
                     <div className="flex-1">
@@ -58,28 +79,31 @@ export const CartDrawer = () => {
                       <p className="text-primary font-bold">€{item.price.toFixed(2)}</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="icon" 
+                      <Button
+                        variant="outline"
+                        size="icon"
                         className="h-8 w-8"
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                        disabled={isCheckingOut}
                       >
                         <Minus className="h-3 w-3" />
                       </Button>
                       <span className="w-8 text-center">{item.quantity}</span>
-                      <Button 
-                        variant="outline" 
-                        size="icon" 
+                      <Button
+                        variant="outline"
+                        size="icon"
                         className="h-8 w-8"
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        disabled={isCheckingOut}
                       >
                         <Plus className="h-3 w-3" />
                       </Button>
-                      <Button 
-                        variant="destructive" 
-                        size="icon" 
+                      <Button
+                        variant="destructive"
+                        size="icon"
                         className="h-8 w-8 ml-2"
                         onClick={() => removeFromCart(item.id)}
+                        disabled={isCheckingOut}
                       >
                         <X className="h-3 w-3" />
                       </Button>
@@ -91,11 +115,12 @@ export const CartDrawer = () => {
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-lg font-bold">{t('cart.total', { amount: totalPrice.toFixed(2) })}</span>
                 </div>
-                <Button 
+                <Button
                   className="w-full bg-primary hover:bg-primary/90"
-                  onClick={handleCheckout}  // <-- Add onClick here
+                  onClick={handleCheckout}
+                  disabled={isCheckingOut}
                 >
-                  {t('cart.checkout')}
+                  {isCheckingOut ? t('cart.checkingOut') || 'Checking out...' : t('cart.checkout')}
                 </Button>
               </div>
             </>

@@ -112,7 +112,7 @@ const Products = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-background">
-      <Navbar />
+      <Navbar /> {/* Add this line to include the Navbar */}
 
       <main className="flex-grow">
         <div className="p-4 flex flex-col md:flex-row gap-4 justify-between items-center">
