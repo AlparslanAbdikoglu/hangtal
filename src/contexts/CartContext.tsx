@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode, Key } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, Key } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 
 interface CartItem {
   item_key: Key;
-  id: string; // WooCommerce product_id
+  id: string; 
   title: string;
   price: number;
   image: string;
@@ -16,8 +16,8 @@ interface CartContextType {
   itemCount: number;
   totalPrice: number;
   addToCart: (product: Omit<CartItem, 'quantity'>) => Promise<void>;
-  removeFromCart: (id: string) => Promise<void>;
-  updateQuantity: (id: string, quantity: number) => Promise<void>;
+  removeFromCart: (itemKey: string) => Promise<void>;
+  updateQuantity: (itemKey: string, quantity: number) => Promise<void>;
   clearCart: () => Promise<void>;
 }
 
@@ -28,13 +28,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const { toast } = useToast();
   const { t } = useTranslation();
 
-  // Helper function for API requests
+  // ✅ Updated helper function
   const apiRequest = async (url: string, method: string, body?: any) => {
     try {
       const response = await fetch(`${import.meta.env.VITE_WOO_SITE_URL}${url}`, {
         method,
+        credentials: 'include', // ✅ Send cookies!
         headers: {
-          Authorization: `Basic ${btoa(`${import.meta.env.VITE_WC_CONSUMER_KEY}:${import.meta.env.VITE_WC_CONSUMER_SECRET}`)}`,
           'Content-Type': 'application/json',
         },
         body: body ? JSON.stringify(body) : undefined,
@@ -48,27 +48,64 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // ✅ Load cart on initial mount
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const data = await apiRequest('/wp-json/cocart/v2/cart', 'GET');
+        const items = Object.values(data.items || {}).map((item: any) => ({
+          item_key: item.item_key,
+          id: item.id,
+          title: item.name,
+          price: parseFloat(item.prices.price),
+          image: item.featured_image || '',
+          quantity: item.quantity,
+        }));
+        setItems(items);
+      } catch (error) {
+        console.error('Failed to load cart', error);
+      }
+    };
+
+    fetchCart();
+  }, []);
+
   const addToCart = async (product: Omit<CartItem, 'quantity'>) => {
     try {
-      const existingItem = items.find((item) => item.id === product.id);
-      const quantity = existingItem ? existingItem.quantity + 1 : 1;
-
-      // Sync with CoCart
-      await apiRequest(`/wp-json/cocart/v2/cart/add-item`, 'POST', {
+      console.log('Adding to cart:', {
         id: product.id,
-        quantity,
+        quantity: 1,
       });
+      // always add quantity 1
+      const response = await apiRequest(`/wp-json/cocart/v2/cart/add-item`, 'POST', {
+        id: product.id, // should be a valid WooCommerce product ID
+        quantity: 1,
+      });
+      console.log('API response:', response);
 
-      // Update local state
-      if (existingItem) {
-        setItems((prev) =>
-          prev.map((item) =>
-            item.id === product.id ? { ...item, quantity } : item
-          )
-        );
-      } else {
-        setItems((prev) => [...prev, { ...product, quantity }]);
-      }
+      // CoCart returns the updated cart
+      const updatedItem = response.item;
+      const item_key = updatedItem.item_key;
+
+      const newItem: CartItem = {
+        item_key,
+        id: updatedItem.id,
+        title: updatedItem.name,
+        price: parseFloat(updatedItem.prices.price),
+        image: updatedItem.featured_image || '',
+        quantity: updatedItem.quantity,
+      };
+
+      setItems((prev) => {
+        const exists = prev.find((i) => i.item_key === item_key);
+        if (exists) {
+          return prev.map((i) =>
+            i.item_key === item_key ? { ...i, quantity: newItem.quantity } : i
+          );
+        } else {
+          return [...prev, newItem];
+        }
+      });
 
       toast({
         title: t('cart.addedToCart'),
@@ -84,13 +121,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const removeFromCart = async (id: string) => {
+  const removeFromCart = async (itemKey: string) => {
     try {
-      // Remove from CoCart
-      await apiRequest(`/wp-json/cocart/v2/cart/item/${id}`, 'DELETE');
-
-      // Update local state
-      setItems((prev) => prev.filter((item) => item.id !== id));
+      await apiRequest(`/wp-json/cocart/v2/cart/item/${itemKey}`, 'DELETE');
+      setItems((prev) => prev.filter((item) => item.item_key !== itemKey));
       toast({
         title: t('cart.removedFromCart'),
         description: t('cart.removedDescription'),
@@ -105,19 +139,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const updateQuantity = async (id: string, quantity: number) => {
+  const updateQuantity = async (itemKey: string, quantity: number) => {
     try {
       if (quantity <= 0) {
-        await removeFromCart(id);
+        await removeFromCart(itemKey);
         return;
       }
 
-      // Update quantity in CoCart
-      await apiRequest(`/wp-json/cocart/v2/cart/item/${id}`, 'PUT', { quantity });
+      await apiRequest(`/wp-json/cocart/v2/cart/item/${itemKey}`, 'PUT', { quantity });
 
-      // Update local state
       setItems((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, quantity } : item))
+        prev.map((item) => (item.item_key === itemKey ? { ...item, quantity } : item))
       );
       toast({
         title: t('cart.updated'),
@@ -135,10 +167,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = async () => {
     try {
-      // Clear CoCart session
       await apiRequest(`/wp-json/cocart/v2/cart/clear`, 'POST');
-
-      // Update local state
       setItems([]);
       toast({
         title: t('cart.cleared'),
