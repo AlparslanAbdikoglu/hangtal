@@ -4,21 +4,15 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from 
 import { ShoppingCart, Plus, Minus, X } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '@clerk/clerk-react';
 import Checkout from './Checkout';
 
 export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChange?: (open: boolean) => void }) => {
   const { items, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
   const { t } = useTranslation();
-  const { isSignedIn } = useAuth();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
 
   const handleCheckout = async () => {
-    if (!isSignedIn) {
-      alert(t('auth.notSignedIn') || 'Please sign in to proceed to checkout');
-      return;
-    }
     setIsCheckingOut(true);
     try {
       setShowCheckout(true); // Open the Checkout component
