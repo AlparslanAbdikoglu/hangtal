@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '@clerk/clerk-react';
 
 interface CartItem {
   id: string; // WooCommerce product_id
@@ -26,14 +27,22 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const { toast } = useToast();
   const { t } = useTranslation();
+  const { getToken, isSignedIn } = useAuth(); // Clerk's hook for JWT token and auth status
 
-  // Helper function for API requests
+  // Helper function for API requests with JWT
   const apiRequest = async (url: string, method: string, body?: any) => {
     try {
+      if (!isSignedIn) {
+        throw new Error(t('auth.notSignedIn') || 'You must be signed in');
+      }
+      const token = await getToken();
+      if (!token) {
+        throw new Error(t('auth.noToken') || 'No JWT token available');
+      }
       const response = await fetch(`${import.meta.env.VITE_WOO_SITE_URL}${url}`, {
         method,
         headers: {
-          Authorization: `Basic ${btoa(`${import.meta.env.VITE_WC_CONSUMER_KEY}:${import.meta.env.VITE_WC_CONSUMER_SECRET}`)}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: body ? JSON.stringify(body) : undefined,

@@ -5,12 +5,14 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '@clerk/clerk-react';
 
 // Initialize Stripe with your publishable key
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const Checkout = ({ onClose }: { onClose: () => void }) => {
   const { t } = useTranslation();
+  const { getToken, isSignedIn } = useAuth();
   const [cart, setCart] = useState(null);
   const [billing, setBilling] = useState({
     first_name: '',
@@ -31,9 +33,18 @@ const Checkout = ({ onClose }: { onClose: () => void }) => {
   useEffect(() => {
     const fetchCart = async () => {
       try {
+        if (!isSignedIn) {
+          setError(t('auth.notSignedIn') || 'You must be signed in');
+          return;
+        }
+        const token = await getToken();
+        if (!token) {
+          setError(t('auth.noToken') || 'No JWT token available');
+          return;
+        }
         const response = await axios.get(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/cocart/v2/cart`, {
           headers: {
-            Authorization: `Basic ${btoa(`${import.meta.env.VITE_WC_CONSUMER_KEY}:${import.meta.env.VITE_WC_CONSUMER_SECRET}`)}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         setCart(response.data);
@@ -42,7 +53,7 @@ const Checkout = ({ onClose }: { onClose: () => void }) => {
       }
     };
     fetchCart();
-  }, [t]);
+  }, [t, getToken, isSignedIn]);
 
   // Handle input changes for billing fields
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +63,10 @@ const Checkout = ({ onClose }: { onClose: () => void }) => {
   // Handle checkout submission
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isSignedIn) {
+      setError(t('auth.notSignedIn') || 'You must be signed in');
+      return;
+    }
     if (!stripe || !elements) {
       setError(t('checkout.stripeError') || 'Stripe is not initialized');
       return;
@@ -61,6 +76,11 @@ const Checkout = ({ onClose }: { onClose: () => void }) => {
     setError(null);
 
     try {
+      const token = await getToken();
+      if (!token) {
+        throw new Error(t('auth.noToken') || 'No JWT token available');
+      }
+
       // Step 1: Create order via CoCart
       const orderResponse = await axios.post(
         `${import.meta.env.VITE_WOO_SITE_URL}/wp-json/cocart/v2/checkout`,
@@ -72,7 +92,7 @@ const Checkout = ({ onClose }: { onClose: () => void }) => {
         },
         {
           headers: {
-            Authorization: `Basic ${btoa(`${import.meta.env.VITE_WC_CONSUMER_KEY}:${import.meta.env.VITE_WC_CONSUMER_SECRET}`)}`,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         }
@@ -92,7 +112,7 @@ const Checkout = ({ onClose }: { onClose: () => void }) => {
         },
         {
           headers: {
-            Authorization: `Basic ${btoa(`${import.meta.env.VITE_WC_CONSUMER_KEY}:${import.meta.env.VITE_WC_CONSUMER_SECRET}`)}`,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         }
@@ -131,7 +151,7 @@ const Checkout = ({ onClose }: { onClose: () => void }) => {
           { status: 'processing' },
           {
             headers: {
-              Authorization: `Basic ${btoa(`${import.meta.env.VITE_WC_CONSUMER_KEY}:${import.meta.env.VITE_WC_CONSUMER_SECRET}`)}`,
+              Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
             },
           }
@@ -142,7 +162,7 @@ const Checkout = ({ onClose }: { onClose: () => void }) => {
           {},
           {
             headers: {
-              Authorization: `Basic ${btoa(`${import.meta.env.VITE_WC_CONSUMER_KEY}:${import.meta.env.VITE_WC_CONSUMER_SECRET}`)}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -260,7 +280,7 @@ const Checkout = ({ onClose }: { onClose: () => void }) => {
               <Button type="button" variant="outline" onClick={onClose} disabled={processing}>
                 {t('checkout.cancel') || 'Cancel'}
               </Button>
-              <Button type="submit" disabled={!stripe || processing}>
+              <Button type="submit" disabled={!stripe || processing || !isSignedIn}>
                 {processing ? t('checkout.processing') || 'Processing...' : t('checkout.payNow') || 'Pay Now'}
               </Button>
             </DialogFooter>
