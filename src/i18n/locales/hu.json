@@ -43,9 +43,31 @@
     "noResults": "Nem található termék (404).",
     "noResultsText": "Próbáld meg módosítani a szűrőket vagy keresési kifejezéseket a tökéletes hangszer megtalálásához.",
     "available": "Azonnal elérhető",
+    "detail": {
+      "salePrice": "Akciós ár",
+      "regularPrice": "Normál ár",
+      "variant": {
+        "Color": "Szín",
+        "Size": "Méret"
+      },
+      "variantOption": {
+        "Color": {
+          "Red": "Piros",
+          "Blue": "Kék"
+        }
+      }
+    },
     "view": {
       "grid": "Rács",
-      "list": "Lista"
+      "list": "Lista",
+      "discount": "KEDVEZMÉNY",
+      "description": "Leírás",
+      "additionalInfo": "További információ",
+      "shortDescription": "Rövid leírás",
+      "attributes": "Tulajdonságok",
+      "freeShipping": "Ingyenes szállítás",
+      "guarantee": "Elégedettségi garancia",
+      "easyReturns": "Egyszerű visszaküldés"
     }
   },
   "cart": {

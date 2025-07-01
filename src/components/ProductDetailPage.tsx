@@ -51,12 +51,12 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   onAddToWishlist,
 }) => {
   const { t } = useTranslation();
-  const { addToCart } = useCart(); // <-- use CartContext here
+  const { addToCart } = useCart();
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
-  const [activeTab, setActiveTab] = useState<'description' | 'additional' | 'reviews'>('description');
+  const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [showImageZoom, setShowImageZoom] = useState(false);
   const [cartMessage, setCartMessage] = useState<string | null>(null);
@@ -79,7 +79,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       image: product.images[0]?.src || '',
       // add other fields as needed
     });
-    setCartMessage(t('cart.added', { defaultValue: 'Added to cart!' }));
+    setCartMessage(t('cart.addedToCart', { defaultValue: 'Added to cart' }));
     setTimeout(() => setCartMessage(null), 2000);
   };
 
@@ -96,14 +96,6 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             100
         )
       : 0;
-
-  const renderStars = (rating: number) =>
-    Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={`w-4 h-4 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-      />
-    ));
 
   return (
     <>
@@ -151,24 +143,24 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           <div className="md:w-1/2 flex flex-col">
             <h1 className="text-3xl font-semibold">{product.name}</h1>
 
-            <div className="flex items-center space-x-2 mt-2">
-              {renderStars(product.average_rating ? Math.round(parseFloat(product.average_rating)) : 0)}
-              <span className="text-sm text-gray-600">
-                ({product.rating_count ?? 0} {t('products.view.reviews', { defaultValue: 'reviews' })})
-              </span>
-            </div>
-
+            {/* Price and discount */}
             <div className="mt-4">
               {product.sale_price ? (
                 <div className="flex items-baseline space-x-3">
-                  <span className="text-2xl font-bold text-red-600">€{product.sale_price}</span>
-                  <span className="line-through text-gray-500">€{product.regular_price}</span>
+                  <span className="text-2xl font-bold text-red-600">
+                    {t('products.detail.salePrice', { defaultValue: 'Sale Price' })}: €{product.sale_price}
+                  </span>
+                  <span className="line-through text-gray-500">
+                    {t('products.detail.regularPrice', { defaultValue: 'Regular Price' })}: €{product.regular_price}
+                  </span>
                   <span className="text-sm text-green-600 font-semibold">
                     {discountPercentage}% {t('products.view.discount', { defaultValue: 'OFF' })}
                   </span>
                 </div>
               ) : (
-                <span className="text-2xl font-bold">€{product.regular_price}</span>
+                <span className="text-2xl font-bold">
+                  {t('products.detail.regularPrice', { defaultValue: 'Price' })}: €{product.regular_price}
+                </span>
               )}
             </div>
 
@@ -177,7 +169,9 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <div className="mt-6">
                 {product.attributes.map(attribute => (
                   <div key={attribute.id} className="mb-4">
-                    <h3 className="font-semibold mb-2">{attribute.name}</h3>
+                    <h3 className="font-semibold mb-2">
+                      {t(`products.detail.variant.${attribute.name}`, { defaultValue: attribute.name })}
+                    </h3>
                     <div className="flex space-x-2 flex-wrap">
                       {attribute.options.map(option => (
                         <button
@@ -189,7 +183,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                           }`}
                           onClick={() => handleVariantSelect(attribute.name, option)}
                         >
-                          {option}
+                          {t(`products.detail.variantOption.${attribute.name}.${option}`, { defaultValue: option })}
                         </button>
                       ))}
                     </div>
@@ -223,7 +217,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 className="flex items-center bg-primary text-white px-6 py-3 rounded text-lg hover:bg-primary/90"
               >
                 <ShoppingCart size={18} className="mr-2" />
-                {t('cart.addToCart', { defaultValue: 'Buy Now' })}
+                {t('cart.addToCart', { defaultValue: 'Add to Cart' })}
               </button>
 
               {onAddToWishlist && (
@@ -242,7 +236,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <div className="mt-2 text-green-600 font-semibold">{cartMessage}</div>
             )}
 
-            {/* Tabs: Description, Additional Info, Reviews */}
+            {/* Tabs: Description, Additional Info */}
             <div className="mt-10">
               <div className="flex border-b">
                 <button
@@ -261,14 +255,6 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 >
                   {t('products.view.additionalInfo', { defaultValue: 'Additional Info' })}
                 </button>
-                <button
-                  className={`py-3 px-6 font-semibold ${
-                    activeTab === 'reviews' ? 'border-b-2 border-primary text-primary' : 'text-gray-600'
-                  }`}
-                  onClick={() => setActiveTab('reviews')}
-                >
-                  {t('products.view.reviews', { defaultValue: 'Reviews' })}
-                </button>
               </div>
 
               <div className="mt-6 text-gray-800">
@@ -277,23 +263,27 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 )}
                 {activeTab === 'additional' && (
                   <div>
-                    <h4 className="font-semibold mb-2">{t('products.view.shortDescription', { defaultValue: 'Short Description' })}</h4>
+                    <h4 className="font-semibold mb-2">
+                      {t('products.view.shortDescription', { defaultValue: 'Short Description' })}
+                    </h4>
                     <div dangerouslySetInnerHTML={{ __html: product.short_description || '' }} />
-                    <h4 className="font-semibold mt-4 mb-2">{t('products.view.attributes', { defaultValue: 'Attributes' })}</h4>
+                    <h4 className="font-semibold mt-4 mb-2">
+                      {t('products.view.attributes', { defaultValue: 'Attributes' })}
+                    </h4>
                     <ul className="list-disc ml-6">
                       {product.attributes.map(attr => (
                         <li key={attr.id}>
-                          <strong>{attr.name}: </strong>
-                          {attr.options.join(', ')}
+                          <strong>
+                            {t(`products.detail.variant.${attr.name}`, { defaultValue: attr.name })}:{' '}
+                          </strong>
+                          {attr.options
+                            .map(option =>
+                              t(`products.detail.variantOption.${attr.name}.${option}`, { defaultValue: option })
+                            )
+                            .join(', ')}
                         </li>
                       ))}
                     </ul>
-                  </div>
-                )}
-                {activeTab === 'reviews' && (
-                  <div>
-                    {/* Placeholder for reviews UI */}
-                    <p>{t('products.view.noReviews', { defaultValue: 'No reviews yet.' })}</p>
                   </div>
                 )}
               </div>

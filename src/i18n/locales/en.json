@@ -46,6 +46,20 @@
     "view": {
       "grid": "Grid",
       "list": "List"
+    },
+    "detail": {
+      "salePrice": "Sale Price",
+      "regularPrice": "Regular Price",
+      "variant": {
+        "Color": "Color",
+        "Size": "Size"
+      },
+      "variantOption": {
+        "Color": {
+          "Red": "Red",
+          "Blue": "Blue"
+        }
+      }
     }
   },
   "cart": {
