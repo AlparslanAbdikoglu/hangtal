@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Star,
   Heart,
   ShoppingCart,
   Plus,
@@ -77,7 +76,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       title: product.name,
       price: Number(product.sale_price || product.regular_price),
       image: product.images[0]?.src || '',
-      // add other fields as needed
+      id: ''
     });
     setCartMessage(t('cart.addedToCart', { defaultValue: 'Added to cart' }));
     setTimeout(() => setCartMessage(null), 2000);
