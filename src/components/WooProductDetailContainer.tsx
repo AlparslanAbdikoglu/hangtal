@@ -1,9 +1,5 @@
-
 import React, { useEffect, useState } from 'react';
 import ProductDetailPage, { Product } from './ProductDetailPage';
-import { useCart } from '@/contexts/CartContext';
-import { Navbar } from './Navbar';
-import { Footer } from './Footer';
 
 interface WooProductDetailContainerProps {
   productId: number;
@@ -13,7 +9,6 @@ const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({ p
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { addToCart } = useCart();
 
   const consumerKey = import.meta.env.VITE_WOO_CONSUMER_KEY;
   const consumerSecret = import.meta.env.VITE_WOO_CONSUMER_SECRET;
@@ -54,63 +49,15 @@ const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({ p
     fetchProduct();
   }, [productId]);
 
-  const handleAddToCart = async () => {
-    if (!product) return;
-
-    const cartItem = {
-      id: product.id.toString(),
-      title: product.name,
-      price: parseFloat(product.sale_price || product.regular_price),
-      image: product.images[0]?.src || '/placeholder.jpg',
-    };
-
-    await addToCart(cartItem);
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center py-10">Loading product...</div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center py-10 text-red-600">Error: {error}</div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  if (!product) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center py-10">Product not found.</div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+  if (loading) return <div className="text-center py-10">Loading product...</div>;
+  if (error) return <div className="text-center py-10 text-red-600">Error: {error}</div>;
+  if (!product) return <div className="text-center py-10">Product not found.</div>;
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <div className="flex-1">
-        <ProductDetailPage product={product} onAddToCart={handleAddToCart} />
-      </div>
-      <Footer />
-    </div>
+    <ProductDetailPage
+      product={product}
+      onAddToCart={() => {}}  // Pass empty function if addToCart not implemented yet
+    />
   );
 };
 

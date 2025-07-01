@@ -5,33 +5,27 @@ import { ShoppingCart, Plus, Minus, X } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@clerk/clerk-react';
-// We no longer need the custom Checkout component since we are redirecting.
-// import Checkout from './Checkout';
+import Checkout from './Checkout';
 
 export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChange?: (open: boolean) => void }) => {
   const { items, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
   const { t } = useTranslation();
   const { isSignedIn } = useAuth();
-  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
 
-  // FIX: This function now redirects to the standard WooCommerce checkout page.
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!isSignedIn) {
       alert(t('auth.notSignedIn') || 'Please sign in to proceed to checkout');
       return;
     }
-
-    if (itemCount === 0) {
-        return; // Don't redirect if the cart is empty
+    setIsCheckingOut(true);
+    try {
+      setShowCheckout(true); // Open the Checkout component
+    } catch (error) {
+      setIsCheckingOut(false);
+      alert(t('cart.syncError') || 'Something went wrong with your cart!');
     }
-
-    setIsRedirecting(true);
-    
-    // Construct the checkout URL from your environment variables
-    const checkoutUrl = `${import.meta.env.VITE_WOO_SITE_URL}/checkout`;
-    
-    // Redirect the user
-    window.location.href = checkoutUrl;
   };
 
   return (
@@ -50,9 +44,9 @@ export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChang
         <DrawerContent className="max-h-[80vh]">
           <DrawerHeader>
             <DrawerTitle className="flex justify-between items-center">
-              {t('cart.title')} ({itemCount})
+              {t('cart.title')} ({t('cart.items', { count: itemCount })})
               {items.length > 0 && (
-                <Button variant="outline" size="sm" onClick={clearCart} disabled={isRedirecting}>
+                <Button variant="outline" size="sm" onClick={clearCart} disabled={isCheckingOut}>
                   {t('cart.clearAll')}
                 </Button>
               )}
@@ -68,7 +62,7 @@ export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChang
               <>
                 <div className="space-y-4">
                   {items.map((item) => (
-                    <div key={item.item_key} className="flex items-center gap-4 p-4 border rounded-lg">
+                    <div key={item.id} className="flex items-center gap-4 p-4 border rounded-lg">
                       <img src={item.image} alt={item.title} className="w-16 h-16 object-cover rounded" />
                       <div className="flex-1">
                         <h4 className="font-medium line-clamp-2 text-sm">{item.title}</h4>
@@ -79,8 +73,8 @@ export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChang
                           variant="outline"
                           size="icon"
                           className="h-8 w-8"
-                          onClick={() => updateQuantity(String(item.item_key), item.quantity - 1)}
-                          disabled={isRedirecting}
+                          onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                          disabled={isCheckingOut}
                         >
                           <Minus className="h-3 w-3" />
                         </Button>
@@ -89,8 +83,8 @@ export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChang
                           variant="outline"
                           size="icon"
                           className="h-8 w-8"
-                          onClick={() => updateQuantity(String(item.item_key), item.quantity + 1)}
-                          disabled={isRedirecting}
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          disabled={isCheckingOut}
                         >
                           <Plus className="h-3 w-3" />
                         </Button>
@@ -98,8 +92,8 @@ export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChang
                           variant="destructive"
                           size="icon"
                           className="h-8 w-8 ml-2"
-                          onClick={() => removeFromCart(String(item.item_key))}
-                          disabled={isRedirecting}
+                          onClick={() => removeFromCart(item.id)}
+                          disabled={isCheckingOut}
                         >
                           <X className="h-3 w-3" />
                         </Button>
@@ -109,15 +103,14 @@ export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChang
                 </div>
                 <div className="border-t pt-4 mt-4">
                   <div className="flex justify-between items-center mb-4">
-                    <span className="text-lg font-bold">{t('cart.total')}</span>
-                    <span className="text-lg font-bold">€{totalPrice.toFixed(2)}</span>
+                    <span className="text-lg font-bold">{t('cart.total', { amount: totalPrice.toFixed(2) })}</span>
                   </div>
                   <Button
                     className="w-full bg-primary hover:bg-primary/90"
                     onClick={handleCheckout}
-                    disabled={isRedirecting || itemCount === 0}
+                    disabled={isCheckingOut}
                   >
-                    {isRedirecting ? t('cart.redirecting', 'Redirecting...') : t('cart.checkout')}
+                    {isCheckingOut ? t('cart.checkingOut') || 'Checking out...' : t('cart.checkout')}
                   </Button>
                 </div>
               </>
@@ -125,7 +118,14 @@ export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChang
           </div>
         </DrawerContent>
       </Drawer>
-      {/* We no longer need to render the custom Checkout component */}
+      {showCheckout && (
+        <Checkout
+          onClose={() => {
+            setShowCheckout(false);
+            setIsCheckingOut(false);
+          }}
+        />
+      )}
     </>
   );
 };
