@@ -30,23 +30,25 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   // ✅ Updated helper function
   const apiRequest = async (url: string, method: string, body?: any) => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_WOO_SITE_URL}${url}`, {
-        method,
-        credentials: 'include', // ✅ Send cookies!
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: body ? JSON.stringify(body) : undefined,
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return await response.json();
-    } catch (error) {
-      throw error;
+  try {
+    const response = await fetch(`${import.meta.env.VITE_WOO_SITE_URL}${url}`, {
+      method,
+      credentials: 'include', // send cookies (for cart session)
+      headers: {
+        'Content-Type': 'application/json',
+        // Remove Authorization header here!
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
-  };
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
 
   // ✅ Load cart on initial mount
   useEffect(() => {
