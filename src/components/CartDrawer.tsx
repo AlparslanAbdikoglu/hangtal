@@ -6,28 +6,55 @@ import { useCart } from "@/contexts/CartContext";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
 import { useToast } from '@/components/ui/use-toast'; // Import useToast
+import { useUser } from '@clerk/clerk-react';
 
 export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChange?: (open: boolean) => void }) => {
   const { items, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
   const { t } = useTranslation();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const navigate = useNavigate();
-  const { toast } = useToast(); // Initialize useToast
+  const { toast } = useToast();
+  const { user, isSignedIn } = useUser(); // <-- Move this here!
 
   const handleCheckout = async () => {
     setIsCheckingOut(true);
     try {
-      // No WooCommerce sync here as per your request for frontend-based checkout
-      navigate("/checkout"); // Use frontend checkout page
+      const response = await fetch('https://api.lifeisnatural.eu/wp-json/wc/v3/stripe-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cart_items: items.map(item => ({
+            product_id: item.product_id,
+            quantity: item.quantity,
+            variation_id: item.variation_id || null,
+          })),
+          user_email: isSignedIn ? user?.primaryEmailAddress?.emailAddress : undefined,
+          user_id: isSignedIn ? user?.id : undefined,
+          success_url: window.location.origin + '/payment-success',
+          cancel_url: window.location.origin + '/cart'
+        }),
+      });
+
+      const data = await response.json();
+      console.log('Stripe checkout response:', response);
+      console.log('Stripe checkout data:', data);
+
+      if (response.ok && data.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        toast({
+          title: t('cart.syncError') || 'Failed to create Stripe checkout session',
+          description: data.error || JSON.stringify(data),
+          variant: 'destructive',
+        });
+      }
     } catch (error) {
-      console.error("Cart sync failed", error);
-      toast({ // Use toast instead of alert
+      console.error("Checkout error:", error);
+      toast({
         title: t('cart.syncError') || "Something went wrong syncing your cart!",
         variant: "destructive",
       });
-      setIsCheckingOut(false);
     } finally {
-      // Ensure that isCheckingOut is set to false even if navigation fails
       setIsCheckingOut(false);
     }
   };
@@ -115,10 +142,11 @@ export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChang
                 <Button
                   className="w-full bg-primary hover:bg-primary/90"
                   onClick={handleCheckout}
-                  disabled={isCheckingOut}
+                  disabled={isCheckingOut || items.length === 0}
                 >
                   {isCheckingOut ? t('cart.checkingOut') || 'Checking out...' : t('cart.checkout')}
                 </Button>
+
               </div>
             </>
           )}

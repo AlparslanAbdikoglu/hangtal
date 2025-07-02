@@ -1,144 +1,77 @@
-// Cart component with Stripe checkout
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useCart } from '@/contexts/CartContext';
+import { useUser } from '@clerk/clerk-react';
 
-const Cart = ({ cartItems, onUpdateCart }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+const Checkout = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { items: cartItems, totalPrice } = useCart();
+  const { user, isSignedIn } = useUser();
 
-    const handleStripeCheckout = async () => {
-        setIsLoading(true);
-        setError(null);
+  const handleStripeCheckout = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('https://api.lifeisnatural.eu/wp-json/wc/v3/stripe-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cart_items: cartItems.map(item => ({
+            product_id: item.product_id,
+            quantity: item.quantity,
+            variation_id: item.variation_id || null,
+          })),
+          user_email: isSignedIn ? user?.primaryEmailAddress?.emailAddress : undefined,
+          user_id: isSignedIn ? user?.id : undefined,
+          success_url: window.location.origin + '/payment-success',
+          cancel_url: window.location.origin + '/cart'
+        }),
+      });
 
-        try {
-            // Prepare cart data for Stripe
-            const cartData = cartItems.map(item => ({
-                product_id: item.id,
-                variation_id: item.variation_id || null,
-                quantity: item.quantity
-            }));
+      const data = await response.json();
 
-            // Call your WooCommerce endpoint to create Stripe session
-            const response = await fetch('http://api.lifeisnatural.eu/wp-json/wc/v3/stripe-checkout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    cart_items: cartData,
-                    success_url: `${window.location.origin}/checkout/success`,
-                    cancel_url: `${window.location.origin}/cart`
-                })
-            });
+      if (response.ok && data.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        alert(data.error || 'Failed to create Stripe checkout session');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Network error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-            const data = await response.json();
+  useEffect(() => {
+    if (cartItems.length > 0 && !isLoading) {
+      handleStripeCheckout();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run on mount
 
-            if (response.ok) {
-                // Redirect to Stripe hosted checkout
-                window.location.href = data.checkout_url;
-            } else {
-                setError(data.error || 'Failed to create checkout session');
-            }
-        } catch (err) {
-            setError('Network error occurred');
-            console.error('Checkout error:', err);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+  if (cartItems.length === 0) {
+    return <div className="text-center py-10">Your cart is empty.</div>;
+  }
 
-    const calculateTotal = () => {
-        return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-    };
-
-    return (
-        <div className="cart-container">
-            <h2>Shopping Cart</h2>
-            
-            {cartItems.length === 0 ? (
-                <p>Your cart is empty</p>
-            ) : (
-                <>
-                    <div className="cart-items">
-                        {cartItems.map(item => (
-                            <div key={item.id} className="cart-item">
-                                <img src={item.image} alt={item.name} width="60" />
-                                <div className="item-details">
-                                    <h4>{item.name}</h4>
-                                    <p>Price: ${item.price}</p>
-                                    <p>Quantity: {item.quantity}</p>
-                                    <p>Subtotal: ${(item.price * item.quantity).toFixed(2)}</p>
-                                </div>
-                                <button 
-                                    onClick={() => onUpdateCart(item.id, 'remove')}
-                                    className="remove-btn"
-                                >
-                                    Remove
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                    
-                    <div className="cart-summary">
-                        <h3>Total: ${calculateTotal().toFixed(2)}</h3>
-                        
-                        {error && (
-                            <div className="error-message">
-                                {error}
-                            </div>
-                        )}
-                        
-                        <button 
-                            onClick={handleStripeCheckout}
-                            disabled={isLoading}
-                            className="checkout-btn"
-                        >
-                            {isLoading ? 'Processing...' : 'Proceed to Checkout'}
-                        </button>
-                    </div>
-                </>
-            )}
-        </div>
-    );
+  return (
+    <div>
+      <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+      <ul className="mb-4">
+        {cartItems.map(item => (
+          <li key={item.id} className="mb-2">
+            {item.title} x {item.quantity}
+          </li>
+        ))}
+      </ul>
+      <div className="mb-4 font-semibold">Total: €{totalPrice.toFixed(2)}</div>
+      <button
+        onClick={handleStripeCheckout}
+        className="btn btn-primary"
+        disabled={isLoading || cartItems.length === 0}
+      >
+        {isLoading ? 'Redirecting...' : 'Proceed to Stripe Checkout'}
+      </button>
+    </div>
+  );
 };
 
-// Success page component
-const CheckoutSuccess = () => {
-    const [sessionId, setSessionId] = useState(null);
-
-    React.useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        setSessionId(urlParams.get('session_id'));
-    }, []);
-
-    return (
-        <div className="checkout-success">
-            <h2>Payment Successful!</h2>
-            <p>Thank you for your order. Your payment has been processed.</p>
-            {sessionId && (
-                <p>Session ID: {sessionId}</p>
-            )}
-            <a href="/">Continue Shopping</a>
-        </div>
-    );
-};
-
-// Example usage in your main app
-const App = () => {
-    const [cartItems, setCartItems] = useState([]);
-
-    const updateCart = (productId, action) => {
-        // Handle cart updates (add, remove, update quantity)
-        if (action === 'remove') {
-            setCartItems(cartItems.filter(item => item.id !== productId));
-        }
-        // Add more cart logic as needed
-    };
-
-    return (
-        <div className="App">
-            <Cart cartItems={cartItems} onUpdateCart={updateCart} />
-        </div>
-    );
-};
-
-export default App;
+export default Checkout;

@@ -31,7 +31,7 @@ const AppRoutes = () => {
       <Route path="/shipping" element={<Shipping />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/products/:id" element={<ProductPage />} />
-      <Route path="/checkout" element={<Checkout />} /> {/* Add the checkout route */}
+      <Route path="/checkout" element={<Checkout />} />
       <Route path="/payment-success" element={<PaymentSuccess />} /> {/* Add payment success route */}
      
     </Routes>
