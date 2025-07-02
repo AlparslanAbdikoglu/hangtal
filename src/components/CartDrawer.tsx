@@ -1,61 +1,115 @@
-import { useState } from "react";
-import { Button } from "./ui/button";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "./ui/drawer";
-import { ShoppingCart, Plus, Minus, X } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
+import React, { useState } from 'react';
+import { Button } from './ui/button';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from './ui/drawer';
+import { ShoppingCart, Plus, Minus, X } from 'lucide-react';
+import { useCart } from '@/contexts/CartContext';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from "react-router-dom";
-import { useToast } from '@/components/ui/use-toast'; // Import useToast
+import { useToast } from '@/components/ui/use-toast';
 import { useUser } from '@clerk/clerk-react';
 
-export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChange?: (open: boolean) => void }) => {
+export const CartDrawer = ({ open, onOpenChange }) => {
   const { items, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
   const { t } = useTranslation();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, isSignedIn } = useUser(); // <-- Move this here!
+  const { user, isSignedIn } = useUser();
 
   const handleCheckout = async () => {
+    if (items.length === 0) {
+      toast({
+        title: t('cart.emptyCartError') || 'Cart is empty',
+        description: 'Please add items to cart before checkout',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsCheckingOut(true);
     try {
-      const response = await fetch('https://api.lifeisnatural.eu/wp-json/wc/v3/stripe-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cart_items: items.map(item => ({
-            product_id: item.product_id,
-            quantity: item.quantity,
-            variation_id: item.variation_id || null,
-          })),
-          user_email: isSignedIn ? user?.primaryEmailAddress?.emailAddress : undefined,
-          user_id: isSignedIn ? user?.id : undefined,
-          success_url: window.location.origin + '/payment-success',
-          cancel_url: window.location.origin + '/cart'
-        }),
-      });
-
-      const data = await response.json();
-      console.log('Stripe checkout response:', response);
-      console.log('Stripe checkout data:', data);
-
-      if (response.ok && data.checkout_url) {
-        window.location.href = data.checkout_url;
-      } else {
+      // Get cart key from localStorage
+      const cartKey = localStorage.getItem('cocart_cart_key') || '';
+      
+      if (!cartKey) {
         toast({
-          title: t('cart.syncError') || 'Failed to create Stripe checkout session',
-          description: data.error || JSON.stringify(data),
+          title: t('cart.noCartKey') || 'Cart session not found',
+          description: 'Please refresh the page and try again',
           variant: 'destructive',
         });
+        setIsCheckingOut(false);
+        return;
+      }
+
+      console.log('Starting checkout with cart key:', cartKey);
+      console.log('Cart items:', items);
+
+      const checkoutData: {
+        cart_key: string;
+        success_url: string;
+        cancel_url: string;
+        user_email?: string;
+        user_id?: string;
+      } = {
+        cart_key: cartKey,
+        success_url: `${window.location.origin}/payment-success`,
+        cancel_url: `${window.location.origin}/cart`,
+      };
+
+      // Add user info if signed in
+      if (isSignedIn && user) {
+        checkoutData.user_email = user.primaryEmailAddress?.emailAddress;
+        checkoutData.user_id = user.id;
+      }
+
+      console.log('Checkout data:', checkoutData);
+
+      const response = await fetch('https://api.lifeisnatural.eu/wp-json/wc/v3/stripe-checkout', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(checkoutData),
+        credentials: 'include',
+      });
+
+      console.log('Response status:', response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Response error:', errorText);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Response data:', data);
+
+      if (data.success && data.checkout_url) {
+        console.log('Redirecting to:', data.checkout_url);
+        // Use window.location.replace for better UX
+        window.location.replace(data.checkout_url);
+      } else if (data.checkout_url) {
+        console.log('Redirecting to checkout URL:', data.checkout_url);
+        window.location.replace(data.checkout_url);
+      } else {
+        throw new Error(data.message || data.error || 'No checkout URL received');
       }
     } catch (error) {
-      console.error("Checkout error:", error);
+      console.error('Checkout error:', error);
       toast({
-        title: t('cart.syncError') || "Something went wrong syncing your cart!",
-        variant: "destructive",
+        title: t('cart.checkoutError') || 'Checkout failed',
+        description: error.message || 'An error occurred during checkout. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsCheckingOut(false);
+    }
+  };
+
+  const handleQuantityDecrease = (itemKey, currentQuantity) => {
+    if (currentQuantity <= 1) {
+      removeFromCart(itemKey);
+    } else {
+      updateQuantity(itemKey, currentQuantity - 1);
     }
   };
 
@@ -92,22 +146,32 @@ export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChang
             <>
               <div className="space-y-4">
                 {items.map((item) => (
-                  <div key={item.id} className="flex items-center gap-4 p-4 border rounded-lg">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-16 h-16 object-cover rounded"
-                    />
+                  <div key={item.item_key} className="flex items-center gap-4 p-4 border rounded-lg">
+                    {item.image && (
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-16 h-16 object-cover rounded"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none';
+                        }}
+                      />
+                    )}
                     <div className="flex-1">
                       <h4 className="font-medium line-clamp-2 text-sm">{item.title}</h4>
-                      <p className="text-primary font-bold">€{item.price.toFixed(2)}</p>
+                      <p className="text-primary font-bold">
+                        €{(typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0).toFixed(2)}
+                      </p>
+                      {item.variation && (
+                        <p className="text-xs text-muted-foreground">{item.variation}</p>
+                      )}
                     </div>
                     <div className="flex items-center gap-2">
                       <Button
                         variant="outline"
                         size="icon"
                         className="h-8 w-8"
-                        onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                        onClick={() => handleQuantityDecrease(item.item_key, item.quantity)}
                         disabled={isCheckingOut}
                       >
                         <Minus className="h-3 w-3" />
@@ -117,7 +181,7 @@ export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChang
                         variant="outline"
                         size="icon"
                         className="h-8 w-8"
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() => updateQuantity(item.item_key, item.quantity + 1)}
                         disabled={isCheckingOut}
                       >
                         <Plus className="h-3 w-3" />
@@ -126,7 +190,7 @@ export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChang
                         variant="destructive"
                         size="icon"
                         className="h-8 w-8 ml-2"
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => removeFromCart(item.item_key)}
                         disabled={isCheckingOut}
                       >
                         <X className="h-3 w-3" />
@@ -137,16 +201,17 @@ export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChang
               </div>
               <div className="border-t pt-4 mt-4">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-lg font-bold">{t('cart.total', { amount: totalPrice.toFixed(2) })}</span>
+                  <span className="text-lg font-bold">
+                    {t('cart.total', { amount: (typeof totalPrice === 'number' ? totalPrice : parseFloat(totalPrice) || 0).toFixed(2) })}
+                  </span>
                 </div>
                 <Button
                   className="w-full bg-primary hover:bg-primary/90"
                   onClick={handleCheckout}
                   disabled={isCheckingOut || items.length === 0}
                 >
-                  {isCheckingOut ? t('cart.checkingOut') || 'Checking out...' : t('cart.checkout')}
+                  {isCheckingOut ? t('cart.checkingOut') || 'Processing...' : t('cart.checkout') || 'Proceed to Checkout'}
                 </Button>
-
               </div>
             </>
           )}
