@@ -17,11 +17,6 @@ const queryClient = new QueryClient();
 
 const AppRoutes = () => {
   const navigate = useNavigate();
-  const { setGoToCheckout } = useCart();
-
-  useEffect(() => {
-    setGoToCheckout(() => () => navigate('/checkout'));
-  }, [navigate, setGoToCheckout]);
 
   return (
     <Routes>
