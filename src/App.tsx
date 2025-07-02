@@ -4,14 +4,15 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { CartProvider, useCart } from "@/contexts/CartContext";
-import { useEffect } from "react";
 import Index from "./pages/Index";
 import Products from "./pages/Products";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Shipping from "./pages/Shipping";
 import Privacy from "./pages/Privacy";
-import ProductPage from "./pages/ProductPage"; // ⬅️ add this import
+import ProductPage from "./pages/ProductPage";
+
+
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const AppRoutes = () => {
       <Route path="/shipping" element={<Shipping />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/products/:id" element={<ProductPage />} />
+     
     </Routes>
   );
 };

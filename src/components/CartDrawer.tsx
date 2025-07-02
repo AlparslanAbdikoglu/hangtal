@@ -4,30 +4,33 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from 
 import { ShoppingCart, Plus, Minus, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from "react-router-dom";
 
 export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChange?: (open: boolean) => void }) => {
   const { items, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
   const { t } = useTranslation();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const navigate = useNavigate();
 
   const handleCheckout = async () => {
     setIsCheckingOut(true);
     try {
-      for (const item of items) {
-        await fetch(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/wc/store/cart/add-item`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            id: item.id,
-            quantity: item.quantity,
-          }),
-        });
-      }
+      // Optionally sync with WooCommerce backend here if needed
+      // for (const item of items) {
+      //   await fetch(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/wc/store/cart/add-item`, {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     credentials: "include",
+      //     body: JSON.stringify({
+      //       id: item.id,
+      //       quantity: item.quantity,
+      //     }),
+      //   });
+      // }
 
-      window.location.href = `${import.meta.env.VITE_WOO_SITE_URL}/checkout`;
+      navigate("/checkout"); // Use frontend checkout page
     } catch (error) {
       console.error("Cart sync failed", error);
       alert(t('cart.syncError') || "Something went wrong syncing your cart!");
