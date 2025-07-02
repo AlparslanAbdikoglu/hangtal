@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Star,
-  Heart,
+ 
   ShoppingCart,
   Plus,
   Minus,
@@ -228,7 +227,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   }`}
                   aria-label={t('products.addToWishlist', { defaultValue: 'Add to wishlist' })}
                 >
-                  <Heart size={18} />
+                
                 </button>
               )}
             </div>
