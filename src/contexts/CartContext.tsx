@@ -38,6 +38,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   // Generate nonce for WooCommerce API authentication
   const generateNonce = async () => {
+    // Only attempt to generate nonce if signed in and VITE_WOO_SITE_URL is defined
+    if (!isSignedIn || !import.meta.env.VITE_WOO_SITE_URL) {
+      return null;
+    }
     try {
       const response = await fetch(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/wc/store/cart/get-cart-nonce`, {
         method: 'GET',
@@ -62,7 +66,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [isSignedIn, user]);
 
   const syncWithWooCommerce = async () => {
-    if (!isSignedIn) return;
+    if (!isSignedIn || !import.meta.env.VITE_WOO_SITE_URL) return; // Only sync if signed in and URL is available
     
     setIsLoading(true);
     try {
@@ -88,6 +92,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           woo_item_key: item.key,
         }));
         setItems(wooItems);
+      } else {
+        console.warn('Failed to sync with WooCommerce, proceeding with local cart.');
       }
     } catch (error) {
       console.error('Failed to sync with WooCommerce:', error);
@@ -100,63 +106,63 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
     
     try {
-      // First add to WooCommerce if user is signed in
-      if (isSignedIn) {
-        const nonce = await generateNonce();
-        const response = await fetch(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/wc/store/cart/add-item`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-WC-Store-API-Nonce': nonce || '',
-          },
-          body: JSON.stringify({
-            id: product.product_id,
-            quantity: 1,
-            variation: product.variation_id ? [{ attribute: 'variation_id', value: product.variation_id }] : [],
-          }),
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          // Update local cart with WooCommerce response
-          const newItem: CartItem = {
-            id: `woo-${result.item_key || Date.now()}`,
-            title: product.title,
-            price: product.price,
-            image: product.image,
-            quantity: 1,
-            product_id: product.product_id,
-            variation_id: product.variation_id,
-            woo_item_key: result.item_key,
-          };
-
-          setItems(prev => {
-            const existingItemIndex = prev.findIndex(item => 
-              item.product_id === product.product_id && 
-              item.variation_id === product.variation_id
-            );
-            
-            if (existingItemIndex >= 0) {
-              // Update existing item
-              const updatedItems = [...prev];
-              updatedItems[existingItemIndex].quantity += 1;
-              return updatedItems;
-            } else {
-              // Add new item
-              return [...prev, newItem];
-            }
+      let addedToWooCommerce = false;
+      // Attempt to add to WooCommerce if user is signed in and URL is defined
+      if (isSignedIn && import.meta.env.VITE_WOO_SITE_URL) {
+        try {
+          const nonce = await generateNonce();
+          const response = await fetch(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/wc/store/cart/add-item`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-WC-Store-API-Nonce': nonce || '',
+            },
+            body: JSON.stringify({
+              id: product.product_id,
+              quantity: 1,
+              variation: product.variation_id ? [{ attribute: 'variation_id', value: product.variation_id }] : [],
+            }),
           });
 
-          toast({
-            title: t('cart.addedToCart', { defaultValue: 'Added to cart' }),
-            description: t('cart.addedDescription', { title: product.title, defaultValue: `${product.title} added to cart` }),
-          });
-        } else {
-          throw new Error('Failed to add to WooCommerce cart');
+          if (response.ok) {
+            const result = await response.json();
+            const newItem: CartItem = {
+              id: `woo-${result.item_key || Date.now()}`,
+              title: product.title,
+              price: product.price,
+              image: product.image,
+              quantity: 1,
+              product_id: product.product_id,
+              variation_id: product.variation_id,
+              woo_item_key: result.item_key,
+            };
+
+            setItems(prev => {
+              const existingItemIndex = prev.findIndex(item => 
+                item.product_id === product.product_id && 
+                item.variation_id === product.variation_id
+              );
+              
+              if (existingItemIndex >= 0) {
+                const updatedItems = [...prev];
+                updatedItems[existingItemIndex].quantity += 1;
+                return updatedItems;
+              } else {
+                return [...prev, newItem];
+              }
+            });
+            addedToWooCommerce = true;
+          } else {
+            console.warn('Failed to add to WooCommerce cart, adding to local cart only.');
+          }
+        } catch (wooError) {
+          console.warn('Error adding to WooCommerce cart, adding to local cart only:', wooError);
         }
-      } else {
-        // If user is not signed in, add to local cart only
+      }
+
+      // If not added to WooCommerce (or not signed in), add to local cart
+      if (!addedToWooCommerce) {
         const id = `local-${product.product_id}-${Date.now()}`;
         const existingItem = items.find(item => 
           item.product_id === product.product_id && 
@@ -164,8 +170,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         );
         
         if (existingItem) {
-          await updateQuantity(existingItem.id, existingItem.quantity + 1);
+          // Update quantity for existing local item
+          setItems(prev => prev.map(item => 
+            item.id === existingItem.id ? { ...item, quantity: item.quantity + 1 } : item
+          ));
         } else {
+          // Add new local item
           const newItem: CartItem = {
             id,
             title: product.title,
@@ -177,12 +187,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           };
           setItems(prev => [...prev, newItem]);
         }
-        
-        toast({
-          title: t('cart.addedToCart', { defaultValue: 'Added to cart' }),
-          description: t('cart.addedDescription', { title: product.title, defaultValue: `${product.title} added to cart` }),
-        });
       }
+      
+      toast({
+        title: t('cart.addedToCart', { defaultValue: 'Added to cart' }),
+        description: t('cart.addedDescription', { title: product.title, defaultValue: `${product.title} added to cart` }),
+      });
+
     } catch (error) {
       console.error('Failed to add to cart:', error);
       toast({
@@ -202,28 +213,32 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       const item = items.find(i => i.id === id);
       if (!item) return;
 
-      // Remove from WooCommerce if user is signed in and item has WooCommerce key
-      if (isSignedIn && item.woo_item_key) {
-        const nonce = await generateNonce();
-        const response = await fetch(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/wc/store/cart/remove-item`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-WC-Store-API-Nonce': nonce || '',
-          },
-          body: JSON.stringify({
-            key: item.woo_item_key,
-          }),
-        });
+      // Attempt to remove from WooCommerce if user is signed in and item has WooCommerce key
+      if (isSignedIn && item.woo_item_key && import.meta.env.VITE_WOO_SITE_URL) {
+        try {
+          const nonce = await generateNonce();
+          const response = await fetch(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/wc/store/cart/remove-item`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-WC-Store-API-Nonce': nonce || '',
+            },
+            body: JSON.stringify({
+              key: item.woo_item_key,
+            }),
+          });
 
-        if (!response.ok) {
-          throw new Error('Failed to remove from WooCommerce cart');
+          if (!response.ok) {
+            console.warn('Failed to remove from WooCommerce cart, removing from local cart only.');
+          }
+        } catch (wooError) {
+          console.warn('Error removing from WooCommerce cart, removing from local cart only:', wooError);
         }
       }
 
-      // Remove from local cart
-      setItems(prev => prev.filter(item => item.id !== id));
+      // Always remove from local cart
+      setItems(prev => prev.filter(cartItem => cartItem.id !== id));
     } catch (error) {
       console.error('Failed to remove from cart:', error);
       toast({
@@ -248,31 +263,39 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       const item = items.find(i => i.id === id);
       if (!item) return;
 
-      // Update in WooCommerce if user is signed in and item has WooCommerce key
-      if (isSignedIn && item.woo_item_key) {
-        const nonce = await generateNonce();
-        const response = await fetch(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/wc/store/cart/update-item`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-WC-Store-API-Nonce': nonce || '',
-          },
-          body: JSON.stringify({
-            key: item.woo_item_key,
-            quantity: quantity,
-          }),
-        });
+      let updatedInWooCommerce = false;
+      // Attempt to update in WooCommerce if user is signed in and item has WooCommerce key
+      if (isSignedIn && item.woo_item_key && import.meta.env.VITE_WOO_SITE_URL) {
+        try {
+          const nonce = await generateNonce();
+          const response = await fetch(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/wc/store/cart/update-item`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-WC-Store-API-Nonce': nonce || '',
+            },
+            body: JSON.stringify({
+              key: item.woo_item_key,
+              quantity: quantity,
+            }),
+          });
 
-        if (!response.ok) {
-          throw new Error('Failed to update WooCommerce cart');
+          if (response.ok) {
+            updatedInWooCommerce = true;
+          } else {
+            console.warn('Failed to update WooCommerce cart, updating local cart only.');
+          }
+        } catch (wooError) {
+          console.warn('Error updating WooCommerce cart, updating local cart only:', wooError);
         }
       }
 
-      // Update local cart
-      setItems(prev => prev.map(item => 
-        item.id === id ? { ...item, quantity } : item
+      // Always update local cart, regardless of WooCommerce sync status
+      setItems(prev => prev.map(cartItem => 
+        cartItem.id === id ? { ...cartItem, quantity } : cartItem
       ));
+
     } catch (error) {
       console.error('Failed to update cart:', error);
       toast({
@@ -289,24 +312,28 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
     
     try {
-      // Clear WooCommerce cart if user is signed in
-      if (isSignedIn) {
-        const nonce = await generateNonce();
-        const response = await fetch(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/wc/store/cart/remove-item`, {
-          method: 'DELETE',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-WC-Store-API-Nonce': nonce || '',
-          },
-        });
+      // Attempt to clear WooCommerce cart if user is signed in
+      if (isSignedIn && import.meta.env.VITE_WOO_SITE_URL) {
+        try {
+          const nonce = await generateNonce();
+          const response = await fetch(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/wc/store/cart/remove-item`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-WC-Store-API-Nonce': nonce || '',
+            },
+          });
 
-        if (!response.ok) {
-          console.warn('Failed to clear WooCommerce cart, clearing local cart only');
+          if (!response.ok) {
+            console.warn('Failed to clear WooCommerce cart, clearing local cart only');
+          }
+        } catch (wooError) {
+          console.warn('Error clearing WooCommerce cart, clearing local cart only:', wooError);
         }
       }
 
-      // Clear local cart
+      // Always clear local cart
       setItems([]);
     } catch (error) {
       console.error('Failed to clear cart:', error);

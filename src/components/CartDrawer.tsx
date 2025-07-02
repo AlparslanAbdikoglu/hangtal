@@ -5,35 +5,29 @@ import { ShoppingCart, Plus, Minus, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
+import { useToast } from '@/components/ui/use-toast'; // Import useToast
 
 export const CartDrawer = ({ open, onOpenChange }: { open?: boolean; onOpenChange?: (open: boolean) => void }) => {
   const { items, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
   const { t } = useTranslation();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast(); // Initialize useToast
 
   const handleCheckout = async () => {
     setIsCheckingOut(true);
     try {
-      // Optionally sync with WooCommerce backend here if needed
-      // for (const item of items) {
-      //   await fetch(`${import.meta.env.VITE_WOO_SITE_URL}/wp-json/wc/store/cart/add-item`, {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     credentials: "include",
-      //     body: JSON.stringify({
-      //       id: item.id,
-      //       quantity: item.quantity,
-      //     }),
-      //   });
-      // }
-
+      // No WooCommerce sync here as per your request for frontend-based checkout
       navigate("/checkout"); // Use frontend checkout page
     } catch (error) {
       console.error("Cart sync failed", error);
-      alert(t('cart.syncError') || "Something went wrong syncing your cart!");
+      toast({ // Use toast instead of alert
+        title: t('cart.syncError') || "Something went wrong syncing your cart!",
+        variant: "destructive",
+      });
+      setIsCheckingOut(false);
+    } finally {
+      // Ensure that isCheckingOut is set to false even if navigation fails
       setIsCheckingOut(false);
     }
   };

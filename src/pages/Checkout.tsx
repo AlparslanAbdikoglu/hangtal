@@ -27,6 +27,7 @@ const Checkout = () => {
   });
 
   useEffect(() => {
+    // Redirect if cart is empty and not currently processing a payment
     if (items.length === 0 && !isProcessing) {
       toast({
         title: "Your cart is empty!",
@@ -48,19 +49,19 @@ const Checkout = () => {
 
     // Simulate a short delay for "processing"
     setTimeout(async () => {
-      await clearCart();
+      await clearCart(); // Clear the cart after successful payment simulation
       toast({
         title: "Fizetés sikeres!",
         description: "Köszönjük a vásárlást. Hamarosan kapni fog egy email megerősítést.",
       });
-      navigate('/payment-success');
+      navigate('/payment-success'); // Navigate to a success page
     }, 1500);
   };
 
-  // If items are empty, the useEffect above will handle redirection.
-  // This return is for the initial render or if items become empty after a refresh.
+  // If items are empty and not processing, return null to prevent rendering
+  // as the useEffect hook will handle the redirection.
   if (items.length === 0 && !isProcessing) {
-    return null; // Or a loading spinner, as redirection is handled by useEffect
+    return null; 
   }
 
   return (
@@ -242,28 +243,3 @@ const Checkout = () => {
 };
 
 export default Checkout;
-
-// In your ProductDetailPage or Add to Cart button handler
-const navigate = useNavigate();
-
-// Example product object for demonstration purposes
-const product = {
-  id: 1,
-  name: "Sample Product",
-  images: [{ src: "https://placehold.co/80x80/cccccc/333333?text=Image" }]
-};
-
-const handleAddToCartClick = async () => {
-  addToCart({
-        id: product.id,
-        title: product.name,
-        image: product.images[0]?.src || '',
-        product_id: product.id,
-        item_key: product.id,
-    });
-  navigate('/checkout');
-};
-function addToCart(arg0: { id: any; title: any; image: any; product_id: any; item_key: any; }) {
-    throw new Error('Function not implemented.');
-}
-

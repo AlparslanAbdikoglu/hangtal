@@ -11,6 +11,9 @@ import About from "./pages/About";
 import Shipping from "./pages/Shipping";
 import Privacy from "./pages/Privacy";
 import ProductPage from "./pages/ProductPage";
+import Checkout from "./pages/Checkout"; // Import the Checkout component
+import PaymentSuccess from "./pages/PaymentSucess";
+
 
 
 
@@ -28,6 +31,8 @@ const AppRoutes = () => {
       <Route path="/shipping" element={<Shipping />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/products/:id" element={<ProductPage />} />
+      <Route path="/checkout" element={<Checkout />} /> {/* Add the checkout route */}
+      <Route path="/payment-success" element={<PaymentSuccess />} /> {/* Add payment success route */}
      
     </Routes>
   );
