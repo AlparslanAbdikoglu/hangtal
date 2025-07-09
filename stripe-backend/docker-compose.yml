@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  stripe-backend:
+    build:
+      context: ./stripe-backend
+    container_name: stripe-backend
+    env_file:
+      - ./stripe-backend/.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.stripe.rule=Host(`api.lifeisnatural.eu`) && PathPrefix(`/create-checkout-session`, `/success.html`, `/cancel.html`)"
+      - "traefik.http.routers.stripe.entrypoints=websecure"
+      - "traefik.http.services.stripe.loadbalancer.server.port=4242"
+    networks:
+      - web
+
+networks:
+  web:
+    external: true

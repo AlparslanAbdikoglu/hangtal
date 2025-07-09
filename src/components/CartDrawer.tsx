@@ -19,7 +19,7 @@ export const CartDrawer = () => {
 
   const handleCheckout = async () => {
     try {
-      const response = await fetch("http://api.lifeisnatural.eu:4242/create-checkout-session", {
+      const response = await fetch("https://api.lifeisnatural.eu:4242/create-checkout-session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
