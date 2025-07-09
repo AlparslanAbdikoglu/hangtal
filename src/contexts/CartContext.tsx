@@ -47,33 +47,54 @@ export const CartProvider = ({ children }) => {
   }, [items]);
 
   const initializeCart = async () => {
-    try {
-      let storedCartKey = localStorage.getItem('cocart_cart_key');
-      
-      if (!storedCartKey) {
-        // Create new cart
-        const response = await fetch('https://api.lifeisnatural.eu/wp-json/cocart/v2/cart', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          storedCartKey = data.cart_key;
-          localStorage.setItem('cocart_cart_key', storedCartKey);
-        }
+  console.log("Initializing cart...");
+
+  try {
+    let storedCartKey = localStorage.getItem('cocart_cart_key');
+    console.log("Stored cart key:", storedCartKey);
+
+    if (!storedCartKey) {
+      console.log("Creating new cart...");
+      const response = await fetch('https://api.lifeisnatural.eu/wp-json/cocart/v2/cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      });
+
+      console.log("Cart creation response status:", response.status);
+      const text = await response.text();
+      console.log("Cart creation raw response:", text);
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (err) {
+        console.error("Failed to parse JSON:", err);
+        return;
       }
-      
-      setCartKey(storedCartKey);
-      
+
+      console.log("Parsed cart creation data:", data);
+
+      storedCartKey = data.cart_key;
       if (storedCartKey) {
-        await fetchCartItems(storedCartKey);
+        localStorage.setItem('cocart_cart_key', storedCartKey);
+      } else {
+        console.error("No cart_key returned!");
       }
-    } catch (error) {
-      console.error('Failed to initialize cart:', error);
     }
-  };
+
+    if (storedCartKey) {
+      console.log("Fetching cart items with cart key:", storedCartKey);
+      setCartKey(storedCartKey);
+      await fetchCartItems(storedCartKey);
+    } else {
+      console.error("Cart initialization failed — no cart key found");
+    }
+  } catch (error) {
+    console.error('Failed to initialize cart:', error);
+  }
+};
+
 
   const fetchCartItems = async (key) => {
     try {
