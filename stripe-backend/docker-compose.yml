@@ -4,12 +4,15 @@ services:
   stripe-backend:
     build:
       context: ./stripe-backend
-    container_name: stripe-backend
+    container_name: stripe-backend & proxy
+    restart: unless-stopped
+    ports:
+      - "4242:4242"
     env_file:
       - ./stripe-backend/.env
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.stripe.rule=Host(`api.lifeisnatural.eu`) && PathPrefix(`/create-checkout-session`, `/success.html`, `/cancel.html`)"
+      - "traefik.http.routers.stripe.rule=Host(`api.lifeisnatural.eu`) && PathPrefix(`/create-checkout-session`, `/success.html`, `/cancel.html`, `/api`)"
       - "traefik.http.routers.stripe.entrypoints=websecure"
       - "traefik.http.services.stripe.loadbalancer.server.port=4242"
     networks:
