@@ -19,7 +19,7 @@ export const CartDrawer = () => {
 
   const handleCheckout = async () => {
     try {
-      const response = await fetch("https://api.lifeisnatural.eu:4242/create-checkout-session", {
+      const response = await fetch("https://api.lifeisnatural.eu/create-checkout-session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export const CartDrawer = () => {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        console.error("Stripe session creation error:", data);
+        console.error("Stripe session error:", data);
       }
     } catch (error) {
       console.error("Checkout error:", error);
