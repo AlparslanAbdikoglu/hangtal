@@ -3,7 +3,7 @@ version: '3'
 services:
   wp-backend:
     image: wordpress:latest
-    container_name: wp-backend
+    container_name: wp-woo
     restart: unless-stopped
     env_file:
       - .env
@@ -21,7 +21,7 @@ services:
       - internal
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wordpress-backend.rule=(Host(`${WORDPRESS_SITE_URL_HOST}`) || Host(`www.${WORDPRESS_SITE_URL_HOST}`)) && (PathPrefix(`/wp-admin`) || PathPrefix(`/wp-login`) || PathPrefix(`/wp-json`) || PathPrefix(`/wp-content`) || PathPrefix(`/wp-includes`))"
+      - "traefik.http.routers.wordpress-backend.rule=Host(`api.lifeisnatural.eu`)"
       - "traefik.http.routers.wordpress-backend.entrypoints=websecure"
       - "traefik.http.routers.wordpress-backend.tls.certresolver=cloudflare"
       - "traefik.http.services.wordpress-service.loadbalancer.server.port=80"
