@@ -11,34 +11,86 @@ import { ShoppingCart, Plus, Minus, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
+import { toast } from "@/components/ui/use-toast"; // adjust import if needed
 
 export const CartDrawer = () => {
-  const { items, itemCount, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
+  const {
+    items,
+    itemCount,
+    totalPrice,
+    updateQuantity,
+    removeFromCart,
+    clearCart,
+    cartKey,
+  } = useCart();
+
   const { t } = useTranslation();
   const [userEmail, setUserEmail] = useState("");
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
 
   const handleCheckout = async () => {
-    try {
-      const response = await fetch("https://api.lifeisnatural.eu/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          items,
-          userEmail,
-        }),
+    if (!userEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
+      toast({
+        title: t("cart.invalidEmailTitle") || "Invalid Email",
+        description:
+          t("cart.invalidEmailDescription") ||
+          "Please enter a valid email address.",
+        variant: "destructive",
       });
+      return;
+    }
+
+    if (!cartKey) {
+      toast({
+        title: "Cart Error",
+        description: "No cart key found. Please refresh your page.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoadingCheckout(true);
+    try {
+      const response = await fetch(
+        "https://api.lifeisnatural.eu/create-checkout-session",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cartKey,
+            items,
+            userEmail,
+          }),
+        }
+      );
 
       const data = await response.json();
 
       if (data.url) {
         window.location.href = data.url;
       } else {
-        console.error("Stripe session creation error:", data);
+        toast({
+          title: "Checkout Error",
+          description:
+            data.message ||
+            "Could not start checkout session. Please try again later.",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error("Checkout error:", error);
+      toast({
+        title: "Checkout Failed",
+        description:
+          error instanceof Error
+            ? error.message
+            : "An unknown error occurred during checkout.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingCheckout(false);
     }
   };
 
@@ -75,25 +127,37 @@ export const CartDrawer = () => {
             <>
               <div className="space-y-4">
                 {items.map((item) => (
-                  <div key={item.item_key} className="flex items-center gap-4 p-4 border rounded-lg">
+                  <div
+                    key={item.item_key}
+                    className="flex items-center gap-4 p-4 border rounded-lg"
+                  >
                     <img
-                      src={item.image}
+                      src={item.image || "/placeholder.png"}
                       alt={item.title}
                       className="w-16 h-16 object-cover rounded"
                     />
                     <div className="flex-1">
-                      <h4 className="font-medium line-clamp-2 text-sm">{item.title}</h4>
+                      <h4 className="font-medium line-clamp-2 text-sm">
+                        {item.title}
+                      </h4>
                       {item.variation && (
-                        <p className="text-xs text-muted-foreground">{item.variation}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {item.variation}
+                        </p>
                       )}
-                      <p className="text-primary font-bold">€{item.price.toFixed(2)}</p>
+                      <p className="text-primary font-bold">
+                        €{item.price.toFixed(2)}
+                      </p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Button
                         variant="outline"
                         size="icon"
                         className="h-8 w-8"
-                        onClick={() => updateQuantity(item.item_key, item.quantity - 1)}
+                        onClick={() =>
+                          updateQuantity(item.item_key, item.quantity - 1)
+                        }
+                        aria-label="Decrease quantity"
                       >
                         <Minus className="h-3 w-3" />
                       </Button>
@@ -102,7 +166,10 @@ export const CartDrawer = () => {
                         variant="outline"
                         size="icon"
                         className="h-8 w-8"
-                        onClick={() => updateQuantity(item.item_key, item.quantity + 1)}
+                        onClick={() =>
+                          updateQuantity(item.item_key, item.quantity + 1)
+                        }
+                        aria-label="Increase quantity"
                       >
                         <Plus className="h-3 w-3" />
                       </Button>
@@ -111,6 +178,7 @@ export const CartDrawer = () => {
                         size="icon"
                         className="h-8 w-8"
                         onClick={() => removeFromCart(item.item_key)}
+                        aria-label="Remove item"
                       >
                         <X className="h-3 w-3" />
                       </Button>
@@ -128,15 +196,19 @@ export const CartDrawer = () => {
                     type="email"
                     value={userEmail}
                     onChange={(e) => setUserEmail(e.target.value)}
-                    placeholder={t("cart.enterEmail") || "Enter your email"}
+                    placeholder={
+                      t("cart.enterEmail") || "Enter your email"
+                    }
                   />
                 </div>
                 <Button
                   onClick={handleCheckout}
                   className="w-full mt-4"
-                  disabled={itemCount === 0}
+                  disabled={itemCount === 0 || loadingCheckout}
                 >
-                  {t("cart.checkout")}
+                  {loadingCheckout
+                    ? t("cart.processing") || "Processing..."
+                    : t("cart.checkout")}
                 </Button>
               </div>
             </>
