@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useToast } from '@/components/ui/use-toast';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 interface CartItem {
   item_key: string;
@@ -17,7 +23,11 @@ interface CartContextType {
   totalPrice: number;
   cartKey: string;
   isLoading: boolean;
-  addToCart: (productId: number, quantity?: number, variation?: Record<string, any>) => Promise<boolean>;
+  addToCart: (
+    productId: number,
+    quantity?: number,
+    variation?: Record<string, any>
+  ) => Promise<boolean>;
   updateQuantity: (itemKey: string, newQuantity: number) => Promise<void>;
   removeFromCart: (itemKey: string) => Promise<void>;
   clearCart: () => Promise<void>;
@@ -25,24 +35,17 @@ interface CartContextType {
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
-
 export const useCart = () => {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart must be used within a CartProvider');
-  }
-  return context;
+  const ctx = useContext(CartContext);
+  if (!ctx) throw new Error("useCart must be inside CartProvider");
+  return ctx;
 };
 
-interface CartProviderProps {
-  children: ReactNode;
-}
-
-export const CartProvider = ({ children }: CartProviderProps) => {
+export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [itemCount, setItemCount] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [cartKey, setCartKey] = useState('');
+  const [cartKey, setCartKey] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -51,264 +54,183 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   }, []);
 
   useEffect(() => {
-    const count = items.reduce((sum, item) => sum + item.quantity, 0);
-    const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    setItemCount(count);
-    setTotalPrice(total);
+    setItemCount(items.reduce((s, i) => s + i.quantity, 0));
+    setTotalPrice(items.reduce((s, i) => s + i.price * i.quantity, 0));
   }, [items]);
 
-  const initializeCart = async () => {
-    console.log("Initializing cart...");
+  async function initializeCart() {
     try {
-      let storedCartKey = localStorage.getItem('cocart_cart_key');
-      console.log("Stored cart key:", storedCartKey);
-
-      if (!storedCartKey) {
-        console.log("Fetching cart from backend...");
-        const response = await fetch('https://api.lifeisnatural.eu/wp-json/cocart/v2/cart', {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-        });
-
-        console.log("Response status:", response.status);
-        const text = await response.text();
-        console.log("Raw response text:", text);
-
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (err) {
-          console.error("Failed to parse JSON:", err);
-          return;
-        }
-
-        console.log("Parsed data:", data);
-        storedCartKey = data.cart_key;
-
-        if (storedCartKey) {
-          console.log("Storing cart key to localStorage:", storedCartKey);
-          localStorage.setItem('cocart_cart_key', storedCartKey);
-        } else {
-          console.error("No cart_key returned!");
-        }
+      let key = localStorage.getItem("cocart_cart_key") || "";
+      if (!key) {
+        const res = await fetch(
+          "https://api.lifeisnatural.eu/wp-json/cocart/v2/cart",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+        if (!res.ok) return;
+        const data = await res.json();
+        key = data.cart_key;
+        key && localStorage.setItem("cocart_cart_key", key);
       }
-
-      if (storedCartKey) {
-        console.log("Using cart key:", storedCartKey);
-        setCartKey(storedCartKey);
-        await fetchCartItems(storedCartKey);
-      } else {
-        console.error("Cart initialization failed — no cart key found");
-      }
-    } catch (error) {
-      console.error('Failed to initialize cart:', error);
+      setCartKey(key);
+      key && fetchCartItems(key);
+    } catch (e) {
+      console.error(e);
     }
-  };
+  }
 
-  const fetchCartItems = async (key: string) => {
+  async function fetchCartItems(key: string) {
     try {
-      const response = await fetch('https://api.lifeisnatural.eu/wp-json/cocart/v2/cart', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ cart_key: key }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const cartItems = Object.values(data.items || {}).map((item: any) => ({
-          item_key: item.item_key,
-          id: item.id,
-          title: item.name,
-          price: parseFloat(item.price),
-          quantity: item.quantity.value,
-          image: item.featured_image,
-          variation: item.variation ? Object.values(item.variation).join(', ') : null,
-        }));
-        setItems(cartItems);
-      } else {
-        console.error('Failed to fetch cart items. Status:', response.status);
+      const res = await fetch(
+        `https://api.lifeisnatural.eu/wp-json/cocart/v2/cart?cart_key=${key}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      if (!res.ok) {
+        console.error("Fetch cart items failed:", res.status);
+        return;
       }
-    } catch (error) {
-      console.error('Failed to fetch cart items:', error);
+      const data = await res.json();
+      const arr = Object.values(data.items || {}).map((item: any) => ({
+        item_key: item.item_key,
+        id: item.id,
+        title: item.name,
+        price: parseFloat(item.price),
+        quantity: item.quantity.value,
+        image: item.featured_image,
+        variation: item.variation
+          ? Object.values(item.variation).join(", ")
+          : null,
+      }));
+      setItems(arr);
+    } catch (e) {
+      console.error(e);
     }
-  };
+  }
 
-  const addToCart = async (
+  async function addToCart(
     productId: number,
     quantity = 1,
     variation = {}
-  ) => {
+  ) {
     if (!cartKey) {
-      toast({
-        title: 'Cart Error',
-        description: 'Cart not initialized. Please refresh the page.',
-        variant: 'destructive',
-      });
+      toast({ title: "Cart Error", description: "Missing cart key", variant: "destructive" });
       return false;
     }
-
     setIsLoading(true);
     try {
-      const requestBody: any = {
-        product_id: productId,
-        quantity: quantity,
+      const body: any = {
+        id: productId,
+        quantity: quantity.toString(), // v2 requires string :contentReference[oaicite:3]{index=3}
+        cart_key: cartKey,
       };
+      if (Object.keys(variation).length) body.variation = variation;
 
-      if (Object.keys(variation).length > 0) {
-        requestBody.variation = variation;
-      }
-
-      requestBody.cart_key = cartKey;
-
-      const response = await fetch(
-        'https://api.lifeisnatural.eu/wp-json/cocart/v2/cart/add-item',
+      const res = await fetch(
+        "https://api.lifeisnatural.eu/wp-json/cocart/v2/cart/add-item",
         {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(requestBody),
-          credentials: 'include',
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
         }
       );
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Item added to cart:", data);
-        await fetchCartItems(cartKey);
-        toast({
-          title: 'Item Added',
-          description: 'Product has been added to your cart',
-          variant: 'default',
-        });
-        return true;
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to add item to cart');
-      }
-    } catch (error: any) {
-      console.error('Add to cart error:', error);
-      toast({
-        title: 'Add to Cart Failed',
-        description: error.message || 'Failed to add item to cart',
-        variant: 'destructive',
-      });
+      if (!res.ok) throw new Error((await res.json()).message || "");
+      await fetchCartItems(cartKey);
+      toast({ title: "Added!", description: "Item added to cart" });
+      return true;
+    } catch (e: any) {
+      console.error(e);
+      toast({ title: "Add failed", description: e.message || "⚠️", variant: "destructive" });
       return false;
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
-  const updateQuantity = async (itemKey: string, newQuantity: number) => {
-    if (newQuantity < 1) {
-      return removeFromCart(itemKey);
-    }
-
+  async function updateQuantity(itemKey: string, newQty: number) {
+    if (newQty < 1) return removeFromCart(itemKey);
     try {
-      const response = await fetch('https://api.lifeisnatural.eu/wp-json/cocart/v2/cart/item', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cart_key: cartKey,
-          item_key: itemKey,
-          quantity: newQuantity,
-        }),
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        await fetchCartItems(cartKey);
-      } else {
-        throw new Error('Failed to update quantity');
-      }
-    } catch (error) {
-      console.error('Update quantity error:', error);
-      toast({
-        title: 'Update Failed',
-        description: 'Failed to update item quantity',
-        variant: 'destructive',
-      });
+      const res = await fetch(
+        "https://api.lifeisnatural.eu/wp-json/cocart/v2/cart/item",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            cart_key: cartKey,
+            item_key: itemKey,
+            quantity: newQty.toString(),
+          }),
+        }
+      );
+      if (!res.ok) throw new Error("update failed");
+      await fetchCartItems(cartKey);
+    } catch (e) {
+      console.error(e);
+      toast({ title: "Update failed", variant: "destructive" });
     }
-  };
+  }
 
-  const removeFromCart = async (itemKey: string) => {
+  async function removeFromCart(itemKey: string) {
     try {
-      const response = await fetch('https://api.lifeisnatural.eu/wp-json/cocart/v2/cart/item', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cart_key: cartKey,
-          item_key: itemKey,
-        }),
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        await fetchCartItems(cartKey);
-        toast({
-          title: 'Item Removed',
-          description: 'Item has been removed from your cart',
-          variant: 'default',
-        });
-      } else {
-        throw new Error('Failed to remove item');
-      }
-    } catch (error) {
-      console.error('Remove from cart error:', error);
-      toast({
-        title: 'Remove Failed',
-        description: 'Failed to remove item from cart',
-        variant: 'destructive',
-      });
+      const res = await fetch(
+        "https://api.lifeisnatural.eu/wp-json/cocart/v2/cart/item",
+        {
+          method: "DELETE",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cart_key: cartKey, item_key: itemKey }),
+        }
+      );
+      if (!res.ok) throw new Error("remove failed");
+      await fetchCartItems(cartKey);
+    } catch (e) {
+      console.error(e);
+      toast({ title: "Remove failed", variant: "destructive" });
     }
-  };
+  }
 
-  const clearCart = async () => {
+  async function clearCart() {
     try {
-      const response = await fetch('https://api.lifeisnatural.eu/wp-json/cocart/v2/cart/clear', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cart_key: cartKey }),
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        setItems([]);
-        toast({
-          title: 'Cart Cleared',
-          description: 'All items have been removed from your cart',
-          variant: 'default',
-        });
-      } else {
-        throw new Error('Failed to clear cart');
-      }
-    } catch (error) {
-      console.error('Clear cart error:', error);
-      toast({
-        title: 'Clear Failed',
-        description: 'Failed to clear cart',
-        variant: 'destructive',
-      });
+      const res = await fetch(
+        "https://api.lifeisnatural.eu/wp-json/cocart/v2/cart/clear",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cart_key: cartKey }),
+        }
+      );
+      if (!res.ok) throw new Error("clear failed");
+      setItems([]);
+    } catch (e) {
+      console.error(e);
+      toast({ title: "Clear failed", variant: "destructive" });
     }
-  };
-
-  const value: CartContextType = {
-    items,
-    itemCount,
-    totalPrice,
-    cartKey,
-    isLoading,
-    addToCart,
-    updateQuantity,
-    removeFromCart,
-    clearCart,
-    refreshCart: () => fetchCartItems(cartKey),
-  };
+  }
 
   return (
-    <CartContext.Provider value={value}>
+    <CartContext.Provider
+      value={{
+        items,
+        itemCount,
+        totalPrice,
+        cartKey,
+        isLoading,
+        addToCart,
+        updateQuantity,
+        removeFromCart,
+        clearCart,
+        refreshCart: () => fetchCartItems(cartKey),
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
 };
-        
+      
