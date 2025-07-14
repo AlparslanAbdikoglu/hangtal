@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 
 interface CartItem {
@@ -34,7 +34,11 @@ export const useCart = () => {
   return context;
 };
 
-export const CartProvider = ({ children }) => {
+interface CartProviderProps {
+  children: ReactNode;
+}
+
+export const CartProvider = ({ children }: CartProviderProps) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [itemCount, setItemCount] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -53,55 +57,54 @@ export const CartProvider = ({ children }) => {
     setTotalPrice(total);
   }, [items]);
 
- const initializeCart = async () => {
-  console.log("Initializing cart...");
-  try {
-    let storedCartKey = localStorage.getItem('cocart_cart_key');
-    console.log("Stored cart key:", storedCartKey);
+  const initializeCart = async () => {
+    console.log("Initializing cart...");
+    try {
+      let storedCartKey = localStorage.getItem('cocart_cart_key');
+      console.log("Stored cart key:", storedCartKey);
 
-    if (!storedCartKey) {
-      console.log("Fetching cart from backend...");
-      const response = await fetch('https://api.lifeisnatural.eu/wp-json/cocart/v2/cart', {
-        method: 'GET',  // Use GET here!
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-      });
+      if (!storedCartKey) {
+        console.log("Fetching cart from backend...");
+        const response = await fetch('https://api.lifeisnatural.eu/wp-json/cocart/v2/cart', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+        });
 
-      console.log("Response status:", response.status);
-      const text = await response.text();
-      console.log("Raw response text:", text);
+        console.log("Response status:", response.status);
+        const text = await response.text();
+        console.log("Raw response text:", text);
 
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (err) {
-        console.error("Failed to parse JSON:", err);
-        return;
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (err) {
+          console.error("Failed to parse JSON:", err);
+          return;
+        }
+
+        console.log("Parsed data:", data);
+        storedCartKey = data.cart_key;
+
+        if (storedCartKey) {
+          console.log("Storing cart key to localStorage:", storedCartKey);
+          localStorage.setItem('cocart_cart_key', storedCartKey);
+        } else {
+          console.error("No cart_key returned!");
+        }
       }
-
-      console.log("Parsed data:", data);
-      storedCartKey = data.cart_key;
 
       if (storedCartKey) {
-        console.log("Storing cart key to localStorage:", storedCartKey);
-        localStorage.setItem('cocart_cart_key', storedCartKey);
+        console.log("Using cart key:", storedCartKey);
+        setCartKey(storedCartKey);
+        await fetchCartItems(storedCartKey);
       } else {
-        console.error("No cart_key returned!");
+        console.error("Cart initialization failed — no cart key found");
       }
+    } catch (error) {
+      console.error('Failed to initialize cart:', error);
     }
-
-    if (storedCartKey) {
-      console.log("Using cart key:", storedCartKey);
-      setCartKey(storedCartKey);
-      await fetchCartItems(storedCartKey);
-    } else {
-      console.error("Cart initialization failed — no cart key found");
-    }
-  } catch (error) {
-    console.error('Failed to initialize cart:', error);
-  }
-};
-
+  };
 
   const fetchCartItems = async (key: string) => {
     try {
@@ -124,13 +127,19 @@ export const CartProvider = ({ children }) => {
           variation: item.variation ? Object.values(item.variation).join(', ') : null,
         }));
         setItems(cartItems);
+      } else {
+        console.error('Failed to fetch cart items. Status:', response.status);
       }
     } catch (error) {
       console.error('Failed to fetch cart items:', error);
     }
   };
 
-  const addToCart = async (productId: number, quantity = 1, variation = {}) => {
+  const addToCart = async (
+    productId: number,
+    quantity = 1,
+    variation = {}
+  ) => {
     if (!cartKey) {
       toast({
         title: 'Cart Error',
@@ -142,30 +151,30 @@ export const CartProvider = ({ children }) => {
 
     setIsLoading(true);
     try {
-      const requestBody: {
-        id: number;
-        quantity: number;
-        cart_key: string;
-        variation?: Record<string, any>;
-      } = {
-        id: productId,
+      const requestBody: any = {
+        product_id: productId,
         quantity: quantity,
-        cart_key: cartKey,
       };
 
       if (Object.keys(variation).length > 0) {
         requestBody.variation = variation;
       }
 
-      const response = await fetch('https://api.lifeisnatural.eu/wp-json/cocart/v2/cart/add-item', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody),
-        credentials: 'include',
-      });
+      requestBody.cart_key = cartKey;
+
+      const response = await fetch(
+        'https://api.lifeisnatural.eu/wp-json/cocart/v2/cart/add-item',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody),
+          credentials: 'include',
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
+        console.log("Item added to cart:", data);
         await fetchCartItems(cartKey);
         toast({
           title: 'Item Added',
@@ -177,7 +186,7 @@ export const CartProvider = ({ children }) => {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to add item to cart');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Add to cart error:', error);
       toast({
         title: 'Add to Cart Failed',
@@ -302,3 +311,4 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
+        
