@@ -1,5 +1,4 @@
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 import {
   Drawer,
   DrawerContent,
@@ -21,26 +20,19 @@ export const CartDrawer = () => {
     updateQuantity,
     removeFromCart,
     clearCart,
-   // note: only if your context actually provides this; else remove
   } = useCart();
 
   const { t } = useTranslation();
-  const [userEmail, setUserEmail] = useState("");
   const [loadingCheckout, setLoadingCheckout] = useState(false);
 
   const handleCheckout = async () => {
-    if (!userEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
+    if (items.length === 0) {
       toast({
-        title: t("cart.invalidEmailTitle") || "Invalid Email",
-        description:
-          t("cart.invalidEmailDescription") ||
-          "Please enter a valid email address.",
+        title: t("cart.empty") || "Cart is empty",
         variant: "destructive",
       });
       return;
     }
-
-  
 
     setLoadingCheckout(true);
     try {
@@ -53,7 +45,7 @@ export const CartDrawer = () => {
           },
           body: JSON.stringify({
             items,
-            userEmail,
+            totalPrice,
           }),
         }
       );
@@ -120,7 +112,7 @@ export const CartDrawer = () => {
               <div className="space-y-4">
                 {items.map((item) => (
                   <div
-                    key={item.id} // <-- use item.id here
+                    key={item.id}
                     className="flex items-center gap-4 p-4 border rounded-lg"
                   >
                     <img
@@ -182,14 +174,6 @@ export const CartDrawer = () => {
                 <div className="flex justify-between text-sm font-medium">
                   <span>{t("cart.total")}</span>
                   <span>€{totalPrice.toFixed(2)}</span>
-                </div>
-                <div className="mt-2">
-                  <Input
-                    type="email"
-                    value={userEmail}
-                    onChange={(e) => setUserEmail(e.target.value)}
-                    placeholder={t("cart.enterEmail") || "Enter your email"}
-                  />
                 </div>
                 <Button
                   onClick={handleCheckout}
