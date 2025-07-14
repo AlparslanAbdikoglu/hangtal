@@ -11,7 +11,7 @@ import { ShoppingCart, Plus, Minus, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import { toast } from "@/components/ui/use-toast"; // adjust import if needed
+import { toast } from "@/components/ui/use-toast";
 
 export const CartDrawer = () => {
   const {
@@ -21,7 +21,7 @@ export const CartDrawer = () => {
     updateQuantity,
     removeFromCart,
     clearCart,
-    cartKey,
+   // note: only if your context actually provides this; else remove
   } = useCart();
 
   const { t } = useTranslation();
@@ -40,14 +40,7 @@ export const CartDrawer = () => {
       return;
     }
 
-    if (!cartKey) {
-      toast({
-        title: "Cart Error",
-        description: "No cart key found. Please refresh your page.",
-        variant: "destructive",
-      });
-      return;
-    }
+  
 
     setLoadingCheckout(true);
     try {
@@ -59,7 +52,6 @@ export const CartDrawer = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            cartKey,
             items,
             userEmail,
           }),
@@ -128,7 +120,7 @@ export const CartDrawer = () => {
               <div className="space-y-4">
                 {items.map((item) => (
                   <div
-                    key={item.item_key}
+                    key={item.id} // <-- use item.id here
                     className="flex items-center gap-4 p-4 border rounded-lg"
                   >
                     <img
@@ -142,7 +134,7 @@ export const CartDrawer = () => {
                       </h4>
                       {item.variation && (
                         <p className="text-xs text-muted-foreground">
-                          {item.variation}
+                          {JSON.stringify(item.variation)}
                         </p>
                       )}
                       <p className="text-primary font-bold">
@@ -155,7 +147,7 @@ export const CartDrawer = () => {
                         size="icon"
                         className="h-8 w-8"
                         onClick={() =>
-                          updateQuantity(item.item_key, item.quantity - 1)
+                          updateQuantity(item.id, item.quantity - 1)
                         }
                         aria-label="Decrease quantity"
                       >
@@ -167,7 +159,7 @@ export const CartDrawer = () => {
                         size="icon"
                         className="h-8 w-8"
                         onClick={() =>
-                          updateQuantity(item.item_key, item.quantity + 1)
+                          updateQuantity(item.id, item.quantity + 1)
                         }
                         aria-label="Increase quantity"
                       >
@@ -177,7 +169,7 @@ export const CartDrawer = () => {
                         variant="destructive"
                         size="icon"
                         className="h-8 w-8"
-                        onClick={() => removeFromCart(item.item_key)}
+                        onClick={() => removeFromCart(item.id)}
                         aria-label="Remove item"
                       >
                         <X className="h-3 w-3" />
@@ -196,9 +188,7 @@ export const CartDrawer = () => {
                     type="email"
                     value={userEmail}
                     onChange={(e) => setUserEmail(e.target.value)}
-                    placeholder={
-                      t("cart.enterEmail") || "Enter your email"
-                    }
+                    placeholder={t("cart.enterEmail") || "Enter your email"}
                   />
                 </div>
                 <Button
