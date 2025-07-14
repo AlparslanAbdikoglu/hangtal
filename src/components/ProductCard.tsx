@@ -41,7 +41,12 @@ export const ProductCard = ({
       return;
     }
 
-    addToCart({ title, price, image });
+    addToCart({
+      price, image,
+      id: 0,
+      name: "",
+      quantity: 0
+    });
   };
 
   return (

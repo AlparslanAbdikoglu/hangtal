@@ -21,7 +21,7 @@ export const Navbar = () => {
     <nav className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-xl font-bold text-primary">MEINL</div>
+          <div className="text-xl font-bold text-primary">Webshop</div>
 
           {/* Mobile menu button */}
           <Button

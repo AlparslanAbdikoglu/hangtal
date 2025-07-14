@@ -7,7 +7,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const app = express();
 app.use(express.json());
 
-// Stripe checkout endpoint (yours)
+// Stripe checkout endpoint
 app.post('/create-checkout-session', async (req, res) => {
   try {
     const { items, userEmail } = req.body;
@@ -32,8 +32,8 @@ app.post('/create-checkout-session', async (req, res) => {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      success_url: `${process.env.DOMAIN}/success.html`,
-      cancel_url: `${process.env.DOMAIN}/cancel.html`,
+      success_url: `https://api.lifeisnatural.eu/checkout/order-received/${wooOrderId}/?key=${wooOrderKey}`,
+      cancel_url: `https://api.lifeisnatural.eu/cart/`,
       customer_email: userEmail || undefined,
     });
 
@@ -44,7 +44,7 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-// WooCommerce proxy endpoint
+// WooCommerce product proxy
 app.get('/api/products/:id', async (req, res) => {
   const productId = req.params.id;
 
@@ -65,7 +65,49 @@ app.get('/api/products/:id', async (req, res) => {
   }
 });
 
-// You can add more WooCommerce proxy endpoints (categories, products list, etc.)
+// ✅ NEW: WooCommerce order creation route
+app.post('/api/create-order', async (req, res) => {
+  const { items, totalPrice } = req.body;
+
+  try {
+    const response = await fetch(
+      `${process.env.WOO_API_BASE}/orders`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization:
+            'Basic ' +
+            Buffer.from(
+              `${process.env.WOO_CONSUMER_KEY}:${process.env.WOO_CONSUMER_SECRET}`
+            ).toString('base64'),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          payment_method: 'stripe',
+          payment_method_title: 'Stripe',
+          set_paid: false,
+          billing: {
+            first_name: 'John',
+            last_name: 'Doe',
+            email: 'john@example.com',
+          },
+          line_items: items.map((item) => ({
+            product_id: item.id,
+            quantity: item.quantity,
+          })),
+        }),
+      }
+    );
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Error creating WooCommerce order:', error);
+    res.status(500).json({
+      error: error.message || 'Failed to create order',
+    });
+  }
+});
 
 const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

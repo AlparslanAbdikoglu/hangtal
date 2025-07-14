@@ -9,15 +9,13 @@ import {
 import { ShoppingCart, Plus, Minus, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
 import { toast } from "@/components/ui/use-toast";
+import { useState } from "react";
 
 export const CartDrawer = () => {
   const {
-    items,
-    itemCount,
-    totalPrice,
-    updateQuantity,
+    cartItems,
+    addToCart,
     removeFromCart,
     clearCart,
   } = useCart();
@@ -25,8 +23,22 @@ export const CartDrawer = () => {
   const { t } = useTranslation();
   const [loadingCheckout, setLoadingCheckout] = useState(false);
 
+  const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const updateQuantity = (id: number, quantity: number) => {
+    if (quantity < 1) {
+      removeFromCart(id);
+    } else {
+      addToCart({ id, quantity, name: "", price: 0 });
+    }
+  };
+
   const handleCheckout = async () => {
-    if (items.length === 0) {
+    if (cartItems.length === 0) {
       toast({
         title: t("cart.empty") || "Cart is empty",
         variant: "destructive",
@@ -37,14 +49,12 @@ export const CartDrawer = () => {
     setLoadingCheckout(true);
     try {
       const response = await fetch(
-        "https://api.lifeisnatural.eu/create-checkout-session",
+        "https://api.lifeisnatural.eu/api/create-order",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            items,
+            items: cartItems,
             totalPrice,
           }),
         }
@@ -52,19 +62,22 @@ export const CartDrawer = () => {
 
       const data = await response.json();
 
-      if (data.url) {
-        window.location.href = data.url;
+      if (data.id) {
+        toast({
+          title: "Order created!",
+          description: `Order #${data.id} created successfully.`,
+        });
+
+        window.location.href = `https://api.lifeisnatural.eu/checkout/order-pay/${data.id}/?key=${data.order_key}`;
       } else {
         toast({
-          title: "Checkout Error",
-          description:
-            data.message ||
-            "Could not start checkout session. Please try again later.",
+          title: "Checkout error",
+          description: JSON.stringify(data),
           variant: "destructive",
         });
       }
     } catch (error) {
-      console.error("Checkout error:", error);
+      console.error(error);
       toast({
         title: "Checkout Failed",
         description:
@@ -94,7 +107,7 @@ export const CartDrawer = () => {
         <DrawerHeader>
           <DrawerTitle className="flex justify-between items-center">
             {t("cart.title")} ({t("cart.items", { count: itemCount })})
-            {items.length > 0 && (
+            {cartItems.length > 0 && (
               <Button variant="outline" size="sm" onClick={clearCart}>
                 {t("cart.clearAll")}
               </Button>
@@ -102,7 +115,7 @@ export const CartDrawer = () => {
           </DrawerTitle>
         </DrawerHeader>
         <div className="px-4 pb-4 overflow-y-auto">
-          {items.length === 0 ? (
+          {cartItems.length === 0 ? (
             <div className="text-center py-8">
               <ShoppingCart className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
               <p className="text-muted-foreground">{t("cart.empty")}</p>
@@ -110,25 +123,20 @@ export const CartDrawer = () => {
           ) : (
             <>
               <div className="space-y-4">
-                {items.map((item) => (
+                {cartItems.map((item) => (
                   <div
                     key={item.id}
                     className="flex items-center gap-4 p-4 border rounded-lg"
                   >
                     <img
                       src={item.image || "/placeholder.png"}
-                      alt={item.title}
+                      alt={item.name}
                       className="w-16 h-16 object-cover rounded"
                     />
                     <div className="flex-1">
                       <h4 className="font-medium line-clamp-2 text-sm">
-                        {item.title}
+                        {item.name}
                       </h4>
-                      {item.variation && (
-                        <p className="text-xs text-muted-foreground">
-                          {JSON.stringify(item.variation)}
-                        </p>
-                      )}
                       <p className="text-primary font-bold">
                         €{item.price.toFixed(2)}
                       </p>
