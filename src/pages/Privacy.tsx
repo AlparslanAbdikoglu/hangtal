@@ -14,7 +14,7 @@ const Privacy = () => {
     // In a real implementation, this would link to an actual PDF file
     const link = document.createElement('a');
     link.href = '/documents/privacy-policy.pdf'; // Mock PDF path
-    link.download = 'MEINL_Sonic_Energy_Privacy_Policy.pdf';
+    link.download = 'hangacademy_Privacy_Policy.pdf';
     link.click();
   };
 
