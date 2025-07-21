@@ -3,7 +3,6 @@ import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { CartDrawer } from "./CartDrawer";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from 'react-i18next';
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
@@ -64,7 +63,6 @@ export const Navbar = () => {
             <SignedIn>
               <UserButton afterSignOutUrl="/" />
             </SignedIn>
-            <CartDrawer />
           </div>
         </div>
 

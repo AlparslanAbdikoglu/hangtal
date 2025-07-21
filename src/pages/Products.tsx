@@ -4,11 +4,30 @@ import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import { useTranslation } from "react-i18next";
 
-const Products = () => {
+interface Product {
+  id: number;
+  name: string;
+  price: string;
+  regular_price?: string;
+  sale_price?: string;
+  description?: string;
+  short_description?: string;
+  stock_status?: string;
+  categories: { id: number; name: string; slug: string }[];
+  images: { id: number; src: string }[];
+  meta_data?: { key: string; value: string }[];
+}
+
+interface ProductsProps {
+  onAddToCart: (product: Product) => void;
+  setPageLoading: (loading: boolean) => void;
+}
+
+const Products = ({ onAddToCart, setPageLoading }: ProductsProps) => {
   const { t } = useTranslation();
 
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPriceRange, setSelectedPriceRange] = useState({
@@ -46,6 +65,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setPageLoading(true);
         const consumerKey = import.meta.env.VITE_WOO_CONSUMER_KEY;
         const consumerSecret = import.meta.env.VITE_WOO_CONSUMER_SECRET;
         const apiUrl = import.meta.env.VITE_WOO_API_URL;
@@ -61,18 +81,20 @@ const Products = () => {
 
         if (!res.ok) throw new Error("Failed to fetch products");
 
-        const data = await res.json();
+        const data: Product[] = await res.json();
         setProducts(data);
         setLoading(false);
+        setPageLoading(false);
       } catch (err) {
         console.error(err);
         setError("Failed to fetch products.");
         setLoading(false);
+        setPageLoading(false);
       }
     };
 
     fetchProducts();
-  }, []);
+  }, [setPageLoading]);
 
   useEffect(() => {
     const filtered = products
@@ -83,7 +105,9 @@ const Products = () => {
 
         const matchesCategory =
           selectedCategory === "all" ||
-          product.categories?.some((c) => c.slug === selectedCategory || c.name === selectedCategory);
+          product.categories?.some(
+            (c) => c.slug === selectedCategory || c.name === selectedCategory
+          );
 
         const matchesPrice =
           parseFloat(product.price) >= selectedPriceRange.min &&
@@ -112,7 +136,7 @@ const Products = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-background">
-      <Navbar /> {/* Add this line to include the Navbar */}
+      <Navbar />
 
       <main className="flex-grow">
         <div className="p-4 flex flex-col md:flex-row gap-4 justify-between items-center">
@@ -164,17 +188,18 @@ const Products = () => {
         </div>
 
         <div className={`grid ${viewMode === "grid" ? "grid-cols-2 md:grid-cols-4 gap-6" : "grid-cols-1"} p-4`}>
-          {filteredProducts.map((product: any) => (
+          {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}
               title={product.name}
               price={parseFloat(product.price)}
               image={product.images?.[0]?.src || "/placeholder.jpg"}
-              hasVideo={product.meta_data?.some((m: any) => m.key === "has_video" && m.value === "yes")}
-              hasAudio={product.meta_data?.some((m: any) => m.key === "has_audio" && m.value === "yes")}
+              hasVideo={product.meta_data?.some((m) => m.key === "has_video" && m.value === "yes")}
+              hasAudio={product.meta_data?.some((m) => m.key === "has_audio" && m.value === "yes")}
               available={product.stock_status === "instock"}
               id={String(product.id)}
               description={product.short_description || product.description}
+              onAddToCart={() => onAddToCart(product)}
             />
           ))}
         </div>

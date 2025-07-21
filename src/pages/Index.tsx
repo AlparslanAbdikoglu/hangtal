@@ -111,7 +111,13 @@ const Index = () => {
           <CarouselContent>
             {products.map((product) => (
               <CarouselItem key={product.title} className="md:basis-1/2 lg:basis-1/3">
-                <ProductCard {...product} />
+                <ProductCard
+                  {...product}
+                  onAddToCart={() => {
+                    // TODO: Implement add to cart logic
+                    console.log(`Add to cart: ${product.title}`);
+                  }}
+                />
               </CarouselItem>
             ))}
           </CarouselContent>

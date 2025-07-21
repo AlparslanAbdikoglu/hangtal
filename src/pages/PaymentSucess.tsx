@@ -1,22 +1,32 @@
+import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import { CheckCircle } from "lucide-react";
 
-import { useEffect } from 'react';
-// Update the path below if your useCart file is located elsewhere
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useNavigate } from 'react-router-dom';
-import { CheckCircle } from 'lucide-react';
-import { useCart } from '@/contexts/CartContext';
+interface Product {
+  id: number;
+  name: string;
+  price?: string;
+  quantity: number;
+}
 
-const PaymentSuccess = () => {
-  const { items } = useCart();
-  const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+interface PaymentSuccessProps {
+  cart: Product[];
+  clearCart: () => void;
+}
+
+const PaymentSuccess: React.FC<PaymentSuccessProps> = ({ cart, clearCart }) => {
   const navigate = useNavigate();
 
-  // Clear cart after successful payment
+  const total = cart.reduce((sum, item) => {
+    const priceNum = item.price ? parseFloat(item.price) : 0;
+    return sum + priceNum * item.quantity;
+  }, 0);
+
   useEffect(() => {
-    // In a real app, you'd clear the cart after confirming the payment
-    // For now, we'll just show the success message
-  }, []);
+    clearCart();
+  }, [clearCart]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -35,17 +45,17 @@ const PaymentSuccess = () => {
             Hamarosan kapni fog egy email megerősítést a rendelés részleteivel.
           </p>
           <div className="bg-gray-50 p-4 rounded-lg">
-            <p className="font-semibold">Fizetett összeg: {total} Ft</p>
+            <p className="font-semibold">Fizetett összeg: {total.toFixed(2)} Ft</p>
           </div>
           <div className="space-y-2">
-            <Button 
-              onClick={() => navigate('/')} 
+            <Button
+              onClick={() => navigate("/")}
               className="w-full bg-green-600 hover:bg-green-700"
             >
               Vissza a főoldalra
             </Button>
-            <Button 
-              onClick={() => navigate('/products')} 
+            <Button
+              onClick={() => navigate("/products")}
               variant="outline"
               className="w-full"
             >

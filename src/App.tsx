@@ -1,55 +1,85 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import { CartProvider, useCart } from "@/contexts/CartContext";
-import Index from "./pages/Index";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { myStoreHook } from "./MyStoreContext";
+
 import Products from "./pages/Products";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import MyOrders from "./pages/Myorders";
+import MyAccount from "./pages/Myaccount";
+import Auth from "./pages/Auth";
+import SingleProduct from "./pages/SingleProduct";
+import Index from "./pages/Index";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
-import Shipping from "./pages/Shipping";
-import Privacy from "./pages/Privacy";
-import ProductPage from "./pages/ProductPage";
-import Checkout from "./pages/Checkout"; // Import the Checkout component
-import PaymentSuccess from "./pages/PaymentSucess";
 
 
-
-
-const queryClient = new QueryClient();
-
-const AppRoutes = () => {
-  const navigate = useNavigate();
+function App() {
+  const {
+    setPageLoading,
+    isAuthenticated,
+    cart,
+    addProductsToCart,
+    loggedInUserData,
+    clearCartItem,
+  } = myStoreHook();
 
   return (
-    <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/products" element={<Products />} />
-      <Route path="/contact" element={<Contact />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/shipping" element={<Shipping />} />
-      <Route path="/privacy" element={<Privacy />} />
-      <Route path="/products/:id" element={<ProductPage />} />
-      <Route path="/checkout" element={<Checkout />} />
-      <Route path="/payment-success" element={<PaymentSuccess />} /> {/* Add payment success route */}
-     
-    </Routes>
-  );
-};
+    <Router>
+      <ToastContainer />
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <CartProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </TooltipProvider>
-    </CartProvider>
-  </QueryClientProvider>
-);
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route
+          path="/products"
+          element={
+            <Products
+              onAddToCart={addProductsToCart}
+              setPageLoading={setPageLoading}
+            />
+          }
+        />
+        <Route path="/cart" element={<Cart />} />
+
+        <Route
+          path="/checkout"
+          element={
+            <Checkout
+              loggedInUserData={loggedInUserData}
+              clearCartItem={clearCartItem} cartItems={[]}            />
+          }
+        />
+        <Route
+          path="/my-orders"
+          element={
+            <MyOrders
+              setPageLoading={setPageLoading}
+              loggedInUserData={loggedInUserData}
+            />
+          }
+        />
+        <Route
+          path="/my-account"
+          element={<MyAccount loggedInUserData={loggedInUserData} />}
+        />
+       <Route path="/login" element={<Auth />} />
+
+        <Route
+          path="/product/:id"
+          element={
+            <SingleProduct
+              onAddToCart={addProductsToCart}
+              setPageLoading={setPageLoading}
+            />
+          }
+        />
+        <Route path="/about" element={<About />} />
+  <Route path="/contact" element={<Contact />} />
+        {/* Optional fallback route */}
+        <Route path="*" element={<Products onAddToCart={addProductsToCart} setPageLoading={setPageLoading} />} />
+      </Routes>
+    </Router>
+  );
+}
 
 export default App;
