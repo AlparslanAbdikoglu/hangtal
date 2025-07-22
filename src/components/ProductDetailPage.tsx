@@ -7,6 +7,8 @@ import {
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { useTranslation } from 'react-i18next';
+import { ShoppingCart } from 'lucide-react';
+import { myStoreHook } from '../MyStoreContext'; // Adjust path accordingly
 
 export interface ProductImage {
   id: number;
@@ -30,36 +32,27 @@ export interface Product {
   stock_quantity?: number | null;
   images: ProductImage[];
   attributes: ProductAttribute[];
-  // Removed average_rating and rating_count
 }
 
 interface ProductDetailPageProps {
   product: Product;
-  // Removed onAddToCart and onAddToWishlist props
 }
 
-const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
-  product,
-}) => {
+const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
   const { t } = useTranslation();
+  const { addToCart } = myStoreHook();
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  // Removed quantity state
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
   const [activeTab, setActiveTab] = useState<'description' | 'additional'>('description');
-  // Removed isWishlisted state
   const [showImageZoom, setShowImageZoom] = useState(false);
-  // Removed cartMessage state
 
-  // Removed handleQuantityChange function
   const handleVariantSelect = (attributeName: string, option: string) => {
     setSelectedVariants(prev => ({
       ...prev,
       [attributeName]: option,
     }));
   };
-  // Removed handleAddToCartClick function
-  // Removed handleAddToWishlistClick function
 
   const discountPercentage =
     product.sale_price && product.regular_price
@@ -69,6 +62,17 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             100
         )
       : 0;
+
+  const handleAddToCart = () => {
+    addToCart({
+      title: product.name,
+      price: Number(product.sale_price || product.regular_price),
+      image: product.images[0]?.src || '',
+      product_id: product.id,
+      quantity: 1,
+      variants: selectedVariants,
+    });
+  };
 
   return (
     <>
@@ -165,9 +169,14 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               </div>
             )}
 
-            {/* Removed Quantity and Add to Cart + Wishlist section */}
-            {/* Removed cartMessage display */}
-
+            {/* Add to Cart Button */}
+                          <button
+                onClick={handleAddToCart}
+                className="w-full mt-6 bg-primary text-white font-semibold px-4 py-1.5 rounded-full flex items-center justify-center space-x-1.5 hover:bg-primary/90 transition duration-300"
+              >
+                <ShoppingCart size={18} />
+                <span>{t('products.view.addToCart', { defaultValue: 'Add to Cart' })}</span>
+              </button>
             {/* Tabs: Description, Additional Info */}
             <div className="mt-10">
               <div className="flex border-b">
