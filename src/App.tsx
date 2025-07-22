@@ -12,6 +12,8 @@ import SingleProduct from "./pages/SingleProduct";
 import Index from "./pages/Index";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
+import Privacy from "./pages/Privacy";
+import Shipping from "./pages/Shipping";
 
 
 function App() {
@@ -75,6 +77,9 @@ function App() {
         />
         <Route path="/about" element={<About />} />
   <Route path="/contact" element={<Contact />} />
+  <Route path="/privacy" element={<Privacy />} />
+  <Route path="/shipping" element={<Shipping />} />
+
         {/* Optional fallback route */}
         <Route path="*" element={<Products onAddToCart={addProductsToCart} setPageLoading={setPageLoading} />} />
       </Routes>
