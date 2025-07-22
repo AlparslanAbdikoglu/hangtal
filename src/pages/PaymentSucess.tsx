@@ -1,59 +1,51 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle } from "lucide-react";
 
-interface Product {
-  id: number;
-  name: string;
-  price?: string;
-  quantity: number;
-}
-
-interface PaymentSuccessProps {
-  cart: Product[];
-  clearCart: () => void;
-}
-
-interface StripeSession {
-  id: string;
-  amount_total: number;
-  currency: string;
-  customer_email: string;
-  payment_status: string;
-}
-
-const PaymentSuccess: React.FC<PaymentSuccessProps> = ({ cart, clearCart }) => {
+const PaymentSuccess = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const sessionId = searchParams.get("session_id");
-  const [session, setSession] = useState<StripeSession | null>(null);
+  const location = useLocation();
+  const [totalAmount, setTotalAmount] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const total = cart.reduce((sum, item) => {
-    const priceNum = item.price ? parseFloat(item.price) : 0;
-    return sum + priceNum * item.quantity;
-  }, 0);
+  // ✅ Extract session_id from URL
+  const queryParams = new URLSearchParams(location.search);
+  const sessionId = queryParams.get("session_id");
 
   useEffect(() => {
-    // Clear cart immediately after payment
-    clearCart();
+    // Optional: Clear cart here
+    localStorage.removeItem("cart");
 
-    // If session_id is present, fetch Stripe session details
     const fetchSessionDetails = async () => {
-      if (!sessionId) return;
-
       try {
-        const response = await fetch(`https://api.lifeisnatural.eu/api/checkout-session/${sessionId}`);
-        const data = await response.json();
-        setSession(data);
-      } catch (error) {
-        console.error("Failed to fetch session:", error);
+        const res = await fetch(`https://api.lifeisnatural.eu/api/stripe-session/${sessionId}`);
+        const data = await res.json();
+
+        if (data.amount_total) {
+          setTotalAmount((data.amount_total / 100).toFixed(2));
+        } else {
+          throw new Error("No amount_total in session");
+        }
+      } catch (err) {
+        setError("Failed to load payment info.");
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchSessionDetails();
-  }, [clearCart, sessionId]);
+    if (sessionId) fetchSessionDetails();
+    else {
+      setError("Missing session ID.");
+      setLoading(false);
+    }
+  }, [sessionId]);
+
+  if (loading) return <div className="text-center mt-10">Loading...</div>;
+  if (error) return <div className="text-center text-red-500 mt-10">{error}</div>;
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -68,30 +60,14 @@ const PaymentSuccess: React.FC<PaymentSuccessProps> = ({ cart, clearCart }) => {
           <p className="text-gray-600">
             Köszönjük a vásárlást! A rendelését feldolgoztuk.
           </p>
-
-          {session && (
-            <>
-              <p className="text-sm text-gray-500">
-                Email: <strong>{session.customer_email}</strong>
-              </p>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="font-semibold">
-                  Fizetett összeg: {(session.amount_total / 100).toFixed(2)} {session.currency.toUpperCase()}
-                </p>
-                <p className="text-sm">Fizetés állapota: {session.payment_status}</p>
-              </div>
-            </>
-          )}
-
-          {!session && (
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="font-semibold">
-                Fizetett összeg: {total.toFixed(2)} Ft
-              </p>
-              <p className="text-sm text-gray-500">Részletek betöltése...</p>
-            </div>
-          )}
-
+          <p className="text-sm text-gray-500">
+            Hamarosan kapni fog egy email megerősítést a rendelés részleteivel.
+          </p>
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <p className="font-semibold">
+              Fizetett összeg: {totalAmount} €
+            </p>
+          </div>
           <div className="space-y-2">
             <Button
               onClick={() => navigate("/")}

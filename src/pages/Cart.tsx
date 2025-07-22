@@ -35,7 +35,8 @@ const Cart = () => {
     try {
       const token = localStorage.getItem("jwtToken"); // Adjust if needed
       const response = await fetch(
-        "https://your-wordpress-site.com/wp-json/your-namespace/v1/create-checkout-session",
+  "https://api.lifeisnatural.eu/wp-json/myplugin/v1/create-checkout-session",
+
         {
           method: "POST",
           headers: {
