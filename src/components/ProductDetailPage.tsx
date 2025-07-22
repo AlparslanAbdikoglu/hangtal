@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
- 
   ShoppingCart,
   Plus,
   Minus,
@@ -11,7 +10,9 @@ import {
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { useTranslation } from 'react-i18next';
-import { useCart } from '@/contexts/CartContext';
+
+// Import your store hook from src folder
+import { myStoreHook } from '../MyStoreContext';
 
 export interface ProductImage {
   id: number;
@@ -41,7 +42,6 @@ export interface Product {
 
 interface ProductDetailPageProps {
   product: Product;
-  onAddToCart: (productId: number | string, quantity: number, variants: Record<string, string>) => void;
   onAddToWishlist?: (productId: number | string) => void;
 }
 
@@ -50,7 +50,9 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   onAddToWishlist,
 }) => {
   const { t } = useTranslation();
-  const { addToCart } = useCart();
+
+  // Use your store hook here
+  const { addToCart } = myStoreHook();
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -76,7 +78,9 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       title: product.name,
       price: Number(product.sale_price || product.regular_price),
       image: product.images[0]?.src || '',
-      product_id: 0
+      product_id: product.id,
+      quantity,
+      variants: selectedVariants,
     });
     setCartMessage(t('cart.addedToCart', { defaultValue: 'Added to cart' }));
     setTimeout(() => setCartMessage(null), 2000);
@@ -227,7 +231,6 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   }`}
                   aria-label={t('products.addToWishlist', { defaultValue: 'Add to wishlist' })}
                 >
-                
                 </button>
               )}
             </div>

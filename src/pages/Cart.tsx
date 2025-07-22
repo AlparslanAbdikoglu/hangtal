@@ -1,63 +1,146 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { myStoreHook } from "@/MyStoreContext";
-import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Navbar } from "@/components/Navbar";
+import { FaRegFrown } from "react-icons/fa"; // sad smile icon
+
+interface Product {
+  id: number;
+  name: string;
+  price: string;
+  regular_price?: string;
+  sale_price?: string;
+  quantity?: number;
+  images?: { src: string }[];
+  [key: string]: any;
+}
 
 const Cart = () => {
-  const {
-    cart,
-    isAuthenticated,
-    removeItemsFromCart,
-  } = myStoreHook();
-
+  const { t } = useTranslation();
+  const { isAuthenticated, cart, removeItemsFromCart } = myStoreHook();
+  const [cartItems, setCartItems] = useState<Product[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
-  }, [isAuthenticated, navigate]);
+    setCartItems(cart || []);
+  }, [cart]);
 
-  const total = cart.reduce((acc, item) => acc + parseFloat(item.price), 0).toFixed(2);
+  const goToCheckoutPage = () => {
+    navigate(isAuthenticated ? "/checkout" : "/login");
+  };
 
-  if (cart.length === 0) {
-    return <div className="p-8 text-center text-gray-500">Your cart is empty.</div>;
-  }
+  const renderProductPrice = (product: Product) => {
+    return product.sale_price ? (
+      <>
+        <span className="line-through text-gray-400 mr-2">
+          ${product.regular_price}
+        </span>
+        <span className="text-red-600">${product.sale_price}</span>
+      </>
+    ) : (
+      <>${product.regular_price || product.price}</>
+    );
+  };
+
+  const calculateTotalItemsPrice = () => {
+    return cartItems
+      .reduce((total, item) => {
+        const price = parseFloat(item.price) || 0;
+        return total + price * (item.quantity || 1);
+      }, 0)
+      .toFixed(2);
+  };
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
-      <ul className="space-y-4">
-        {cart.map((item) => (
-          <li key={item.id} className="flex items-center justify-between border p-4 rounded">
-            <div className="flex items-center gap-4">
-              <img src={item.image} alt={item.title} className="w-20 h-20 object-cover rounded" />
-              <div>
-                <h2 className="text-lg font-semibold">{item.title}</h2>
-                <p className="text-sm text-gray-500">${item.price}</p>
-              </div>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => removeItemsFromCart(item)}
-              className="text-red-500 hover:text-red-700"
-            >
-              <Trash2 className="w-5 h-5" />
-            </Button>
-          </li>
-        ))}
-      </ul>
+    <>
+      <Navbar />
+      <div className="max-w-5xl mx-auto p-8">
+        <h1 className="text-2xl font-bold mb-6">{t("cart.title")}</h1>
 
-      <div className="mt-6 text-right">
-        <p className="text-xl font-bold">Total: ${total}</p>
-        <Button className="mt-4" onClick={() => navigate("/checkout")}>
-          Proceed to Checkout
-        </Button>
+        {cartItems.length === 0 ? (
+          <div className="text-center text-gray-500">
+            <FaRegFrown className="mx-auto mb-4 text-6xl" />
+            <p>{t("cart.emptyMessage")}</p>
+            <table className="min-w-full border mt-6">
+              <thead>
+                <tr className="bg-gray-100 text-left">
+                  <th className="p-3 border-b">{t("cart.image")}</th>
+                  <th className="p-3 border-b">{t("cart.product")}</th>
+                  <th className="p-3 border-b">{t("cart.unitPrice")}</th>
+                  <th className="p-3 border-b">{t("cart.quantity")}</th>
+                  <th className="p-3 border-b">{t("cart.action")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    className="p-3 text-center text-gray-400"
+                    colSpan={5}
+                  >
+                    {t("cart.noItems")}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full border">
+              <thead>
+                <tr className="bg-gray-100 text-left">
+                  <th className="p-3 border-b">{t("cart.image")}</th>
+                  <th className="p-3 border-b">{t("cart.product")}</th>
+                  <th className="p-3 border-b">{t("cart.unitPrice")}</th>
+                  <th className="p-3 border-b">{t("cart.quantity")}</th>
+                  <th className="p-3 border-b">{t("cart.action")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cartItems.map((item, index) => (
+                  <tr key={index} className="border-t">
+                    <td className="p-3">
+                      <img
+                        src={item?.images?.[0]?.src}
+                        alt={item.name}
+                        className="w-12 h-12 object-cover rounded"
+                      />
+                    </td>
+                    <td className="p-3">{item.name}</td>
+                    <td className="p-3">{renderProductPrice(item)}</td>
+                    <td className="p-3">{item.quantity || 1}</td>
+                    <td className="p-3">
+                      <button
+                        onClick={() => removeItemsFromCart(item)}
+                        className="text-red-600 hover:text-red-800"
+                      >
+                        {t("cart.remove")}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div className="flex justify-between items-center mt-6">
+              <h3 className="text-xl font-semibold">
+                {t("cart.total")}: ${calculateTotalItemsPrice()}
+              </h3>
+              <button
+                className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+                onClick={goToCheckoutPage}
+              >
+                {t("cart.checkout")}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+      
+    </>
+    
   );
 };
+
 
 export default Cart;

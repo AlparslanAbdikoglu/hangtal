@@ -3,8 +3,8 @@ import App from './App.tsx';
 import './index.css';
 import './i18n/config';
 import { ClerkProvider } from '@clerk/clerk-react';
+import { MyStoreProvider } from './MyStoreContext';
 
-// Import your Publishable Key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
@@ -13,6 +13,8 @@ if (!PUBLISHABLE_KEY) {
 
 createRoot(document.getElementById('root')!).render(
   <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-    <App />
+    <MyStoreProvider>
+      <App />
+    </MyStoreProvider>
   </ClerkProvider>
 );

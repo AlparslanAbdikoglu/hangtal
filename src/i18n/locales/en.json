@@ -67,11 +67,20 @@
     "items": "{{count}} items",
     "empty": "Your cart is empty",
     "clearAll": "Clear All",
-    "total": "Total: €{{amount}}",
-    "checkout": "Proceed to Checkout",
+
     "addToCart": "Add to Cart",
     "addedToCart": "Added to cart",
-    "addedDescription": "{{title}} has been added to your cart."
+    "addedDescription": "{{title}} has been added to your cart.",
+    "emptyMessage": "Your cart is empty.",
+    "noItems": "No items to display.",
+    "image": "Image",
+    "product": "Product",
+    "unitPrice": "Unit Price",
+    "quantity": "Quantity",
+    "action": "Action",
+    "remove": "Remove",
+    "total": "Total",
+    "checkout": "Checkout"
   },
   "about": {
     "title": "About Marcus Weber",

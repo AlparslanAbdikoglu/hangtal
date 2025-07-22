@@ -1,11 +1,11 @@
 import axios from "axios";
 import CryptoJS from "crypto-js";
 
-const CONSUMER_KEY = "ck_a7b0f3e446452e99dce438372b522d16b4deb37b";
-const CONSUMER_SECRET = "cs_fe9de33e0547d025ab25ed7dd64d58a96ba41e59"
-const PROJECT_URL = "https://api.lifeisnatural.eu/"
-const API_URL = PROJECT_URL + "wp-json/wc/v3"
-const WP_USER_API_URL = `${PROJECT_URL}wp-json/wp/v2/users`
+const CONSUMER_KEY = import.meta.env.VITE_WOO_CONSUMER_KEY;
+const CONSUMER_SECRET = import.meta.env.VITE_WOO_CONSUMER_SECRET;
+const PROJECT_URL = import.meta.env.VITE_PROJECT_URL;
+const API_URL = import.meta.env.VITE_WOO_API_URL;
+const WP_USER_API_URL = `${PROJECT_URL}wp-json/wp/v2/users`;
 
 // Function to generate OAuth signature
 const generateOAuthSignature = (url, method = 'GET', params = {}) => {

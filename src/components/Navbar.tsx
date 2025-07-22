@@ -1,11 +1,12 @@
 import { Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart, faRightToBracket } from '@fortawesome/free-solid-svg-icons'; // added login icon
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 import { myStoreHook } from "@/MyStoreContext";
 
 export const Navbar = () => {
@@ -14,9 +15,13 @@ export const Navbar = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  // Get cart and auth from your store
+  // Get cart from your store
   const { cart } = myStoreHook();
-  const itemCount = Array.isArray(cart) ? cart.length : 0;
+
+  // Calculate total quantity of items in cart (sum quantities or default 1)
+  const itemCount = Array.isArray(cart)
+    ? cart.reduce((acc, item) => acc + (item.quantity ?? 1), 0)
+    : 0;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -26,7 +31,9 @@ export const Navbar = () => {
     <nav className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-xl font-bold text-primary">Webshop</div>
+          <div className="text-xl font-bold text-primary cursor-pointer" onClick={() => navigate('/')}>
+            Webshop
+          </div>
 
           {/* Mobile menu button */}
           <Button
@@ -34,6 +41,7 @@ export const Navbar = () => {
             size="icon"
             className="md:hidden"
             onClick={toggleMenu}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           >
             {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
@@ -55,24 +63,35 @@ export const Navbar = () => {
           </div>
 
           {/* Right-side controls */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-4">
             <LanguageSwitcher />
 
-            
+            {/* Cart icon with badge */}
+            <Link
+              to="/cart"
+              className="relative text-primary hover:text-secondary transition-colors"
+              aria-label={`Cart with ${itemCount} items`}
+            >
+              <FontAwesomeIcon icon={faShoppingCart} size="lg" />
+              {itemCount > 0 && (
+                <span
+                  className="absolute -top-1 -right-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full"
+                >
+                  {itemCount}
+                </span>
+              )}
+            </Link>
 
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button variant="ghost" size="icon" aria-label="Sign in">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8V22h19.2v-2.8c0-3.2-6.4-4.8-9.6-4.8z" />
-                  </svg>
-                </Button>
-              </SignInButton>
-            </SignedOut>
-
-            <SignedIn>
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
+            {/* Login icon button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Login"
+              onClick={() => navigate("/login")}
+              title="Login"
+            >
+              <FontAwesomeIcon icon={faRightToBracket} className="h-5 w-5" />
+            </Button>
           </div>
         </div>
 

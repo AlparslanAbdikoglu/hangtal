@@ -36,6 +36,8 @@ const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({ p
           stock_quantity: data.stock_quantity,
           images: data.images || [],
           attributes: data.attributes || [],
+          average_rating: data.average_rating,
+          rating_count: data.rating_count,
         };
 
         setProduct(productData);
@@ -53,12 +55,7 @@ const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({ p
   if (error) return <div className="text-center py-10 text-red-600">Error: {error}</div>;
   if (!product) return <div className="text-center py-10">Product not found.</div>;
 
-  return (
-    <ProductDetailPage
-      product={product}
-      onAddToCart={() => {}}  // Pass empty function if addToCart not implemented yet
-    />
-  );
+  return <ProductDetailPage product={product} />;
 };
 
 export default WooProductDetailContainer;

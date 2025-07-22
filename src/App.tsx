@@ -14,6 +14,8 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Privacy from "./pages/Privacy";
 import Shipping from "./pages/Shipping";
+import ProductPage from "./pages/ProductPgae";
+import ProductDetailPage from "./components/ProductDetailPage";
 
 
 function App() {
@@ -47,7 +49,7 @@ function App() {
           path="/checkout"
           element={
             <Checkout
-              loggedInUserData={loggedInUserData}
+              loggedInUserData={JSON.stringify(loggedInUserData)}
               clearCartItem={clearCartItem} cartItems={[]}            />
           }
         />
@@ -56,13 +58,13 @@ function App() {
           element={
             <MyOrders
               setPageLoading={setPageLoading}
-              loggedInUserData={loggedInUserData}
+              loggedInUserData={JSON.stringify(loggedInUserData)}
             />
           }
         />
         <Route
           path="/my-account"
-          element={<MyAccount loggedInUserData={loggedInUserData} />}
+          element={<MyAccount loggedInUserData={JSON.stringify(loggedInUserData)}/>}
         />
        <Route path="/login" element={<Auth />} />
 
@@ -75,6 +77,11 @@ function App() {
             />
           }
         />
+        <Route path="/product-page/:id" element={<ProductPage />} />
+        <Route path="/new-product/:id" element={<ProductDetailPage product={undefined} />} />
+
+
+        {/* Static pages */}
         <Route path="/about" element={<About />} />
   <Route path="/contact" element={<Contact />} />
   <Route path="/privacy" element={<Privacy />} />

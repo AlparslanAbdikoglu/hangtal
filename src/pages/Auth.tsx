@@ -1,8 +1,10 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { registerStoreUser, loginUser, getLoggedInUserData } from "../lib/api"; // adjust path if needed
-import { myStoreHook } from "../MyStoreContext"; // adjust path if needed
+import { registerStoreUser, loginUser, getLoggedInUserData } from "../lib/api";
+import { myStoreHook } from "../MyStoreContext";
+import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/Footer";
 
 const Auth: React.FC = () => {
   const navigate = useNavigate();
@@ -25,13 +27,11 @@ const Auth: React.FC = () => {
     signup_password: "",
   });
 
-  // Handle login input change
   const handleOnChangeLoginFormData = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLoginData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle login form submit
   const handleLoginFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setPageLoading(true);
@@ -54,9 +54,9 @@ const Auth: React.FC = () => {
       };
 
       localStorage.setItem("user_data", JSON.stringify(loggedInUserData));
-      setLoggedInUserData(JSON.stringify(loggedInUserData));
+      setLoggedInUserData(loggedInUserData); // <-- fix here, pass object NOT string
 
-      toast.success("User logged in Successfully");
+      toast.success("User logged in successfully");
       setLoginData({ login_username: "", login_password: "" });
       navigate("/products");
     } catch (err) {
@@ -67,13 +67,11 @@ const Auth: React.FC = () => {
     }
   };
 
-  // Handle signup input change
   const handleOnChangeSignUpFormData = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSignUpData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle signup form submit
   const handleSignUpFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setPageLoading(true);
@@ -102,102 +100,112 @@ const Auth: React.FC = () => {
   };
 
   return (
-    <div className="container">
-      <h1 className="my-4 text-center">Login / Signup</h1>
-      <div className="row">
-        {/* Login Form */}
-        <div className="col-md-6">
-          <h2>Login</h2>
-          <form onSubmit={handleLoginFormSubmit}>
-            <div className="mb-3">
-              <label className="form-label">Username</label>
-              <input
-                type="text"
-                name="login_username"
-                value={loginData.login_username}
-                onChange={handleOnChangeLoginFormData}
-                className="form-control"
-                placeholder="Enter username"
-              />
-            </div>
+    <>
+      <Navbar />
+      <div className="max-w-4xl mx-auto py-12 px-6">
+        <h1 className="text-3xl font-bold text-center mb-10">Login / Signup</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Login Form */}
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Login</h2>
+            <form onSubmit={handleLoginFormSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Username</label>
+                <input
+                  type="text"
+                  name="login_username"
+                  value={loginData.login_username}
+                  onChange={handleOnChangeLoginFormData}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  placeholder="Enter username"
+                />
+              </div>
 
-            <div className="mb-3">
-              <label className="form-label">Password</label>
-              <input
-                type="password"
-                name="login_password"
-                value={loginData.login_password}
-                onChange={handleOnChangeLoginFormData}
-                className="form-control"
-                placeholder="Enter password"
-              />
-            </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Password</label>
+                <input
+                  type="password"
+                  name="login_password"
+                  value={loginData.login_password}
+                  onChange={handleOnChangeLoginFormData}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  placeholder="Enter password"
+                />
+              </div>
 
-            <button type="submit" className="btn btn-primary mt-3">
-              Login
-            </button>
-          </form>
-        </div>
+              <button
+                type="submit"
+                className="w-full bg-primary hover:bg-secondary text-white font-semibold py-2 px-4 rounded transition-colors"
+              >
+                Login
+              </button>
+            </form>
+          </div>
 
-        {/* Signup Form */}
-        <div className="col-md-6">
-          <h2>Signup</h2>
-          <form onSubmit={handleSignUpFormSubmit}>
-            <div className="mb-3">
-              <label className="form-label">Name</label>
-              <input
-                type="text"
-                name="signup_name"
-                value={signUpData.signup_name}
-                onChange={handleOnChangeSignUpFormData}
-                className="form-control"
-                placeholder="Enter name"
-              />
-            </div>
+          {/* Signup Form */}
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Signup</h2>
+            <form onSubmit={handleSignUpFormSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Name</label>
+                <input
+                  type="text"
+                  name="signup_name"
+                  value={signUpData.signup_name}
+                  onChange={handleOnChangeSignUpFormData}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  placeholder="Enter name"
+                />
+              </div>
 
-            <div className="mb-3">
-              <label className="form-label">Email</label>
-              <input
-                type="email"
-                name="signup_email"
-                value={signUpData.signup_email}
-                onChange={handleOnChangeSignUpFormData}
-                className="form-control"
-                placeholder="Enter email"
-              />
-            </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Email</label>
+                <input
+                  type="email"
+                  name="signup_email"
+                  value={signUpData.signup_email}
+                  onChange={handleOnChangeSignUpFormData}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  placeholder="Enter email"
+                />
+              </div>
 
-            <div className="mb-3">
-              <label className="form-label">Username</label>
-              <input
-                type="text"
-                name="signup_username"
-                value={signUpData.signup_username}
-                onChange={handleOnChangeSignUpFormData}
-                className="form-control"
-                placeholder="Enter username"
-              />
-            </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Username</label>
+                <input
+                  type="text"
+                  name="signup_username"
+                  value={signUpData.signup_username}
+                  onChange={handleOnChangeSignUpFormData}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  placeholder="Enter username"
+                />
+              </div>
 
-            <div className="mb-3">
-              <label className="form-label">Password</label>
-              <input
-                type="password"
-                name="signup_password"
-                value={signUpData.signup_password}
-                onChange={handleOnChangeSignUpFormData}
-                className="form-control"
-                placeholder="Enter password"
-              />
-            </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Password</label>
+                <input
+                  type="password"
+                  name="signup_password"
+                  value={signUpData.signup_password}
+                  onChange={handleOnChangeSignUpFormData}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  placeholder="Enter password"
+                />
+              </div>
 
-            <button type="submit" className="btn btn-success mt-3">
-              Signup
-            </button>
-          </form>
+              <button
+                type="submit"
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition-colors"
+              >
+                Signup
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 
