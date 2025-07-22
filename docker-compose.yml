@@ -6,9 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        VITE_CLERK_PUBLISHABLE_KEY: ${VITE_CLERK_PUBLISHABLE_KEY}
-        VITE_WOO_API_URL: ${VITE_WOO_API_URL}
-        VITE_STRIPE_PUBLISHABLE_KEY: ${VITE_STRIPE_PUBLISHABLE_KEY}
+       VITE_WOO_API_URL: ${VITE_WOO_API_URL}
     ports:
       - "3000:80"
     container_name: hangtal
