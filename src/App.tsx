@@ -8,15 +8,13 @@ import Checkout from "./pages/Checkout";
 import MyOrders from "./pages/Myorders";
 import MyAccount from "./pages/Myaccount";
 import Auth from "./pages/Auth";
-import SingleProduct from "./pages/SingleProduct";
 import Index from "./pages/Index";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Privacy from "./pages/Privacy";
 import Shipping from "./pages/Shipping";
-import ProductPage from "./pages/ProductPgae";
-import ProductDetailPage from "./components/ProductDetailPage";
 
+        
 
 function App() {
   const {
@@ -68,19 +66,9 @@ function App() {
         />
        <Route path="/login" element={<Auth />} />
 
-        <Route
-          path="/product/:id"
-          element={
-            <SingleProduct
-              onAddToCart={addProductsToCart}
-              setPageLoading={setPageLoading}
-            />
-          }
-        />
-        <Route path="/product-page/:id" element={<ProductPage />} />
-        <Route path="/new-product/:id" element={<ProductDetailPage product={undefined} />} />
-
-
+       
+    
+       
         {/* Static pages */}
         <Route path="/about" element={<About />} />
   <Route path="/contact" element={<Contact />} />

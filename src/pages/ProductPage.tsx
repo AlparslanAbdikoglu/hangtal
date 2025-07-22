@@ -1,7 +1,7 @@
 // src/pages/ProductPage.tsx
 import React from "react";
 import { useParams } from "react-router-dom";
-import WooProductDetailContainer from "../components/WooProductDetailContainer";
+
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -12,7 +12,6 @@ const ProductPage: React.FC = () => {
 
   if (isNaN(productId)) return <div>Invalid product ID.</div>;
 
-  return <WooProductDetailContainer productId={productId} />;
 };
 
 export default ProductPage;

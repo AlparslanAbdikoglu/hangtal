@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ProductDetailPage, { Product } from './ProductDetailPage';
+import ProductDetailPage, { Product } from './ProductDetailPage'; // Adjust path if needed
 
 interface WooProductDetailContainerProps {
   productId: number;
@@ -10,6 +10,7 @@ const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({ p
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Ensure your environment variables are set up correctly
   const consumerKey = import.meta.env.VITE_WOO_CONSUMER_KEY;
   const consumerSecret = import.meta.env.VITE_WOO_CONSUMER_SECRET;
   const storeUrl = 'https://api.lifeisnatural.eu';
@@ -26,6 +27,7 @@ const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({ p
         }
         const data = await res.json();
 
+        // Map the API data to your Product interface
         const productData: Product = {
           id: data.id,
           name: data.name,
@@ -38,6 +40,7 @@ const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({ p
           attributes: data.attributes || [],
           average_rating: data.average_rating,
           rating_count: data.rating_count,
+          price: ''
         };
 
         setProduct(productData);
@@ -48,14 +51,23 @@ const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({ p
       }
     };
 
-    fetchProduct();
-  }, [productId]);
+    if (productId) {
+      fetchProduct();
+    }
+  }, [productId, consumerKey, consumerSecret]);
 
   if (loading) return <div className="text-center py-10">Loading product...</div>;
   if (error) return <div className="text-center py-10 text-red-600">Error: {error}</div>;
   if (!product) return <div className="text-center py-10">Product not found.</div>;
 
-  return <ProductDetailPage product={product} />;
+  return (
+    <ProductDetailPage
+      product={product} onAddToCart={function (productId: number | string, quantity: number, variants: Record<string, string>): void {
+        throw new Error('Function not implemented.');
+      } }      // The onAddToWishlist prop is optional
+      // onAddToWishlist={(id) => console.log('Add to wishlist:', id)}
+    />
+  );
 };
 
 export default WooProductDetailContainer;
