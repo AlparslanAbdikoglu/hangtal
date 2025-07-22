@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { myStoreHook } from "@/MyStoreContext";
 import { Navbar } from "@/components/Navbar";
-import { FaRegFrown } from "react-icons/fa"; // sad smile icon
+import { FaRegFrown } from "react-icons/fa"; // sad icon
 
 interface Product {
   id: number;
@@ -26,8 +26,36 @@ const Cart = () => {
     setCartItems(cart || []);
   }, [cart]);
 
-  const goToCheckoutPage = () => {
-    navigate(isAuthenticated ? "/checkout" : "/login");
+  const handleStripeCheckout = async () => {
+    if (!isAuthenticated) {
+      localStorage.setItem("redirectAfterLogin", "/cart");
+      return navigate("/login");
+    }
+
+    try {
+      const token = localStorage.getItem("jwtToken"); // Adjust if needed
+      const response = await fetch(
+        "https://your-wordpress-site.com/wp-json/your-namespace/v1/create-checkout-session",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ cart: cartItems }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error("Stripe session URL not found.");
+      }
+    } catch (error) {
+      console.error("Stripe checkout failed:", error);
+    }
   };
 
   const renderProductPrice = (product: Product) => {
@@ -46,8 +74,9 @@ const Cart = () => {
   const calculateTotalItemsPrice = () => {
     return cartItems
       .reduce((total, item) => {
-        const price = parseFloat(item.price) || 0;
-        return total + price * (item.quantity || 1);
+        const price = parseFloat(item.sale_price || item.regular_price || "0");
+        const quantity = item.quantity || 1;
+        return total + price * quantity;
       }, 0)
       .toFixed(2);
   };
@@ -74,10 +103,7 @@ const Cart = () => {
               </thead>
               <tbody>
                 <tr>
-                  <td
-                    className="p-3 text-center text-gray-400"
-                    colSpan={5}
-                  >
+                  <td className="p-3 text-center text-gray-400" colSpan={5}>
                     {t("cart.noItems")}
                   </td>
                 </tr>
@@ -122,13 +148,14 @@ const Cart = () => {
               </tbody>
             </table>
 
-            <div className="flex justify-between items-center mt-6">
+            <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center mt-6 gap-4">
               <h3 className="text-xl font-semibold">
                 {t("cart.total")}: ${calculateTotalItemsPrice()}
               </h3>
+
               <button
-                className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
-                onClick={goToCheckoutPage}
+                className="bg-yellow-600 text-white px-6 py-2 rounded-full hover:bg-yellow-700 transition"
+                onClick={handleStripeCheckout}
               >
                 {t("cart.checkout")}
               </button>
@@ -136,11 +163,8 @@ const Cart = () => {
           </div>
         )}
       </div>
-      
     </>
-    
   );
 };
-
 
 export default Cart;

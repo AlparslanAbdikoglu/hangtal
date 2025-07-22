@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
 import { CheckCircle } from "lucide-react";
 
 interface Product {
@@ -16,8 +16,19 @@ interface PaymentSuccessProps {
   clearCart: () => void;
 }
 
+interface StripeSession {
+  id: string;
+  amount_total: number;
+  currency: string;
+  customer_email: string;
+  payment_status: string;
+}
+
 const PaymentSuccess: React.FC<PaymentSuccessProps> = ({ cart, clearCart }) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const sessionId = searchParams.get("session_id");
+  const [session, setSession] = useState<StripeSession | null>(null);
 
   const total = cart.reduce((sum, item) => {
     const priceNum = item.price ? parseFloat(item.price) : 0;
@@ -25,8 +36,24 @@ const PaymentSuccess: React.FC<PaymentSuccessProps> = ({ cart, clearCart }) => {
   }, 0);
 
   useEffect(() => {
+    // Clear cart immediately after payment
     clearCart();
-  }, [clearCart]);
+
+    // If session_id is present, fetch Stripe session details
+    const fetchSessionDetails = async () => {
+      if (!sessionId) return;
+
+      try {
+        const response = await fetch(`https://api.lifeisnatural.eu/api/checkout-session/${sessionId}`);
+        const data = await response.json();
+        setSession(data);
+      } catch (error) {
+        console.error("Failed to fetch session:", error);
+      }
+    };
+
+    fetchSessionDetails();
+  }, [clearCart, sessionId]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -41,12 +68,30 @@ const PaymentSuccess: React.FC<PaymentSuccessProps> = ({ cart, clearCart }) => {
           <p className="text-gray-600">
             Köszönjük a vásárlást! A rendelését feldolgoztuk.
           </p>
-          <p className="text-sm text-gray-500">
-            Hamarosan kapni fog egy email megerősítést a rendelés részleteivel.
-          </p>
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <p className="font-semibold">Fizetett összeg: {total.toFixed(2)} Ft</p>
-          </div>
+
+          {session && (
+            <>
+              <p className="text-sm text-gray-500">
+                Email: <strong>{session.customer_email}</strong>
+              </p>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="font-semibold">
+                  Fizetett összeg: {(session.amount_total / 100).toFixed(2)} {session.currency.toUpperCase()}
+                </p>
+                <p className="text-sm">Fizetés állapota: {session.payment_status}</p>
+              </div>
+            </>
+          )}
+
+          {!session && (
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="font-semibold">
+                Fizetett összeg: {total.toFixed(2)} Ft
+              </p>
+              <p className="text-sm text-gray-500">Részletek betöltése...</p>
+            </div>
+          )}
+
           <div className="space-y-2">
             <Button
               onClick={() => navigate("/")}

@@ -1,13 +1,23 @@
 require('dotenv').config({ path: './.env' });
 const express = require('express');
-const fetch = require('node-fetch'); // If not installed, `npm install node-fetch@2`
-
+const fetch = require('node-fetch');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 app.use(express.json());
 
-// Stripe checkout endpoint
+// Stripe checkout session retrieval endpoint
+app.get('/api/checkout-session/:id', async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.retrieve(req.params.id);
+    res.json(session);
+  } catch (error) {
+    console.error('Error fetching Stripe session:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Stripe checkout session creation endpoint
 app.post('/create-checkout-session', async (req, res) => {
   try {
     const { items, userEmail } = req.body;
@@ -32,7 +42,8 @@ app.post('/create-checkout-session', async (req, res) => {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      success_url: `https://api.lifeisnatural.eu/checkout/order-received/${wooOrderId}/?key=${wooOrderKey}`,
+      // Make sure Stripe replaces {CHECKOUT_SESSION_ID} with the actual session id:
+      success_url: `https://api.lifeisnatural.eu/payment-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `https://api.lifeisnatural.eu/cart/`,
       customer_email: userEmail || undefined,
     });
@@ -65,7 +76,7 @@ app.get('/api/products/:id', async (req, res) => {
   }
 });
 
-// ✅ NEW: WooCommerce order creation route
+// WooCommerce order creation route
 app.post('/api/create-order', async (req, res) => {
   const { items, totalPrice } = req.body;
 
