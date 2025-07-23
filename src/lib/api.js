@@ -79,19 +79,18 @@ export const getSingleProductData = async (productID) => {
 // Register User API
 export const registerStoreUser = async(userInfo) => {
   try {
-    const authHeader = "Basic " + btoa(`${WP_ADMIN_USERNAME}:${WP_ADMIN_PASSWORD}`);
+   const authHeader = "Basic " + btoa(`${WP_ADMIN_USERNAME}:${WP_ADMIN_PASSWORD}`);
 
-    const response = await api.post(WP_USER_API_URL, userInfo, {
-      headers: {
-        Authorization: authHeader
-      }
-    });
-
-    return response.data;
-  } catch(error) {
-    console.log("Registration error:", error);
+const response = await api.post(WP_USER_API_URL, userInfo, {
+  headers: {
+    Authorization: authHeader
   }
-};
+});
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 // Login User API
