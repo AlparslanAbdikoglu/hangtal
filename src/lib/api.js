@@ -6,6 +6,9 @@ const CONSUMER_SECRET = import.meta.env.VITE_WOO_CONSUMER_SECRET;
 const PROJECT_URL = import.meta.env.VITE_PROJECT_URL;
 const API_URL = import.meta.env.VITE_WOO_API_URL;
 const WP_USER_API_URL = `${PROJECT_URL}wp-json/wp/v2/users`;
+const WP_ADMIN_USERNAME = import.meta.env.VITE_WP_ADMIN_USERNAME;
+const WP_ADMIN_PASSWORD = import.meta.env.VITE_WP_ADMIN_PASSWORD;
+
 
 // Function to generate OAuth signature
 const generateOAuthSignature = (url, method = 'GET', params = {}) => {
@@ -75,20 +78,21 @@ export const getSingleProductData = async (productID) => {
 
 // Register User API
 export const registerStoreUser = async(userInfo) => {
-
-  try{
+  try {
+    const authHeader = "Basic " + btoa(`${WP_ADMIN_USERNAME}:${WP_ADMIN_PASSWORD}`);
 
     const response = await api.post(WP_USER_API_URL, userInfo, {
       headers: {
-        "Authorization": "Basic " + btoa("username:password")
+        Authorization: authHeader
       }
-    })
+    });
 
-    return response.data
-  } catch(error){
-    console.log(error)
+    return response.data;
+  } catch(error) {
+    console.log("Registration error:", error);
   }
-}
+};
+
 
 // Login User API
 export const loginUser = async(userInfo) => {
