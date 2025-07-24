@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { myStoreHook } from "@/MyStoreContext";
 import { Navbar } from "@/components/Navbar";
 import { FaRegFrown } from "react-icons/fa"; // sad icon
+import { toast } from "react-toastify";
 
 interface Product {
   id: number;
@@ -27,37 +28,41 @@ const Cart = () => {
   }, [cart]);
 
   const handleStripeCheckout = async () => {
-    if (!isAuthenticated) {
-      localStorage.setItem("redirectAfterLogin", "/cart");
-      return navigate("/login");
+  if (!isAuthenticated) {
+    localStorage.setItem("redirectAfterLogin", "/cart");
+    return navigate("/login");
+  }
+
+  try {
+    const response = await fetch("https://api.lifeisnatural.eu/create-checkout-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        items: cartItems.map(item => ({
+          title: item.name,
+          price: parseFloat(item.sale_price || item.regular_price || "0"),
+          image: item.images?.[0]?.src || "",
+          quantity: item.quantity || 1,
+        })),
+        userEmail: loggedInUserData?.email,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      toast.error("Stripe session URL not found.");
     }
-
-    try {
-      const token = localStorage.getItem("jwtToken"); // Adjust if needed
-      const response = await fetch(
-  "https://api.lifeisnatural.eu/wp-json/myplugin/v1/create-checkout-session",
-
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ cart: cartItems }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        console.error("Stripe session URL not found.");
-      }
-    } catch (error) {
-      console.error("Stripe checkout failed:", error);
-    }
-  };
+  } catch (error) {
+    toast.error("Checkout failed.");
+    console.error(error);
+  }
+};
+  const loggedInUserData = JSON.parse(localStorage.getItem("loggedInUserData") || "{}");
 
   const renderProductPrice = (product: Product) => {
     return product.sale_price ? (

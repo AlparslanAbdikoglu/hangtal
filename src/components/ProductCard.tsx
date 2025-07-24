@@ -1,12 +1,9 @@
-// src/components/ProductCard.tsx
 import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 import { Card, CardFooter, CardHeader, CardContent, CardTitle } from "./ui/card";
 import { Music, Video } from "lucide-react";
-import { Product } from "./ProductDetailPage";
-
 
 type ProductCardProps = {
   id: string;
@@ -17,7 +14,7 @@ type ProductCardProps = {
   hasAudio?: boolean;
   available?: boolean;
   description?: string;
-  onAddToCart: () => void; // just a simple callback
+  onAddToCart: () => void;
 };
 
 export const ProductCard = ({

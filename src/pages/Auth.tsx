@@ -58,7 +58,7 @@ const Auth: React.FC = () => {
 
       toast.success("User logged in successfully");
       setLoginData({ login_username: "", login_password: "" });
-      navigate("/products");
+      navigate("/cart");
     } catch (err) {
       console.error(err);
       toast.error("Invalid login details");

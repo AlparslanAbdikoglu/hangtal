@@ -42,7 +42,6 @@ app.post('/create-checkout-session', async (req, res) => {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      // Make sure Stripe replaces {CHECKOUT_SESSION_ID} with the actual session id:
       success_url: `https://api.lifeisnatural.eu/payment-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `https://api.lifeisnatural.eu/cart/`,
       customer_email: userEmail || undefined,
@@ -55,7 +54,7 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-// WooCommerce product proxy
+// WooCommerce product proxy endpoint (get product by ID)
 app.get('/api/products/:id', async (req, res) => {
   const productId = req.params.id;
 
@@ -78,7 +77,11 @@ app.get('/api/products/:id', async (req, res) => {
 
 // WooCommerce order creation route
 app.post('/api/create-order', async (req, res) => {
-  const { items, totalPrice } = req.body;
+  const { items, billing, totalPrice } = req.body;
+
+  if (!billing || !billing.first_name || !billing.email) {
+    return res.status(400).json({ error: 'Incomplete billing information' });
+  }
 
   try {
     const response = await fetch(
@@ -97,11 +100,7 @@ app.post('/api/create-order', async (req, res) => {
           payment_method: 'stripe',
           payment_method_title: 'Stripe',
           set_paid: false,
-          billing: {
-            first_name: 'John',
-            last_name: 'Doe',
-            email: 'john@example.com',
-          },
+          billing,
           line_items: items.map((item) => ({
             product_id: item.id,
             quantity: item.quantity,
@@ -110,13 +109,17 @@ app.post('/api/create-order', async (req, res) => {
       }
     );
 
+    if (!response.ok) {
+      const errorBody = await response.text();
+      console.error('WooCommerce API error:', response.status, errorBody);
+      return res.status(response.status).json({ error: errorBody });
+    }
+
     const data = await response.json();
     res.json(data);
   } catch (error) {
     console.error('Error creating WooCommerce order:', error);
-    res.status(500).json({
-      error: error.message || 'Failed to create order',
-    });
+    res.status(500).json({ error: error.message || 'Failed to create order' });
   }
 });
 

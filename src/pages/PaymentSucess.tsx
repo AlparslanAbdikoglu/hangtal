@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle } from "lucide-react";
@@ -11,19 +11,18 @@ const PaymentSuccess = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // ✅ Extract session_id from URL
   const queryParams = new URLSearchParams(location.search);
   const sessionId = queryParams.get("session_id");
 
   useEffect(() => {
-    // Optional: Clear cart here
     localStorage.removeItem("cart");
-
     const fetchSessionDetails = async () => {
       try {
-        const res = await fetch(`https://api.lifeisnatural.eu/api/stripe-session/${sessionId}`);
+        const res = await fetch(`https://api.lifeisnatural.eu/api/checkout-session/${sessionId}`);
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
         const data = await res.json();
-
         if (data.amount_total) {
           setTotalAmount((data.amount_total / 100).toFixed(2));
         } else {
@@ -64,9 +63,7 @@ const PaymentSuccess = () => {
             Hamarosan kapni fog egy email megerősítést a rendelés részleteivel.
           </p>
           <div className="bg-gray-50 p-4 rounded-lg">
-            <p className="font-semibold">
-              Fizetett összeg: {totalAmount} €
-            </p>
+            <p className="font-semibold">Fizetett összeg: {totalAmount} €</p>
           </div>
           <div className="space-y-2">
             <Button
@@ -76,11 +73,18 @@ const PaymentSuccess = () => {
               Vissza a főoldalra
             </Button>
             <Button
-              onClick={() => navigate("/products")}
+              onClick={() => navigate("/")}
               variant="outline"
               className="w-full"
             >
               További vásárlás
+            </Button>
+            <Button
+              onClick={() => navigate("/my-orders")}
+              variant="secondary"
+              className="w-full"
+            >
+              Rendeléseim megtekintése
             </Button>
           </div>
         </CardContent>

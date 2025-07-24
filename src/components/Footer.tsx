@@ -40,7 +40,7 @@ export const Footer = () => {
           <div>
             <h3 className="font-bold text-lg mb-4">{t("footer.contactTitle")}</h3>
             <ul className="space-y-2 text-sm">
-              <li>{t("footer.email")}: info@meinlsonic.com</li>
+              <li>{t("footer.email")}: info@com</li>
             </ul>
           </div>
         </div>

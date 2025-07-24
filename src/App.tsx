@@ -14,6 +14,8 @@ import About from "./pages/About";
 import Privacy from "./pages/Privacy";
 import Shipping from "./pages/Shipping";
 import ProductPage from "./pages/ProductPage";
+import PaymentSuccess from "./pages/PaymentSucess";
+import NotFound from "./components/404Page";
 
         
 
@@ -73,14 +75,15 @@ function App() {
     
        
         {/* Static pages */}
-        <Route path="/about" element={<About />} />
+  <Route path="/about" element={<About />} />
   <Route path="/contact" element={<Contact />} />
   <Route path="/privacy" element={<Privacy />} />
   <Route path="/shipping" element={<Shipping />} />
+  <Route path="/payment-success" element={<PaymentSuccess />} />
 
-        {/* Optional fallback route */}
-        <Route path="*" element={<Products onAddToCart={addProductsToCart} setPageLoading={setPageLoading} />} />
-      </Routes>
+        {/* Catch-all for 404 */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
     </Router>
   );
 }

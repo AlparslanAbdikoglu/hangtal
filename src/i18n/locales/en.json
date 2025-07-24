@@ -3,7 +3,9 @@
     "home": "Home",
     "products": "Products",
     "about": "About",
-    "contact": "Contact"
+    "contact": "Contact",
+    "myAccount": "My Account",
+    "myOrders": "My Orders"
   },
   "hero": {
     "title": "Discover the Healing Power of Sound",
@@ -284,5 +286,14 @@
   },
   "common": {
     "close": "Close"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "message": "The page you are looking for does not exist.",
+    "goHome": "Go to Home"
+  },
+  "paymentSuccess": {
+    "title": "Payment Successful",
+    "message": "Thank you for your purchase!"
   }
 }

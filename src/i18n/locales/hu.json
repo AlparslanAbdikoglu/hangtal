@@ -283,5 +283,16 @@
   },
   "common": {
     "close": "Bezárás"
-  }
+  },
+
+  "notFound": {
+    "title": "Az oldal nem található",
+    "message": "A keresett oldal nem létezik.",
+    "goHome": "Vissza a főoldalra"
+  },
+  "paymentSuccess": {
+    "title": "Fizetés sikeres",
+    "message": "Köszönjük a vásárlást! A fizetés sikeresen feldolgozva.",
+    "goHome": "Vissza a főoldalra"
+}
 }
