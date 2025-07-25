@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { myStoreHook } from "@/MyStoreContext";
 import { Navbar } from "@/components/Navbar";
-import { FaRegFrown } from "react-icons/fa"; // sad icon
+import { FaRegFrown } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 interface Product {
   id: number;
   name: string;
-  price: string;
+  price: string | number;
   regular_price?: string;
   sale_price?: string;
   quantity?: number;
@@ -48,8 +48,8 @@ const Cart = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          items: cartItems.map(item => ({
-            product_id: item.id,
+          products: cartItems.map(item => ({
+            id: item.id,
             quantity: item.quantity || 1,
           })),
           userEmail: loggedInUserData?.email,
@@ -73,25 +73,39 @@ const Cart = () => {
   };
 
   const renderProductPrice = (product: Product) => {
-    return product.sale_price ? (
+    const regular = parseFloat(
+      (product.regular_price ?? product.price ?? "0").toString()
+    );
+    const sale = product.sale_price
+      ? parseFloat(product.sale_price.toString())
+      : undefined;
+
+    return sale !== undefined ? (
       <>
-        <span className="line-through text-gray-400 mr-2">${product.regular_price}</span>
-        <span className="text-red-600">${product.sale_price}</span>
+        <span className="line-through text-gray-400 mr-2">${regular.toFixed(2)}</span>
+        <span className="text-red-600">${sale.toFixed(2)}</span>
       </>
     ) : (
-      <>${product.regular_price || product.price}</>
+      <>${regular.toFixed(2)}</>
     );
   };
 
   const calculateTotalItemsPrice = () => {
     return cartItems
       .reduce((total, item) => {
-        const price = parseFloat(item.sale_price || item.regular_price || "0");
+        const regular = parseFloat(
+          (item.regular_price ?? item.price ?? "0").toString()
+        );
+        const sale = item.sale_price
+          ? parseFloat(item.sale_price.toString())
+          : undefined;
+        const price = sale !== undefined ? sale : regular;
         const quantity = item.quantity || 1;
         return total + price * quantity;
       }, 0)
       .toFixed(2);
   };
+
 
   return (
     <>
@@ -136,10 +150,10 @@ const Cart = () => {
               </thead>
               <tbody>
                 {cartItems.map((item, index) => (
-                  <tr key={index} className="border-t">
+                  <tr key={item.id ?? index} className="border-t">
                     <td className="p-3">
                       <img
-                        src={item?.images?.[0]?.src}
+                        src={item?.images?.[0]?.src || "/placeholder.svg"}
                         alt={item.name}
                         className="w-12 h-12 object-cover rounded"
                       />
@@ -149,11 +163,17 @@ const Cart = () => {
                     <td className="p-3">{item.quantity || 1}</td>
                     <td className="p-3">
                       <button
-                        onClick={() => removeItemsFromCart(item)}
+                        onClick={() =>
+                          removeItemsFromCart({
+                            ...item,
+                            price: item.price.toString(),  // ensure price is string here
+                          })
+                        }
                         className="text-red-600 hover:text-red-800"
                       >
                         {t("cart.remove")}
                       </button>
+
                     </td>
                   </tr>
                 ))}
@@ -168,9 +188,8 @@ const Cart = () => {
               <button
                 onClick={handleStripeCheckout}
                 disabled={loading || cartItems.length === 0}
-                className={`bg-yellow-600 text-white px-6 py-2 rounded-full hover:bg-yellow-700 transition ${
-                  loading ? "opacity-70 cursor-not-allowed" : ""
-                }`}
+                className={`bg-yellow-600 text-white px-6 py-2 rounded-full hover:bg-yellow-700 transition ${loading ? "opacity-70 cursor-not-allowed" : ""
+                  }`}
               >
                 {loading ? t("cart.processing") || "Processing..." : t("cart.checkout")}
               </button>
