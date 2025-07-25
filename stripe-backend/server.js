@@ -1,10 +1,20 @@
 require('dotenv').config({ path: './.env' });
 const express = require('express');
+const cors = require('cors');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
+
 const app = express();
+
+app.use(cors());
+app.options('*', cors());  // enable preflight OPTIONS requests
 app.use(express.json());
 
+// Log all incoming requests for debugging
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
 
 // Stripe checkout session retrieval endpoint
 app.get('/api/checkout-session/:id', async (req, res) => {
@@ -17,21 +27,27 @@ app.get('/api/checkout-session/:id', async (req, res) => {
   }
 });
 
-
 // Stripe checkout session creation endpoint
 app.post('/create-checkout-session', async (req, res) => {
+  console.log('POST /create-checkout-session body:', req.body);
+
   try {
-    const { products, userEmail } = req.body;  // Expects: [{ id, quantity }, ...]
+    const { products, userEmail } = req.body; // expects: [{ id, quantity }, ...]
 
     if (!products || products.length === 0) {
       return res.status(400).json({ error: 'Cart is empty' });
     }
 
+    // Use the exact env variable names you specified
+    const WOO_API_BASE = process.env.WOO_API_BASE_URL || '';
+    const WOO_CONSUMER_KEY = process.env.WC_CONSUMER_KEY || '';
+    const WOO_CONSUMER_SECRET = process.env.WC_CONSUMER_SECRET || '';
+
     // Fetch product details from WooCommerce for each product id
     const detailedProducts = await Promise.all(
       products.map(async (product) => {
         const response = await fetch(
-          `${process.env.WOO_API_BASE}/products/${product.id}?consumer_key=${process.env.WOO_CONSUMER_KEY}&consumer_secret=${process.env.WOO_CONSUMER_SECRET}`
+          `${WOO_API_BASE}/products/${product.id}?consumer_key=${WOO_CONSUMER_KEY}&consumer_secret=${WOO_CONSUMER_SECRET}`
         );
 
         if (!response.ok) {
@@ -77,7 +93,6 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-
 // WooCommerce order creation endpoint
 app.post('/api/create-order', async (req, res) => {
   const { items, billing, totalPrice } = req.body;
@@ -87,16 +102,17 @@ app.post('/api/create-order', async (req, res) => {
   }
 
   try {
+    // Use the exact env variable names you specified
+    const WOO_API_BASE = process.env.WOO_API_BASE_URL || '';
+    const WOO_CONSUMER_KEY = process.env.WC_CONSUMER_KEY || '';
+    const WOO_CONSUMER_SECRET = process.env.WC_CONSUMER_SECRET || '';
+
     const response = await fetch(
-      `${process.env.WOO_API_BASE}/orders`,
+      `${WOO_API_BASE}/orders`,
       {
         method: 'POST',
         headers: {
-          Authorization:
-            'Basic ' +
-            Buffer.from(
-              `${process.env.WOO_CONSUMER_KEY}:${process.env.WOO_CONSUMER_SECRET}`
-            ).toString('base64'),
+          Authorization: 'Basic ' + Buffer.from(`${WOO_CONSUMER_KEY}:${WOO_CONSUMER_SECRET}`).toString('base64'),
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
