@@ -1,22 +1,21 @@
-require('dotenv').config({ path: './.env' });
-const express = require('express');
-const cors = require('cors');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import dotenv from 'dotenv';
+dotenv.config({ path: './.env' });
 
+import express from 'express';
+import cors from 'cors';
+import Stripe from 'stripe';
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const app = express();
 
-app.use(cors());
-app.options('*', cors());  // enable preflight OPTIONS requests
+app.options('*', cors());
 app.use(express.json());
 
-// Log all incoming requests for debugging
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
 
-// Stripe checkout session retrieval endpoint
 app.get('/api/checkout-session/:id', async (req, res) => {
   try {
     const session = await stripe.checkout.sessions.retrieve(req.params.id);
@@ -27,23 +26,20 @@ app.get('/api/checkout-session/:id', async (req, res) => {
   }
 });
 
-// Stripe checkout session creation endpoint
 app.post('/create-checkout-session', async (req, res) => {
   console.log('POST /create-checkout-session body:', req.body);
 
   try {
-    const { products, userEmail } = req.body; // expects: [{ id, quantity }, ...]
+    const { products, userEmail } = req.body;
 
     if (!products || products.length === 0) {
       return res.status(400).json({ error: 'Cart is empty' });
     }
 
-    // Use the exact env variable names you specified
     const WOO_API_BASE = process.env.WOO_API_BASE_URL || '';
     const WOO_CONSUMER_KEY = process.env.WC_CONSUMER_KEY || '';
     const WOO_CONSUMER_SECRET = process.env.WC_CONSUMER_SECRET || '';
 
-    // Fetch product details from WooCommerce for each product id
     const detailedProducts = await Promise.all(
       products.map(async (product) => {
         const response = await fetch(
@@ -55,7 +51,6 @@ app.post('/create-checkout-session', async (req, res) => {
         }
 
         const data = await response.json();
-
         return {
           ...data,
           quantity: product.quantity || 1,
@@ -63,7 +58,6 @@ app.post('/create-checkout-session', async (req, res) => {
       })
     );
 
-    // Construct line items for Stripe session
     const lineItems = detailedProducts.map(product => ({
       price_data: {
         currency: 'eur',
@@ -93,7 +87,6 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-// WooCommerce order creation endpoint
 app.post('/api/create-order', async (req, res) => {
   const { items, billing, totalPrice } = req.body;
 
@@ -102,31 +95,27 @@ app.post('/api/create-order', async (req, res) => {
   }
 
   try {
-    // Use the exact env variable names you specified
     const WOO_API_BASE = process.env.WOO_API_BASE_URL || '';
     const WOO_CONSUMER_KEY = process.env.WC_CONSUMER_KEY || '';
     const WOO_CONSUMER_SECRET = process.env.WC_CONSUMER_SECRET || '';
 
-    const response = await fetch(
-      `${WOO_API_BASE}/orders`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + Buffer.from(`${WOO_CONSUMER_KEY}:${WOO_CONSUMER_SECRET}`).toString('base64'),
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          payment_method: 'stripe',
-          payment_method_title: 'Stripe',
-          set_paid: false,
-          billing,
-          line_items: items.map((item) => ({
-            product_id: item.id,
-            quantity: item.quantity,
-          })),
-        }),
-      }
-    );
+    const response = await fetch(`${WOO_API_BASE}/orders`, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Basic ' + Buffer.from(`${WOO_CONSUMER_KEY}:${WOO_CONSUMER_SECRET}`).toString('base64'),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        payment_method: 'stripe',
+        payment_method_title: 'Stripe',
+        set_paid: false,
+        billing,
+        line_items: items.map((item) => ({
+          product_id: item.id,
+          quantity: item.quantity,
+        })),
+      }),
+    });
 
     if (!response.ok) {
       const errorBody = await response.text();
@@ -144,4 +133,4 @@ app.post('/api/create-order', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 4242;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Stripe backend running on port ${PORT}`));
