@@ -64,8 +64,8 @@ define( 'DB_CHARSET', getenv_docker('WORDPRESS_DB_CHARSET', 'utf8') );
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', getenv_docker('WORDPRESS_DB_COLLATE', '') );
 
-/** edited  auth login for me  */
-define('JWT_AUTH_SECRET_KEY', 'm_xjOzBor)+V]o09.N QG<m%a3/W5$7[L><(j,hSjo#Z,f${@}gcx6[&-3ahY[y');
+
+define('JWT_AUTH_SECRET_KEY', 'G!x35NmR$yrfW1(IK9g_3#r*zZAs919wI&1Re_ng@D@[#igeFh|O(Z@5WE_>V;1%');
 define('JWT_AUTH_CORS_ENABLE', true);
 
 /**#@+
@@ -79,14 +79,14 @@ define('JWT_AUTH_CORS_ENABLE', true);
  *
  * @since 2.6.0
  */
-define( 'AUTH_KEY',         getenv_docker('WORDPRESS_AUTH_KEY',         '93328537d867997eb7e99f486de3c648a9b74d69') );
-define( 'SECURE_AUTH_KEY',  getenv_docker('WORDPRESS_SECURE_AUTH_KEY',  '14f67458b6920a7f34c6c5dd77a307a52f203b2a') );
-define( 'LOGGED_IN_KEY',    getenv_docker('WORDPRESS_LOGGED_IN_KEY',    'cd870b24fa58c69d031c90cc5e2f4f4af5eef906') );
-define( 'NONCE_KEY',        getenv_docker('WORDPRESS_NONCE_KEY',        '675c92b374a1ef5c982a2601709ba08ec9bcd0cb') );
-define( 'AUTH_SALT',        getenv_docker('WORDPRESS_AUTH_SALT',        '9a06da0538ba15b928e96673549fb1914db88709') );
-define( 'SECURE_AUTH_SALT', getenv_docker('WORDPRESS_SECURE_AUTH_SALT', '98687830e643d387d9e33e8f2e30a43572b7578a') );
-define( 'LOGGED_IN_SALT',   getenv_docker('WORDPRESS_LOGGED_IN_SALT',   '907a06e2df528fdb02468227480c931253882a7a') );
-define( 'NONCE_SALT',       getenv_docker('WORDPRESS_NONCE_SALT',       '634e507dd3d46ce0b4b74aa99f256f25e00abeb2') );
+define( 'AUTH_KEY',         getenv_docker('WORDPRESS_AUTH_KEY',         '108225f4d6eed5c6de783c340ff98e4481250e30') );
+define( 'SECURE_AUTH_KEY',  getenv_docker('WORDPRESS_SECURE_AUTH_KEY',  '2c6db43e686aa21e7cb3e5d92af58e71ae5afec6') );
+define( 'LOGGED_IN_KEY',    getenv_docker('WORDPRESS_LOGGED_IN_KEY',    '84fddfd79f4488a65b06dfb792dd9f7f172e45b9') );
+define( 'NONCE_KEY',        getenv_docker('WORDPRESS_NONCE_KEY',        'aeb47a05881d717e5477437fd2c1090e96e6a36a') );
+define( 'AUTH_SALT',        getenv_docker('WORDPRESS_AUTH_SALT',        '867debd233703099cadee6f13bfa7e0ea736060e') );
+define( 'SECURE_AUTH_SALT', getenv_docker('WORDPRESS_SECURE_AUTH_SALT', '7050404249dae9c0dfc7154dfbf41ce5dcc68f7b') );
+define( 'LOGGED_IN_SALT',   getenv_docker('WORDPRESS_LOGGED_IN_SALT',   '93fd0d664aa3ff2577fe879c6a1b21ca7d594394') );
+define( 'NONCE_SALT',       getenv_docker('WORDPRESS_NONCE_SALT',       '4a9e567d9709bc875a450e91437827a72a9770d5') );
 // (See also https://wordpress.stackexchange.com/a/152905/199287)
 
 /**#@-*/

@@ -16,6 +16,8 @@ services:
       - WORDPRESS_HOME_URL=${WORDPRESS_HOME_URL}
     volumes:
       - ./wp-backend/wp-content:/var/www/html/wp-content
+      - ./wp-config.php:/var/www/html/wp-config.php
+
     networks:
       - web
       - internal
