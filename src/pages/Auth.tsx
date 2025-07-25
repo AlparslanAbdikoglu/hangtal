@@ -5,6 +5,7 @@ import { registerStoreUser, loginUser, getLoggedInUserData } from "../lib/api";
 import { myStoreHook } from "../MyStoreContext";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import {} from "../lib/api.js"
 
 const Auth: React.FC = () => {
   const navigate = useNavigate();
