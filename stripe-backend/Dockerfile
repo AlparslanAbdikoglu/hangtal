@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 4242
 
 # Start the Node.js server
-CMD ["node", "server.mjs"]
+CMD ["node", "server.js"]
