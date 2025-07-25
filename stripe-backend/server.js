@@ -1,6 +1,5 @@
 require('dotenv').config({ path: './.env' });
 const express = require('express');
-const fetch = require('node-fetch');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
