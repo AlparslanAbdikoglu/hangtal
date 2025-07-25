@@ -6,8 +6,8 @@ const CONSUMER_SECRET = import.meta.env.VITE_WOO_CONSUMER_SECRET;
 const PROJECT_URL = import.meta.env.VITE_PROJECT_URL;
 const API_URL = import.meta.env.VITE_WOO_API_URL;
 const WP_USER_API_URL = `${PROJECT_URL}wp-json/wp/v2/users`;
-const WP_ADMIN_USERNAME = import.meta.env.VITE_WP_ADMIN_USERNAME;
-const WP_ADMIN_PASSWORD = import.meta.env.VITE_WP_ADMIN_PASSWORD;
+const WP_ADMIN_USERNAME = import.meta.env.WP_ADMIN_USERNAME;
+const WP_ADMIN_PASSWORD = import.meta.env.WP_ADMIN_PASSWORD;
 
 
 // Function to generate OAuth signature
