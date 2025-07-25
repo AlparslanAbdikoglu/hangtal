@@ -6,6 +6,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const app = express();
 app.use(express.json());
 
+
 // Stripe checkout session retrieval endpoint
 app.get('/api/checkout-session/:id', async (req, res) => {
   try {
@@ -17,25 +18,47 @@ app.get('/api/checkout-session/:id', async (req, res) => {
   }
 });
 
+
 // Stripe checkout session creation endpoint
 app.post('/create-checkout-session', async (req, res) => {
   try {
-    const { items, userEmail } = req.body;
+    const { products, userEmail } = req.body;  // Expects: [{ id, quantity }, ...]
 
-    if (!items || items.length === 0) {
+    if (!products || products.length === 0) {
       return res.status(400).json({ error: 'Cart is empty' });
     }
 
-    const lineItems = items.map(item => ({
+    // Fetch product details from WooCommerce for each product id
+    const detailedProducts = await Promise.all(
+      products.map(async (product) => {
+        const response = await fetch(
+          `${process.env.WOO_API_BASE}/products/${product.id}?consumer_key=${process.env.WOO_CONSUMER_KEY}&consumer_secret=${process.env.WOO_CONSUMER_SECRET}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch product ${product.id}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        return {
+          ...data,
+          quantity: product.quantity || 1,
+        };
+      })
+    );
+
+    // Construct line items for Stripe session
+    const lineItems = detailedProducts.map(product => ({
       price_data: {
         currency: 'eur',
         product_data: {
-          name: item.title,
-          images: [item.image],
+          name: product.name,
+          images: product.images?.map(img => img.src) || [],
         },
-        unit_amount: Math.round(item.price * 100),
+        unit_amount: Math.round(parseFloat(product.price || product.regular_price) * 100),
       },
-      quantity: item.quantity,
+      quantity: product.quantity,
     }));
 
     const session = await stripe.checkout.sessions.create({
@@ -48,34 +71,15 @@ app.post('/create-checkout-session', async (req, res) => {
     });
 
     res.json({ id: session.id, url: session.url });
+
   } catch (error) {
     console.error('Error creating checkout session:', error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// WooCommerce product proxy endpoint (get product by ID)
-app.get('/api/products/:id', async (req, res) => {
-  const productId = req.params.id;
 
-  try {
-    const response = await fetch(
-      `${process.env.WOO_API_BASE}/products/${productId}?consumer_key=${process.env.WOO_CONSUMER_KEY}&consumer_secret=${process.env.WOO_CONSUMER_SECRET}`
-    );
-
-    if (!response.ok) {
-      return res.status(response.status).json({ error: `WooCommerce API error: ${response.statusText}` });
-    }
-
-    const data = await response.json();
-    res.json(data);
-  } catch (error) {
-    console.error('WooCommerce proxy error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// WooCommerce order creation route
+// WooCommerce order creation endpoint
 app.post('/api/create-order', async (req, res) => {
   const { items, billing, totalPrice } = req.body;
 
@@ -117,6 +121,7 @@ app.post('/api/create-order', async (req, res) => {
 
     const data = await response.json();
     res.json(data);
+
   } catch (error) {
     console.error('Error creating WooCommerce order:', error);
     res.status(500).json({ error: error.message || 'Failed to create order' });

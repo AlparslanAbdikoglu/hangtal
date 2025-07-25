@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 import { CategoryCard } from "@/components/CategoryCard";
-import { ProductCard } from "@/components/ProductCard";
+import { ProductCard } from "@/components/ProductCard"; // You might keep this for future use or delete if unused
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+// Removed carousel imports
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
@@ -92,6 +86,24 @@ const Index = () => {
       <Navbar />
       <Hero />
 
+      {/* Promo Section added at the top instead of carousel */}
+      <section className="container py-16 bg-muted rounded-lg text-center max-w-4xl mx-auto">
+        <h2 className="text-4xl font-bold mb-6">
+          {t("promo.title", "Discover Our Unique Portfolio")}
+        </h2>
+        <p className="mb-8 text-lg text-gray-700 max-w-lg mx-auto">
+          {t(
+            "promo.description",
+            "Explore our curated collection of handcrafted instruments and bespoke creations. See the artistry and craftsmanship behind every piece."
+          )}
+        </p>
+        <Link to="/portfolio">
+          <button className="bg-primary text-white px-8 py-4 rounded-lg text-xl font-semibold hover:bg-primary/90 transition">
+            {t("promo.cta", "View Portfolio")}
+          </button>
+        </Link>
+      </section>
+
       <section className="container py-16">
         <h2 className="text-3xl font-bold mb-8">{t("categories.title")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -106,43 +118,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="container py-16 bg-muted">
-        <h2 className="text-3xl font-bold mb-8">{t("products.featured")}</h2>
-        {loading ? (
-          <p className="text-center text-muted-foreground">Loading products...</p>
-        ) : (
-          <Carousel className="w-full max-w-6xl mx-auto">
-            <CarouselContent>
-              {products.map((product) => (
-                <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-1/3">
-                  <div>
-                    <Link to={`/products/${product.id}`}>
-                      <ProductCard
-                        id={product.id}
-                        title={product.name}
-                        price={product.price}
-                        image={product.images?.[0]?.src || "/placeholder.svg"}
-                        hasVideo={product.hasVideo || false}
-                        hasAudio={product.hasAudio || false}
-                        onAddToCart={() => handleAddToCart(product)}
-                      />
-                    </Link>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        )}
-        <div className="flex justify-center mt-8">
-          <Link to="/products">
-            <button className="bg-primary text-white px-6 py-2 rounded hover:bg-primary/90">
-              {t("products.viewAll") || "View All Products"}
-            </button>
-          </Link>
-        </div>
-      </section>
+      {/* Removed Featured Products Carousel Section */}
 
       <section className="container py-12 text-center">
         <h2 className="text-2xl font-bold mb-6">{t("footer.followUs")}</h2>

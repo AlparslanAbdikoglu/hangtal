@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { myStoreHook } from "@/MyStoreContext";
@@ -21,55 +21,61 @@ const Cart = () => {
   const { t } = useTranslation();
   const { isAuthenticated, cart, removeItemsFromCart } = myStoreHook();
   const [cartItems, setCartItems] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     setCartItems(cart || []);
   }, [cart]);
 
-  const handleStripeCheckout = async () => {
-  if (!isAuthenticated) {
-    localStorage.setItem("redirectAfterLogin", "/cart");
-    return navigate("/login");
-  }
-
-  try {
-    const response = await fetch("https://api.lifeisnatural.eu/create-checkout-session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        items: cartItems.map(item => ({
-          title: item.name,
-          price: parseFloat(item.sale_price || item.regular_price || "0"),
-          image: item.images?.[0]?.src || "",
-          quantity: item.quantity || 1,
-        })),
-        userEmail: loggedInUserData?.email,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      toast.error("Stripe session URL not found.");
-    }
-  } catch (error) {
-    toast.error("Checkout failed.");
-    console.error(error);
-  }
-};
   const loggedInUserData = JSON.parse(localStorage.getItem("loggedInUserData") || "{}");
+
+  const handleStripeCheckout = async () => {
+    if (!isAuthenticated) {
+      localStorage.setItem("redirectAfterLogin", "/cart");
+      return navigate("/login");
+    }
+
+    if (cartItems.length === 0) {
+      toast.error(t("cart.emptyMessage") || "Your cart is empty.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch("https://api.lifeisnatural.eu/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: cartItems.map(item => ({
+            product_id: item.id,
+            quantity: item.quantity || 1,
+          })),
+          userEmail: loggedInUserData?.email,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.url) {
+        window.location.href = data.url; // redirect to Stripe checkout
+      } else {
+        toast.error(t("cart.stripeSessionError") || "Stripe session URL not found.");
+        console.error("Stripe session creation error response:", data);
+      }
+    } catch (error) {
+      toast.error(t("cart.checkoutFailed") || "Checkout failed.");
+      console.error("Stripe checkout error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const renderProductPrice = (product: Product) => {
     return product.sale_price ? (
       <>
-        <span className="line-through text-gray-400 mr-2">
-          ${product.regular_price}
-        </span>
+        <span className="line-through text-gray-400 mr-2">${product.regular_price}</span>
         <span className="text-red-600">${product.sale_price}</span>
       </>
     ) : (
@@ -160,10 +166,13 @@ const Cart = () => {
               </h3>
 
               <button
-                className="bg-yellow-600 text-white px-6 py-2 rounded-full hover:bg-yellow-700 transition"
                 onClick={handleStripeCheckout}
+                disabled={loading || cartItems.length === 0}
+                className={`bg-yellow-600 text-white px-6 py-2 rounded-full hover:bg-yellow-700 transition ${
+                  loading ? "opacity-70 cursor-not-allowed" : ""
+                }`}
               >
-                {t("cart.checkout")}
+                {loading ? t("cart.processing") || "Processing..." : t("cart.checkout")}
               </button>
             </div>
           </div>
