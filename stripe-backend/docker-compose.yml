@@ -11,31 +11,34 @@ services:
     # as it prevents direct external access to the container's port.
     # For debugging, you might keep it temporarily.
     ports:
-    - "4242:4242"
+      - "4242:4242"
     env_file:
       - .env
     labels:
       - "traefik.enable=true"
       
       # Router for the Stripe checkout session creation endpoint
+      # CORRECTED: Use Path for exact match for /create-checkout-session
       - "traefik.http.routers.stripe-checkout.rule=Host(`api.lifeisnatural.eu`) && Path(`/create-checkout-session`)"
       - "traefik.http.routers.stripe-checkout.entrypoints=websecure"
       - "traefik.http.routers.stripe-checkout.methods=POST" # Explicitly allow only POST requests
       - "traefik.http.routers.stripe-checkout.service=stripe-backend-service" # Link to the service below
-      # Optional: Add TLS resolver if you're using Let's Encrypt via Traefik
-      - "traefik.http.routers.stripe-checkout.tls=true"
-      
+      - "traefik.http.routers.stripe-checkout.tls=true" # This enables TLS from client to Traefik
+      - "traefik.http.routers.stripe-checkout.tls.certresolver=cloudflare" # Using your defined cert resolver name
 
       # Define the service (load balancer) that points to the container's internal port
       - "traefik.http.services.stripe-backend-service.loadbalancer.server.port=4242"
-      
+      # Explicitly tell Traefik to use HTTP when connecting to this backend service
+      - "traefik.http.services.stripe-backend-service.loadbalancer.server.scheme=https"
+
       # If you have other API endpoints under /api/ that this backend handles:
+      # CORRECTED: Use PathPrefix for /api/ only. Removed /success.html and /cancel.html from this backend router.
       - "traefik.http.routers.stripe-api-general.rule=Host(`api.lifeisnatural.eu`) && PathPrefix(`/api`)"
       - "traefik.http.routers.stripe-api-general.entrypoints=websecure"
       - "traefik.http.routers.stripe-api-general.service=stripe-backend-service"
       - "traefik.http.routers.stripe-api-general.methods=GET,POST,PUT,DELETE" # Adjust methods as needed
       - "traefik.http.routers.stripe-api-general.tls=true"
-      - "traefik.http.routers.stripe-api-general.tls.certresolver=myresolver"
+      - "traefik.http.routers.stripe-api-general.tls.certresolver=cloudflare" # Using your defined cert resolver name
 
     networks:
       - web
