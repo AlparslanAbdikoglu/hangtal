@@ -56,6 +56,14 @@ const Cart = () => {
         }),
       });
 
+      // --- ADD THIS BLOCK ---
+  if (!response.ok) {
+    // This will catch the 405 error and give a better message
+    const errorText = await response.text(); // Get the HTML error page as text
+    throw new Error(`Server responded with ${response.status}. Body: ${errorText}`);
+  }
+  // --------------------
+
       const data = await response.json();
 
       if (data.url) {
