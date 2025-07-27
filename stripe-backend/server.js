@@ -6,7 +6,7 @@ const fetch = require('node-fetch');
 
 const app = express();
 
-const YOUR_DOMAIN = process.env.DOMAIN || 'http://api.lifeisnatural.eu'; // Default to your API domain
+const YOUR_DOMAIN = process.env.DOMAIN || 'https://zvukovaakademia.sk'; // Default to your API domain
 
 app.use(cors());
 app.use(express.json());
