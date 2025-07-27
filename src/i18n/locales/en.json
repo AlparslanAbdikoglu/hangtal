@@ -85,10 +85,10 @@
     "checkout": "Checkout"
   },
   "about": {
-    "title": "About Marcus Weber",
-    "intro1": "Marcus Weber is dedicated to bringing the healing power of sound to everyone. With years of experience in sound therapy, he curates instruments that inspire relaxation and well-being.",
+    "title": "About zvukovaakademia",
+    "intro1": "zvukovaakademia is dedicated to bringing the healing power of sound to everyone. With years of experience in sound therapy, he curates instruments that inspire relaxation and well-being.",
     "intro2": "Our mission is to help you discover the transformative effects of sound, whether you are a beginner or an experienced practitioner.",
-    "imageAlt": "Portrait of Marcus Weber",
+    "imageAlt": "Portrait of zvukovaakademia",
     "mission": "Our Mission",
     "missionText": "We strive to provide high-quality sound healing instruments and resources to support your journey towards balance and harmony.",
     "faq": "Frequently Asked Questions",
@@ -270,13 +270,13 @@
   },
   "footer": {
     "aboutTitle": "About Us",
-    "aboutText": "MEINL Sonic Energy offers high-quality sound therapy instruments for meditation, relaxation, and sound healing.",
+    "aboutText": "zvukovaakademia offers high-quality sound therapy instruments for meditation, relaxation, and sound healing.",
     "quickLinks": "Quick Links",
     "shipping": "Shipping Info",
     "privacy": "Privacy Policy",
     "contactTitle": "Contact",
     "email": "Email",
-    "copyright": "© 2024 MEINL Sonic Energy. All rights reserved.",
+    "copyright": "© 2025 zvukovaakademia. All rights reserved.",
     "followUs": "Follow Us"
   },
   "auth": {

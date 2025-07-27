@@ -19,7 +19,7 @@ export const Hero = () => {
         </div>
         <div className="relative h-[400px] rounded-lg overflow-hidden">
           <img 
-            src="/placeholder.svg"
+            src="/images/webshop.jpg"
             alt={t("hero.imageAlt")}
             className="w-full h-full object-cover"
           />

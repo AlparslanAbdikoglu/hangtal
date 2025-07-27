@@ -29,7 +29,7 @@ const About = () => {
             </div>
             <div className="relative h-[400px] rounded-lg overflow-hidden">
               <img 
-                src="/placeholder.svg"
+                src="/images/Ardi1.webp"
                 alt={t('about.imageAlt')}
                 className="w-full h-full object-cover"
               />

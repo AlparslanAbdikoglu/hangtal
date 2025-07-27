@@ -8,12 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const categories = [
-  { title: "Handpans", image: "/placeholder.svg" },
-  { title: "Steel Tongue Drums", image: "/placeholder.svg" },
-  { title: "Kalimbas", image: "/placeholder.svg" },
-  { title: "Crystal Singing Bowls", image: "/placeholder.svg" },
-  { title: "Crystal Singing Chalices", image: "/placeholder.svg" },
-  { title: "Singing Bowls", image: "/placeholder.svg" },
+  { title: "Handpans", image: "/images/item1.jpg" },
+  { title: "Steel Tongue Drums", image: "/images/thumbnail1.jpg" },
+  { title: "Kalimbas", image: "/images/webshop2.jpg" },
+  { title: "Crystal Singing Bowls", image: "/images/webshop4.jpg" },
+  { title: "Crystal Singing Chalices", image: "/images/thumbnail3.jpg" },
+  { title: "Singing Bowls", image: "/images/webshop.jpg" },
 ];
 
 const socialLinks = [
@@ -37,10 +37,10 @@ const Index = () => {
         <p className="mb-8 text-lg text-gray-700 max-w-lg mx-auto">
           {t(
             "promo.description",
-            "Explore our curated collection of handcrafted instruments and bespoke creations. See the artistry and craftsmanship behind every piece."
+            "Explore our curated collection of handcrafted instruments and bespoke creations. See the artistry and craftsmanship behind every piece Learn how you can experience the healing power of sound."
           )}
         </p>
-        <Link to="/portfolio">
+        <Link to="https://portfolio.zvukovaakademia.sk" target="_blank" rel="noopener noreferrer">
           <button className="bg-primary text-white px-8 py-4 rounded-lg text-xl font-semibold hover:bg-primary/90 transition">
             {t("promo.cta", "View Portfolio")}
           </button>
