@@ -1,8 +1,9 @@
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
+import  {Navbar}  from "../components/Navbar.tsx";
+import  {Footer}  from "../components/Footer";
+import { Button } from "../components/ui/button";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { useTranslation } from "react-i18next";
+
 
 const Contact = () => {
   const { t } = useTranslation();
