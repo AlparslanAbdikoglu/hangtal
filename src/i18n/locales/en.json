@@ -111,7 +111,10 @@
     "infoTitle": "Contact Information",
     "formTitle": "Send an Email",
     "emailPrompt": "Click the button below to send us an email. We'll get back to you as soon as possible.",
-    "sendEmail": "Send Email"
+    "sendEmail": "Send Email",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address"
   },
   "privacy": {
     "title": "Privacy Policy",
@@ -278,6 +281,7 @@
     "email": "Email",
     "copyright": "© 2025 zvukovaakademia. All rights reserved.",
     "followUs": "Follow Us"
+    
   },
   "auth": {
     "loginRequired": "Login Required",

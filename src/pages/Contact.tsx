@@ -29,7 +29,7 @@ const Contact = () => {
                       <Mail className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-primary">{t("footer.email")}</h3>
+                      <h3 className="font-semibold text-primary">{t("contact.email")}</h3>
                       <p className="text-muted-foreground">hangakademia@gmail.com</p>
                     </div>
                   </div>
@@ -38,7 +38,7 @@ const Contact = () => {
                       <Phone className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-primary">{t("footer.phone")}</h3>
+                      <h3 className="font-semibold text-primary">{t("contact.phone")}</h3>
                       <p className="text-muted-foreground">+36 307402048</p>
                     </div>
                   </div>
@@ -47,7 +47,7 @@ const Contact = () => {
                       <MapPin className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-primary">{t("footer.address")}</h3>
+                      <h3 className="font-semibold text-primary">{t("contact.address")}</h3>
                       <p className="text-muted-foreground">
                        1188 Budapest, Nemes u.88.<br />
                        
