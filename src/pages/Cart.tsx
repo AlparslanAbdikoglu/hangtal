@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { myStoreHook } from "@/MyStoreContext";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer"; // <-- import Footer
 import { FaRegFrown } from "react-icons/fa";
 import { toast } from "react-toastify";
 
@@ -28,9 +29,7 @@ const Cart = () => {
     setCartItems(cart || []);
   }, [cart]);
 
-  const loggedInUserData = JSON.parse(localStorage.getItem("loggedInUserData") || "{}");
-
-  const handleStripeCheckout = async () => {
+  const handleStripeCheckout = () => {
     if (!isAuthenticated) {
       localStorage.setItem("redirectAfterLogin", "/cart");
       return navigate("/login");
@@ -41,43 +40,7 @@ const Cart = () => {
       return;
     }
 
-    try {
-      setLoading(true);
-
-      const response = await fetch("https://api.lifeisnatural.eu/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          products: cartItems.map(item => ({
-            id: item.id,
-            quantity: item.quantity || 1,
-          })),
-          userEmail: loggedInUserData?.email,
-        }),
-      });
-
-      // --- ADD THIS BLOCK ---
-  if (!response.ok) {
-    // This will catch the 405 error and give a better message
-    const errorText = await response.text(); // Get the HTML error page as text
-    throw new Error(`Server responded with ${response.status}. Body: ${errorText}`);
-  }
-  // --------------------
-
-      const data = await response.json();
-
-      if (data.url) {
-        window.location.href = data.url; // redirect to Stripe checkout
-      } else {
-        toast.error(t("cart.stripeSessionError") || "Stripe session URL not found.");
-        console.error("Stripe session creation error response:", data);
-      }
-    } catch (error) {
-      toast.error(t("cart.checkoutFailed") || "Checkout failed.");
-      console.error("Stripe checkout error:", error);
-    } finally {
-      setLoading(false);
-    }
+    navigate("/checkout");
   };
 
   const renderProductPrice = (product: Product) => {
@@ -114,11 +77,10 @@ const Cart = () => {
       .toFixed(2);
   };
 
-
   return (
     <>
       <Navbar />
-      <div className="max-w-5xl mx-auto p-8">
+      <div className="max-w-5xl mx-auto p-8 min-h-[70vh]">
         <h1 className="text-2xl font-bold mb-6">{t("cart.title")}</h1>
 
         {cartItems.length === 0 ? (
@@ -174,14 +136,13 @@ const Cart = () => {
                         onClick={() =>
                           removeItemsFromCart({
                             ...item,
-                            price: item.price.toString(),  // ensure price is string here
+                            price: item.price.toString(),
                           })
                         }
                         className="text-red-600 hover:text-red-800"
                       >
                         {t("cart.remove")}
                       </button>
-
                     </td>
                   </tr>
                 ))}
@@ -196,8 +157,9 @@ const Cart = () => {
               <button
                 onClick={handleStripeCheckout}
                 disabled={loading || cartItems.length === 0}
-                className={`bg-yellow-600 text-white px-6 py-2 rounded-full hover:bg-yellow-700 transition ${loading ? "opacity-70 cursor-not-allowed" : ""
-                  }`}
+                className={`bg-yellow-600 text-white px-6 py-2 rounded-full hover:bg-yellow-700 transition ${
+                  loading ? "opacity-70 cursor-not-allowed" : ""
+                }`}
               >
                 {loading ? t("cart.processing") || "Processing..." : t("cart.checkout")}
               </button>
@@ -205,6 +167,7 @@ const Cart = () => {
           </div>
         )}
       </div>
+      <Footer /> {/* Add Footer at the bottom */}
     </>
   );
 };

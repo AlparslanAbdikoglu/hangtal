@@ -1,7 +1,10 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import { createAnOrder } from "../lib/api.js"; // your order creation function
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { myStoreHook } from "@/MyStoreContext";
+import { createAnOrder } from "@/lib/api";
+import { toast } from "react-toastify";
+import { Navbar } from "@/components/Navbar";  // <-- added
+import { Footer } from "@/components/Footer";  // <-- added
 
 interface Billing {
   first_name: string;
@@ -23,42 +26,16 @@ interface CheckoutData {
   billing: Billing;
 }
 
-interface Product {
-  id: number;
-  product_id: number;
-  name: string;
-  price?: string; // fallback price string
-  regular_price?: string;
-  sale_price?: string | null;
-  quantity: number;
-  variation_id?: number | null;
-  images?: { src: string }[];
-}
-
-interface CheckoutProps {
-  clearCartItem: () => void;
-  loggedInUserData: string; // JSON string user data from your auth system
-  cartItems: Product[];
-}
-
-const Checkout: React.FC<CheckoutProps> = ({
-  clearCartItem,
-  loggedInUserData,
-  cartItems,
-}) => {
+const Checkout: React.FC = () => {
   const navigate = useNavigate();
+  const { cart, clearCartItem, loggedInUserData } = myStoreHook();
+  const userData = loggedInUserData || {};
 
-  // Calculate total price from cart items (use sale_price > regular_price > price)
-  const totalPrice = cartItems.reduce((sum, item) => {
-    const priceStr = item.sale_price || item.regular_price || item.price || "0";
-    const priceNum = parseFloat(priceStr);
-    return sum + priceNum * item.quantity;
-  }, 0);
-
-  const userData = JSON.parse(loggedInUserData || "{}");
+  const [useStripe, setUseStripe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [checkoutData, setCheckoutData] = useState<CheckoutData>({
-    customer_id: userData.id || "",
+    customer_id: userData?.id || "",
     payment_method: "cod",
     payment_method_title: "Cash on Delivery",
     set_paid: false,
@@ -70,17 +47,13 @@ const Checkout: React.FC<CheckoutProps> = ({
       state: "",
       postcode: "",
       country: "",
-      email: userData.email || "",
+      email: userData?.email || "",
       phone: "",
     },
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [useStripe, setUseStripe] = useState(false); // toggle payment method
-
-  // Update billing form fields
-  const handleOnChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setCheckoutData((prev) => ({
       ...prev,
       billing: {
@@ -90,18 +63,27 @@ const Checkout: React.FC<CheckoutProps> = ({
     }));
   };
 
-  // Handle form submit or stripe checkout button
-  const handleCheckoutSubmit = async (event: FormEvent | React.MouseEvent) => {
-    if ("preventDefault" in event) event.preventDefault();
+  const totalPrice = cart.reduce((total, item) => {
+    const price =
+      parseFloat(item.sale_price || item.regular_price || item.price || "0") *
+      (item.quantity || 1);
+    return total + price;
+  }, 0);
 
-    if (cartItems.length === 0) {
+  const handleCheckoutSubmit = async (
+    e: FormEvent | React.MouseEvent
+  ) => {
+    e.preventDefault();
+
+    if (cart.length === 0) {
       toast.error("Your cart is empty.");
       return;
     }
 
+    setIsLoading(true);
+
     if (useStripe) {
-      // Stripe Hosted Checkout flow
-      setIsLoading(true);
+      // Stripe Hosted Checkout Flow
       try {
         const response = await fetch(
           "https://api.lifeisnatural.eu/wp-json/wc/v3/stripe-checkout",
@@ -109,116 +91,226 @@ const Checkout: React.FC<CheckoutProps> = ({
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              cart_items: cartItems.map((item) => ({
-                product_id: item.product_id,
-                quantity: item.quantity,
+              cart_items: cart.map((item) => ({
+                product_id: item.id,
+                quantity: item.quantity || 1,
                 variation_id: item.variation_id || null,
               })),
               user_email: checkoutData.billing.email,
-              user_id: userData.id || undefined,
+              user_id: userData?.id || undefined,
               success_url: window.location.origin + "/payment-success",
               cancel_url: window.location.origin + "/cart",
-              billing: checkoutData.billing, // optional billing info
+              billing: checkoutData.billing,
             }),
           }
         );
 
         const data = await response.json();
-
         if (response.ok && data.checkout_url) {
           window.location.href = data.checkout_url;
         } else {
-          toast.error(data.error || "Failed to create Stripe checkout session");
-          setIsLoading(false);
+          toast.error(data.error || "Stripe session failed.");
         }
       } catch (error) {
-        console.error("Checkout error:", error);
-        toast.error("Network error occurred");
+        console.error(error);
+        toast.error("Failed to initiate Stripe checkout.");
+      } finally {
         setIsLoading(false);
       }
       return;
     }
 
-    // Cash on Delivery - create order directly
-    setIsLoading(true);
+    // COD Order Flow
     try {
       await createAnOrder(checkoutData);
-      toast.success("Order has been placed successfully.");
+      toast.success("Order placed successfully.");
       clearCartItem();
       navigate("/products");
     } catch (error) {
-      console.error("Order creation failed:", error);
-      toast.error("Failed to place order");
+      console.error(error);
+      toast.error("Order creation failed.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  if (cartItems.length === 0) {
-    return <div className="text-center py-10">Your cart is empty.</div>;
+  if (cart.length === 0) {
+    return (
+      <>
+        <Navbar />
+        <div className="text-center mt-10 text-lg">Your cart is empty.</div>
+        <Footer />
+      </>
+    );
   }
 
   return (
-    <div className="container mt-5">
-      <h1 className="mb-4">Checkout</h1>
+    <>
+      <Navbar />
 
-      <div className="mb-4">
-        <label className="form-label me-3">
-          <input
-            type="radio"
-            name="payment_method"
-            value="cod"
-            checked={!useStripe}
-            onChange={() => setUseStripe(false)}
-          />{" "}
-          Cash on Delivery
-        </label>
-        <label className="form-label">
-          <input
-            type="radio"
-            name="payment_method"
-            value="stripe"
-            checked={useStripe}
-            onChange={() => setUseStripe(true)}
-          />{" "}
-          Pay with Stripe
-        </label>
-      </div>
+      <div className="max-w-5xl mx-auto p-6">
+        <h1 className="text-2xl font-bold mb-6">Checkout</h1>
 
-      {!useStripe && (
-        <form onSubmit={handleCheckoutSubmit}>
-          {/* Billing fields here... (same as before) */}
-          {/* ... */}
+        {/* Payment method toggle */}
+        <div className="mb-6">
+          <label className="mr-4 cursor-pointer">
+            <input
+              type="radio"
+              name="payment"
+              checked={!useStripe}
+              onChange={() => setUseStripe(false)}
+              className="mr-2"
+            />
+            Cash on Delivery
+          </label>
+          <label className="cursor-pointer">
+            <input
+              type="radio"
+              name="payment"
+              checked={useStripe}
+              onChange={() => setUseStripe(true)}
+              className="mr-2"
+            />
+            Pay with Stripe
+          </label>
+        </div>
 
-          <div className="text-center">
-            <button type="submit" className="btn btn-primary" disabled={isLoading}>
+        {/* Billing Form - show only for COD */}
+        {!useStripe && (
+          <form onSubmit={handleCheckoutSubmit} className="mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <input
+                name="first_name"
+                placeholder="First Name"
+                onChange={handleInputChange}
+                className="border p-2"
+                required
+                value={checkoutData.billing.first_name}
+              />
+              <input
+                name="last_name"
+                placeholder="Last Name"
+                onChange={handleInputChange}
+                className="border p-2"
+                required
+                value={checkoutData.billing.last_name}
+              />
+              <input
+                name="address_1"
+                placeholder="Address"
+                onChange={handleInputChange}
+                className="border p-2"
+                required
+                value={checkoutData.billing.address_1}
+              />
+              <input
+                name="city"
+                placeholder="City"
+                onChange={handleInputChange}
+                className="border p-2"
+                required
+                value={checkoutData.billing.city}
+              />
+              <input
+                name="state"
+                placeholder="State"
+                onChange={handleInputChange}
+                className="border p-2"
+                value={checkoutData.billing.state}
+              />
+              <input
+                name="postcode"
+                placeholder="Postcode"
+                onChange={handleInputChange}
+                className="border p-2"
+                required
+                value={checkoutData.billing.postcode}
+              />
+              <input
+                name="country"
+                placeholder="Country"
+                onChange={handleInputChange}
+                className="border p-2"
+                required
+                value={checkoutData.billing.country}
+              />
+              <input
+                name="phone"
+                placeholder="Phone"
+                onChange={handleInputChange}
+                className="border p-2"
+                required
+                value={checkoutData.billing.phone}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+              disabled={isLoading}
+            >
               {isLoading ? "Placing Order..." : "Place Order"}
             </button>
-          </div>
-        </form>
-      )}
+          </form>
+        )}
 
-      {useStripe && (
+        {/* Cart Summary */}
         <div>
-          <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-          <ul className="mb-4">
-            {cartItems.map((item) => (
-              <li key={item.id} className="mb-2">
-                {item.name} x {item.quantity}
-              </li>
-            ))}
-          </ul>
-          <div className="mb-4 font-semibold">Total: €{totalPrice.toFixed(2)}</div>
-          <button
-            onClick={handleCheckoutSubmit}
-            className="btn btn-primary"
-            disabled={isLoading || cartItems.length === 0}
-          >
-            {isLoading ? "Redirecting..." : "Proceed to Stripe Checkout"}
-          </button>
+          <h2 className="text-xl font-semibold mb-4">Cart Summary</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full border text-sm">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="p-2 text-left">Image</th>
+                  <th className="p-2 text-left">Product</th>
+                  <th className="p-2 text-left">Unit Price</th>
+                  <th className="p-2 text-left">Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cart.map((item) => {
+                  const price = parseFloat(
+                    item.sale_price || item.regular_price || item.price || "0"
+                  );
+                  return (
+                    <tr key={item.id} className="border-t">
+                      <td className="p-2">
+                        <img
+                          src={item.images?.[0]?.src || "/placeholder.svg"}
+                          alt={item.name}
+                          className="w-12 h-12 object-cover"
+                        />
+                      </td>
+                      <td className="p-2">{item.name}</td>
+                      <td className="p-2">€{price.toFixed(2)}</td>
+                      <td className="p-2">{item.quantity || 1}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-4 font-bold text-right">
+            Total: €{totalPrice.toFixed(2)}
+          </div>
+
+          {/* Stripe Payment Button */}
+          {useStripe && (
+            <div className="mt-6 text-center">
+              <button
+                onClick={handleCheckoutSubmit}
+                className="bg-yellow-600 text-white px-6 py-2 rounded hover:bg-yellow-700"
+                disabled={isLoading}
+              >
+                {isLoading ? "Redirecting..." : "Proceed to Stripe Checkout"}
+              </button>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </div>
+
+      <Footer />
+    </>
   );
 };
 

@@ -1,5 +1,6 @@
 {
   "navbar": {
+    "siteTitle": "SoundAcademy",
     "home": "Home",
     "products": "Products",
     "about": "About",
@@ -29,20 +30,22 @@
     "featured": "Featured Products",
     "search": "Search instruments...",
     "filters": {
-      "all": "All",
-      "allPrices": "All Prices",
-      "under100": "Under €100",
-      "100to500": "€100 - €500",
-      "over500": "Over €500",
+      "search": "Search products...",
+      "all": "All Categories",
       "featured": "Featured",
-      "priceLowHigh": "Price: Low to High",
-      "priceHighLow": "Price: High to Low",
-      "nameAZ": "Name: A to Z"
-    },
-    "showing": "Showing {{count}} of {{total}} products",
-    "clearFilters": "Clear All Filters",
-    "viewAll": "View All Products",
-    "noResults": "No items have been found (404).",
+      "priceLowToHigh": "Price: Low to High",
+      "priceHighToLow": "Price: High to Low",
+      "name": "Name",
+      "allPrices": "All Prices",
+      "under100": "Under $100",
+      "100to500": "$100 to $500",
+      "over500": "Over $500"
+    }
+  },
+  "showing": "Showing {{count}} of {{total}} products",
+  "clearFilters": "Clear All Filters",
+  "viewAll": "View All Products",
+  "noResults": "No items have been found (404).",
     "noResultsText": "Try adjusting your filters or search terms to find the perfect instrument.",
     "available": "Available immediately",
     "view": {
@@ -63,7 +66,7 @@
         }
       }
     }
-  },
+  ,
   "cart": {
     "title": "Shopping Cart",
     "items": "{{count}} items",

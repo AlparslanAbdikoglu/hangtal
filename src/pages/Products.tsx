@@ -139,71 +139,80 @@ const Products = ({ onAddToCart, setPageLoading }: ProductsProps) => {
       <Navbar />
 
       <main className="flex-grow">
-        <div className="p-4 flex flex-col md:flex-row gap-4 justify-between items-center">
-          <input
-            type="text"
-            placeholder={t("search product") || "Search products..."}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="border px-3 py-2 rounded w-full md:w-1/3"
-          />
+  <div className="flex flex-col md:flex-row p-4 gap-6">
+    {/* Sidebar Filters */}
+    <div className="w-full md:w-64 flex-shrink-0">
+      <div className="flex flex-col gap-4">
+        <input
+          type="text"
+          placeholder={t("products.search") || "Search products..."}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border px-3 py-2 rounded w-full"
+        />
 
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="border px-3 py-2 rounded"
-          >
-            {categories.map((cat) => (
-              <option key={cat.key} value={cat.key}>
-                {cat.label}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={selectedPriceRange.label}
-            onChange={(e) => {
-              const selected = priceRanges.find((r) => r.label === e.target.value);
-              if (selected) setSelectedPriceRange(selected);
-            }}
-            className="border px-3 py-2 rounded"
-          >
-            {priceRanges.map((range) => (
-              <option key={range.label} value={range.label}>
-                {range.label}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="border px-3 py-2 rounded"
-          >
-            <option value="featured">Featured</option>
-            <option value="price-low">Price: Low to High</option>
-            <option value="price-high">Price: High to Low</option>
-            <option value="name">Name</option>
-          </select>
-        </div>
-
-        <div className={`grid ${viewMode === "grid" ? "grid-cols-2 md:grid-cols-4 gap-6" : "grid-cols-1"} p-4`}>
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              title={product.name}
-              price={parseFloat(product.price)}
-              image={product.images?.[0]?.src || "/placeholder.jpg"}
-              hasVideo={product.meta_data?.some((m) => m.key === "has_video" && m.value === "yes")}
-              hasAudio={product.meta_data?.some((m) => m.key === "has_audio" && m.value === "yes")}
-              available={product.stock_status === "instock"}
-              id={String(product.id)}
-              description={product.short_description || product.description}
-              onAddToCart={() => onAddToCart(product)}
-            />
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="border px-3 py-2 rounded w-full"
+        >
+          {categories.map((cat) => (
+            <option key={cat.key} value={cat.key}>
+              {cat.label}
+            </option>
           ))}
-        </div>
-      </main>
+        </select>
+
+        <select
+          value={selectedPriceRange.label}
+          onChange={(e) => {
+            const selected = priceRanges.find((r) => r.label === e.target.value);
+            if (selected) setSelectedPriceRange(selected);
+          }}
+          className="border px-3 py-2 rounded w-full"
+        >
+          {priceRanges.map((range) => (
+            <option key={range.label} value={range.label}>
+              {range.label}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="border px-3 py-2 rounded w-full"
+        >
+          <option value="featured">{t("products.filters.featured")}</option>
+  <option value="price-low">{t("products.filters.priceLowToHigh")}</option>
+  <option value="price-high">{t("products.filters.priceHighToLow")}</option>
+  <option value="name">{t("products.filters.name")}</option>
+        </select>
+      </div>
+    </div>
+
+    {/* Product Grid */}
+    <div className="flex-grow">
+      <div className={`grid ${viewMode === "grid" ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" : "grid-cols-1"} p-1`}>
+        {filteredProducts.map((product) => (
+          <ProductCard
+            key={product.id}
+            title={product.name}
+            price={parseFloat(product.price)}
+            image={product.images?.[0]?.src || "/placeholder.jpg"}
+            hasVideo={product.meta_data?.some((m) => m.key === "has_video" && m.value === "yes")}
+            hasAudio={product.meta_data?.some((m) => m.key === "has_audio" && m.value === "yes")}
+            available={product.stock_status === "instock"}
+            id={String(product.id)}
+            description={product.short_description || product.description}
+            onAddToCart={() => onAddToCart(product)}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</main>
+
 
       <Footer />
     </div>

@@ -36,9 +36,11 @@ export const Navbar = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="text-xl font-bold text-primary cursor-pointer" onClick={() => navigate('/')}>
-            SoundAcademy
-          </div>
+        {/* Logo */}
+<div className="text-xl font-bold text-primary cursor-pointer" onClick={() => navigate('/')}>
+  {t("siteTitle", "SoundAcademy")}
+</div>
+    
 
           {/* Mobile menu button */}
           <Button

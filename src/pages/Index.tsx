@@ -40,7 +40,7 @@ const Index = () => {
             "Explore our curated collection of handcrafted instruments and bespoke creations. See the artistry and craftsmanship behind every piece Learn how you can experience the healing power of sound."
           )}
         </p>
-        <Link to="https://portfolio.zvukovaakademia.sk" target="_blank" rel="noopener noreferrer">
+        <Link to="https://hangakademia.hu" target="_blank" rel="noopener noreferrer">
           <button className="bg-primary text-white px-8 py-4 rounded-lg text-xl font-semibold hover:bg-primary/90 transition">
             {t("promo.cta", "View Portfolio")}
           </button>
