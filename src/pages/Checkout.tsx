@@ -83,24 +83,20 @@ const Checkout: React.FC = () => {
     if (useStripe) {
       try {
         const response = await fetch(
-          "https://zvukovaakademia.sk/wp-json/wc/v3/stripe-checkout",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              cart_items: cart.map((item) => ({
-                product_id: item.id,
-                quantity: item.quantity || 1,
-                variation_id: item.variation_id || null,
-              })),
-              user_email: checkoutData.billing.email,
-              user_id: userData?.id || undefined,
-              success_url: window.location.origin + "/payment-success",
-              cancel_url: window.location.origin + "/cart",
-              billing: checkoutData.billing,
-            }),
-          }
-        );
+  "https://zvukovaakademia.sk/create-checkout-session", // Node backend route
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      products: cart.map((item) => ({
+        id: item.id,
+        quantity: item.quantity || 1
+      })),
+      userEmail: checkoutData.billing.email
+    })
+  }
+);
+
 
         const data = await response.json();
         if (response.ok && data.checkout_url) {
