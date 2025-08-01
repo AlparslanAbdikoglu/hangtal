@@ -31,7 +31,7 @@ services:
 
       # Define service port
       - "traefik.http.services.stripe-backend-service.loadbalancer.server.port=4242"
-      - "traefik.http.services.stripe-backend-service.loadbalancer.server.scheme=https"
+      - "traefik.http.services.stripe-backend-service.loadbalancer.server.scheme=http"
 
     networks:
       - web
