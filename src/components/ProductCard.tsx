@@ -52,7 +52,9 @@ export const ProductCard = ({
       <CardContent className="p-4">
         <CardTitle className="text-lg font-medium line-clamp-2">{title}</CardTitle>
         <p className="text-2xl font-bold mt-2">€{price.toFixed(2)}</p>
-        {available && <p className="text-green-500 text-sm mt-1">{t("products.available")}</p>}
+        {available && <p className="text-green-500 text-sm mt-1">{t("products.filters.stockAvailable")}</p>}
+
+
         {description && (
           <p
             className="text-sm text-muted-foreground mt-1 line-clamp-2"

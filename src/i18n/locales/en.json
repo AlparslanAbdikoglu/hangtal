@@ -39,7 +39,10 @@
       "allPrices": "All Prices",
       "under100": "Under $100",
       "100to500": "$100 to $500",
-      "over500": "Over $500"
+      "over500": "Over $500",
+      "stockAvailable": "Stock available",
+      "inStock": "In Stock",
+      "outOfStock": "Out of Stock"
     }
   },
   "showing": "Showing {{count}} of {{total}} products",
