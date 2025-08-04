@@ -46,7 +46,11 @@ export const ProductCard = ({
           )}
         </div>
         <Link to={`/products/${id}`} className="block z-0">
-          <img src={image} alt={title} className="w-full h-48 object-cover rounded" />
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-48 object-cover rounded"
+          />
         </Link>
       </CardHeader>
       <CardContent className="p-4">

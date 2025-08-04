@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
@@ -22,9 +22,12 @@ interface Product {
 interface ProductsProps {
   onAddToCart: (product: Product) => void;
   setPageLoading: (loading: boolean) => void;
+  defaultCategory?: string;
 }
 
-const Products = ({ onAddToCart, setPageLoading }: ProductsProps) => {
+const VISIBLE_INCREMENT = 10;
+
+const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProps) => {
   const { t } = useTranslation();
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -32,7 +35,7 @@ const Products = ({ onAddToCart, setPageLoading }: ProductsProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPriceRange, setSelectedPriceRange] = useState({
-    label: "All Prices",
+    label: t("products.filters.allPrices") || "All Prices",
     min: 0,
     max: Infinity,
   });
@@ -41,11 +44,28 @@ const Products = ({ onAddToCart, setPageLoading }: ProductsProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [categories, setCategories] = useState<{ key: string; label: string }[]>([]);
+  const [visibleCount, setVisibleCount] = useState(VISIBLE_INCREMENT); // Initial visible count
 
   const consumerKey = import.meta.env.VITE_WOO_CONSUMER_KEY;
   const consumerSecret = import.meta.env.VITE_WOO_CONSUMER_SECRET;
   const apiUrl = import.meta.env.VITE_WOO_API_URL;
   const auth = btoa(`${consumerKey}:${consumerSecret}`);
+
+  // Ref to store the previous values of our filtering dependencies
+  const prevDeps = useRef({ searchTerm, selectedCategory, selectedPriceRange, sortBy });
+
+  // Set category from URL or defaultCategory
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlCategory = params.get("category");
+    if (urlCategory) {
+      setSelectedCategory(urlCategory);
+    } else if (defaultCategory) {
+      setSelectedCategory(defaultCategory);
+      params.set("category", defaultCategory);
+      window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
+    }
+  }, [defaultCategory]);
 
   // Fetch categories
   useEffect(() => {
@@ -56,7 +76,7 @@ const Products = ({ onAddToCart, setPageLoading }: ProductsProps) => {
         });
         const data = await res.json();
         setCategories([
-          { key: "all", label: t("products.filters.all") },
+          { key: "all", label: t("products.filters.all") || "All Categories" },
           ...data.map((cat: any) => ({
             key: cat.slug,
             label: cat.name,
@@ -69,7 +89,7 @@ const Products = ({ onAddToCart, setPageLoading }: ProductsProps) => {
     fetchCategories();
   }, []);
 
-  // Fetch products with grouped product price handling
+  // Fetch products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -148,8 +168,31 @@ const Products = ({ onAddToCart, setPageLoading }: ProductsProps) => {
             return 0;
         }
       });
+      
+    // Check if any filter has actually changed before resetting the visible count
+    const hasFilterChanged =
+      prevDeps.current.searchTerm !== searchTerm ||
+      prevDeps.current.selectedCategory !== selectedCategory ||
+      prevDeps.current.selectedPriceRange !== selectedPriceRange ||
+      prevDeps.current.sortBy !== sortBy;
+
+    if (hasFilterChanged) {
+        setVisibleCount(VISIBLE_INCREMENT);
+    }
+    
+    // Update the ref with current values
+    prevDeps.current = { searchTerm, selectedCategory, selectedPriceRange, sortBy };
 
     setFilteredProducts(filtered);
+
+    // Update URL when category changes
+    const params = new URLSearchParams(window.location.search);
+    if (selectedCategory && selectedCategory !== "all") {
+      params.set("category", selectedCategory);
+    } else {
+      params.delete("category");
+    }
+    window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
   }, [products, searchTerm, selectedCategory, selectedPriceRange, sortBy]);
 
   const priceRanges = [
@@ -221,7 +264,7 @@ const Products = ({ onAddToCart, setPageLoading }: ProductsProps) => {
           {/* Product Grid */}
           <div className="flex-grow">
             <div className={`grid ${viewMode === "grid" ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" : "grid-cols-1"} p-1`}>
-              {filteredProducts.map((product) => (
+              {filteredProducts.slice(0, visibleCount).map((product) => (
                 <ProductCard
                   key={product.id}
                   title={product.name}
@@ -236,6 +279,18 @@ const Products = ({ onAddToCart, setPageLoading }: ProductsProps) => {
                 />
               ))}
             </div>
+
+            {/* Load More Button */}
+            {filteredProducts.length > visibleCount && (
+              <div className="flex justify-center mt-8">
+                <button
+                  onClick={() => setVisibleCount(prevCount => prevCount + VISIBLE_INCREMENT)}
+                  className="bg-primary text-primary-foreground font-bold py-2 px-6 rounded-lg shadow-md hover:bg-primary-foreground hover:text-primary transition-colors duration-200"
+                >
+                  Load More
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </main>

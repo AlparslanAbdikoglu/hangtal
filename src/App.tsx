@@ -16,6 +16,7 @@ import Shipping from "./pages/Shipping";
 import ProductPage from "./pages/ProductPage";
 import PaymentSuccess from "./pages/PaymentSucess";
 import NotFound from "./components/404Page";
+import Categories from "./pages/Categories";
 
         
 
@@ -45,6 +46,7 @@ function App() {
           }
         />
         <Route path="/products/:id" element={<ProductPage />} />
+        <Route path="/categories" element={<Categories />} />
 
         <Route path="/cart" element={<Cart />} />
 
