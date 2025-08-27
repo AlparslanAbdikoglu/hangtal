@@ -16,9 +16,12 @@ const PaymentSuccess = () => {
 
   useEffect(() => {
     localStorage.removeItem("cart");
+
     const fetchSessionDetails = async () => {
       try {
-        const res = await fetch(`https://api.lifeisnatural.eu/api/checkout-session/${sessionId}`);
+        const res = await fetch(
+          `https://zvukovaakademia.sk/wp-json/stripe/v1/checkout-session/${sessionId}`
+        );
         if (!res.ok) {
           throw new Error(`Server responded with status ${res.status}`);
         }

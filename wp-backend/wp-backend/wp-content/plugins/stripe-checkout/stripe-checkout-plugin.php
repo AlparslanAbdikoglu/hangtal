@@ -2,22 +2,27 @@
 /*
 Plugin Name: Stripe Checkout Plugin
 Description: Adds Stripe checkout session REST endpoint.
-Version: 1.0
+Version: 1.1
 Author: Alparslan
 */
 
-// Enable error display temporarily for debugging - remove later
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Require Stripe SDK (adjust path relative to this file)
 require_once __DIR__ . '/vendor/autoload.php';
 
-// Register REST route on REST API init
 add_action('rest_api_init', function () {
+    // Create checkout session
     register_rest_route('stripe/v1', '/create-checkout-session', [
         'methods' => 'POST',
         'callback' => 'stripe_create_checkout_session',
+        'permission_callback' => '__return_true',
+    ]);
+
+    // Retrieve checkout session
+    register_rest_route('stripe/v1', '/checkout-session/(?P<id>[^/]+)', [
+        'methods' => 'GET',
+        'callback' => 'stripe_get_checkout_session',
         'permission_callback' => '__return_true',
     ]);
 });
@@ -45,7 +50,6 @@ function stripe_create_checkout_session(WP_REST_Request $request) {
     $order->calculate_totals();
     $order->save();
 
-    // Get secret key from environment variable
     $stripe_secret = getenv('STRIPE_SECRET_KEY');
     if (!$stripe_secret) {
         return new WP_REST_Response(['error' => 'Stripe secret key not set in environment'], 500);
@@ -71,8 +75,8 @@ function stripe_create_checkout_session(WP_REST_Request $request) {
             'payment_method_types' => ['card'],
             'line_items' => $line_items,
             'mode' => 'payment',
-            'success_url' => home_url('/order-success?session_id={CHECKOUT_SESSION_ID}'),
-            'cancel_url' => home_url('/checkout'),
+            'success_url' => 'https://zvukovaakademia.sk/order-success?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => 'https://zvukovaakademia.sk/checkout',
             'metadata' => ['order_id' => $order->get_id()],
             'customer_email' => $order->get_billing_email(),
         ]);
@@ -81,4 +85,22 @@ function stripe_create_checkout_session(WP_REST_Request $request) {
     }
 
     return rest_ensure_response(['checkout_url' => $checkout_session->url]);
+}
+
+function stripe_get_checkout_session(WP_REST_Request $request) {
+    $session_id = $request['id'];
+
+    $stripe_secret = getenv('STRIPE_SECRET_KEY');
+    if (!$stripe_secret) {
+        return new WP_REST_Response(['error' => 'Stripe secret key not set'], 500);
+    }
+
+    \Stripe\Stripe::setApiKey($stripe_secret);
+
+    try {
+        $session = \Stripe\Checkout\Session::retrieve($session_id);
+        return rest_ensure_response($session);
+    } catch (Exception $e) {
+        return new WP_REST_Response(['error' => $e->getMessage()], 500);
+    }
 }
