@@ -13,7 +13,7 @@ import About from "./pages/About";
 import Privacy from "./pages/Privacy";
 import Shipping from "./pages/Shipping";
 import ProductPage from "./pages/ProductPage";
-import PaymentSuccess from "./pages/PaymentSucess";
+import PaymentSuccess from "./pages/PaymentSuccess";
 import NotFound from "./components/404Page";
 import Categories from "./pages/Categories";
 
