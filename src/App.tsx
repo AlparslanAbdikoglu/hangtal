@@ -81,7 +81,7 @@ function App() {
   <Route path="/contact" element={<Contact />} />
   <Route path="/privacy" element={<Privacy />} />
   <Route path="/shipping" element={<Shipping />} />
-  <Route path="/payment-success" element={<PaymentSuccess />} />
+  <Route path="/payment-success" element={<PaymentSuccess />} /> // Add this route for  order success plugin change 
 
         {/* Catch-all for 404 */}
       <Route path="*" element={<NotFound />} />
