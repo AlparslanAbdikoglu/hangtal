@@ -1,15 +1,14 @@
 <?php
 /*
 Plugin Name: Stripe Checkout Plugin
-Description: Adds Stripe checkout session REST endpoint.
-Version: 1.2
+Description: Adds Stripe checkout session REST endpoint with WooCommerce integration.
+Version: 2.0
 Author: Alparslan
 */
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Require Stripe SDK (adjust path if necessary)
 require_once __DIR__ . '/vendor/autoload.php';
 
 /**
@@ -21,7 +20,6 @@ define('STRIPE_ENDPOINT_LOGGED_IN_ONLY', false);
  * Register REST API routes
  */
 add_action('rest_api_init', function () {
-
     // Create checkout session
     register_rest_route('stripe/v1', '/create-checkout-session', [
         'methods' => 'POST',
@@ -38,6 +36,13 @@ add_action('rest_api_init', function () {
         'permission_callback' => function () {
             return STRIPE_ENDPOINT_LOGGED_IN_ONLY ? is_user_logged_in() : true;
         },
+    ]);
+
+    // Stripe webhook
+    register_rest_route('stripe/v1', '/webhook', [
+        'methods' => 'POST',
+        'callback' => 'stripe_webhook_handler',
+        'permission_callback' => '__return_true',
     ]);
 });
 
@@ -104,12 +109,22 @@ function stripe_create_checkout_session(WP_REST_Request $request) {
             'cancel_url' => home_url('/checkout'),
             'metadata' => ['order_id' => $order->get_id()],
             'customer_email' => $order->get_billing_email(),
+
+            // Collect billing + shipping addresses
+            'billing_address_collection' => 'required',
+            'shipping_address_collection' => [
+                'allowed_countries' => [
+                    'AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR',
+                    'HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK',
+                    'SI','ES','SE'
+                ],
+            ],
         ]);
     } catch (Exception $e) {
         return new WP_REST_Response(['error' => $e->getMessage()], 500);
     }
 
-    // Return URL in format expected by React frontend
+    // Return URL for frontend
     return rest_ensure_response(['url' => $checkout_session->url]);
 }
 
@@ -132,4 +147,77 @@ function stripe_get_checkout_session(WP_REST_Request $request) {
     } catch (Exception $e) {
         return new WP_REST_Response(['error' => $e->getMessage()], 500);
     }
+}
+
+/**
+ * Handle Stripe webhook events
+ */
+function stripe_webhook_handler(WP_REST_Request $request) {
+    $payload = $request->get_body();
+    $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'] ?? '';
+    $secret = getenv('STRIPE_WEBHOOK_SECRET');
+
+    if (!$secret) {
+        return new WP_REST_Response(['error' => 'Webhook secret not set'], 500);
+    }
+
+    try {
+        $event = \Stripe\Webhook::constructEvent(
+            $payload, $sig_header, $secret
+        );
+    } catch (\UnexpectedValueException $e) {
+        return new WP_REST_Response(['error' => 'Invalid payload'], 400);
+    } catch (\Stripe\Exception\SignatureVerificationException $e) {
+        return new WP_REST_Response(['error' => 'Invalid signature'], 400);
+    }
+
+    if ($event->type === 'checkout.session.completed') {
+        $session = $event->data->object;
+        $order_id = $session->metadata->order_id ?? null;
+
+        if ($order_id) {
+            $order = wc_get_order($order_id);
+            if ($order) {
+                // Mark payment complete
+                $order->payment_complete($session->payment_intent);
+
+                // Update billing + shipping details
+                if (!empty($session->customer_details)) {
+                    $details = $session->customer_details;
+
+                    $order->set_billing_first_name($details->name ?? '');
+                    $order->set_billing_email($details->email ?? '');
+                    $order->set_billing_phone($details->phone ?? '');
+
+                    if (!empty($details->address)) {
+                        $addr = $details->address;
+                        $order->set_billing_address_1($addr->line1 ?? '');
+                        $order->set_billing_address_2($addr->line2 ?? '');
+                        $order->set_billing_city($addr->city ?? '');
+                        $order->set_billing_postcode($addr->postal_code ?? '');
+                        $order->set_billing_country($addr->country ?? '');
+                    }
+
+                    if (!empty($session->shipping_details)) {
+                        $ship = $session->shipping_details;
+                        $order->set_shipping_first_name($ship->name ?? '');
+                        if (!empty($ship->address)) {
+                            $saddr = $ship->address;
+                            $order->set_shipping_address_1($saddr->line1 ?? '');
+                            $order->set_shipping_address_2($saddr->line2 ?? '');
+                            $order->set_shipping_city($saddr->city ?? '');
+                            $order->set_shipping_postcode($saddr->postal_code ?? '');
+                            $order->set_shipping_country($saddr->country ?? '');
+                        }
+                    }
+                }
+
+                // Set order status completed
+                $order->update_status('completed', 'Stripe payment confirmed via webhook');
+                $order->save();
+            }
+        }
+    }
+
+    return new WP_REST_Response(['status' => 'success'], 200);
 }
