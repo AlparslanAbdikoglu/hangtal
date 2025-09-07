@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { myStoreHook } from "./MyStoreContext";
-
 import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -81,7 +80,7 @@ function App() {
   <Route path="/contact" element={<Contact />} />
   <Route path="/privacy" element={<Privacy />} />
   <Route path="/shipping" element={<Shipping />} />
-  <Route path="/payment-success" element={<PaymentSuccess />} /> // Add this route for  order success plugin change 
+  <Route path="/order-success" element={<PaymentSuccess />} />
 
         {/* Catch-all for 404 */}
       <Route path="*" element={<NotFound />} />
