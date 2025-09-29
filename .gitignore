@@ -1,6 +1,23 @@
 # Ignore environment variables file
 **/.env
 backups/*.sql
+# ----------------------------------------------------------------
+# IGNORING COMPOSER/VENDOR FILES IN PLUGINS
+# ----------------------------------------------------------------
+
+# Ignore vendor directories (dependencies) in specific plugins
+wp-backend/wp-backend/wp-content/plugins/*/vendor/
+wp-backend/wp-backend/wp-content/plugins/*/composer.lock
+
+# Specific exception for the WooCommerce/Stripe plugins listed
+wp-backend/wp-backend/wp-content/plugins/stripe-checkout/composer.lock
+wp-backend/wp-backend/wp-content/plugins/woocommerce/vendor/
+
+# ----------------------------------------------------------------
+# PREVIOUSLY IGNORED (to ensure they are still there)
+# ----------------------------------------------------------------
+# You might want to keep the asset-specific one if you didn't use the vendor/ wildcard:
+ wp-backend/wp-backend/wp-content/plugins/woocommerce/assets/client/
 
 
 # Logs
