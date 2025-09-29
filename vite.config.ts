@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     proxy: {
       '/wp-json': {
-        target: 'https://api.lifeisnatural.eu',
+        target: 'https://zvukovaakademia.sk',
         changeOrigin: true,
         secure: false,
       },

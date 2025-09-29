@@ -4,6 +4,7 @@ import { myStoreHook } from "@/MyStoreContext";
 import { toast } from "react-toastify";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { useTranslation } from "react-i18next";
 
 interface Billing {
   first_name: string;
@@ -26,6 +27,7 @@ const Checkout: React.FC = () => {
   const navigate = useNavigate();
   const { cart, clearCartItem, loggedInUserData } = myStoreHook();
   const userData = loggedInUserData || {};
+  const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,16 +68,15 @@ const Checkout: React.FC = () => {
     e.preventDefault();
 
     if (cart.length === 0) {
-      toast.error("Your cart is empty.");
+      toast.error(t("checkout.emptyCart"));
       return;
     }
 
     setIsLoading(true);
 
     try {
-      // Call your WordPress backend to create a Stripe checkout session
       const response = await fetch(
-        "https://zvukovaakademia.sk/wp-json/stripe/v1/create-checkout-session", // Adjust to your WP REST endpoint
+        "https://zvukovaakademia.sk/wp-json/stripe/v1/create-checkout-session",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -85,7 +86,7 @@ const Checkout: React.FC = () => {
               quantity: item.quantity || 1,
             })),
             userEmail: checkoutData.billing.email,
-            billing: checkoutData.billing, // optionally send billing info
+            billing: checkoutData.billing,
             customer_id: checkoutData.customer_id,
           }),
         }
@@ -93,14 +94,14 @@ const Checkout: React.FC = () => {
 
       const data = await response.json();
       if (response.ok && data.url) {
-        window.location.href = data.url; // redirect to Stripe checkout
+        window.location.href = data.url;
       } else {
-        toast.error(data.error || "Stripe session creation failed.");
+        toast.error(data.error || t("checkout.stripeFailed"));
         setIsLoading(false);
       }
     } catch (error) {
       console.error(error);
-      toast.error("Failed to initiate Stripe checkout.");
+      toast.error(t("checkout.stripeFailed"));
       setIsLoading(false);
     }
   };
@@ -110,7 +111,7 @@ const Checkout: React.FC = () => {
       <div className="flex flex-col min-h-screen">
         <Navbar />
         <main className="flex-grow flex items-center justify-center text-lg">
-          Your cart is empty.
+          {t("checkout.emptyCart")}
         </main>
         <Footer />
       </div>
@@ -123,7 +124,7 @@ const Checkout: React.FC = () => {
 
       <main className="flex-grow">
         <div className="max-w-5xl mx-auto p-6">
-          <h1 className="text-2xl font-bold mb-6">Checkout</h1>
+          <h1 className="text-2xl font-bold mb-6">{t("checkout.title")}</h1>
 
           {/* Billing Form */}
           <form onSubmit={handleCheckoutSubmit} className="mb-10">
@@ -143,9 +144,7 @@ const Checkout: React.FC = () => {
                   key={field}
                   name={field}
                   type={field === "email" ? "email" : "text"}
-                  placeholder={field
-                    .replace("_", " ")
-                    .replace(/\b\w/g, (l) => l.toUpperCase())}
+                  placeholder={t(`checkout.fields.${field}`)}
                   onChange={handleInputChange}
                   className="border p-2"
                   required={true}
@@ -159,21 +158,22 @@ const Checkout: React.FC = () => {
               className="bg-yellow-600 text-white px-6 py-2 rounded hover:bg-yellow-700"
               disabled={isLoading}
             >
-              {isLoading ? "Redirecting to Stripe..." : "Pay with Stripe"}
+              {isLoading ? t("checkout.redirecting") : t("checkout.payButton")}
             </button>
           </form>
 
           {/* Cart Summary */}
           <div>
-            <h2 className="text-xl font-semibold mb-4">Cart Summary</h2>
+            <h2 className="text-xl font-semibold mb-4">{t("checkout.cartSummary")}</h2>
             <div className="overflow-x-auto">
               <table className="min-w-full border text-sm">
                 <thead className="bg-gray-100">
                   <tr>
-                    <th className="p-2 text-left">Image</th>
-                    <th className="p-2 text-left">Product</th>
-                    <th className="p-2 text-left">Unit Price</th>
-                    <th className="p-2 text-left">Quantity</th>
+                    <th className="p-2 text-left">{t("checkout.cart.image")}</th>
+                    <th className="p-2 text-left">{t("checkout.cart.product")}</th>
+                    <th className="p-2 text-left">{t("checkout.cart.unitPrice")}</th>
+                    <th className="p-2 text-left">{t("checkout.cart.quantity")}</th>
+                    <th className="p-2 text-left">{t("checkout.cart.action")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -200,7 +200,7 @@ const Checkout: React.FC = () => {
               </table>
             </div>
             <div className="mt-4 font-bold text-right">
-              Total: €{totalPrice.toFixed(2)}
+              {t("checkout.total")}: €{totalPrice.toFixed(2)}
             </div>
           </div>
         </div>

@@ -1,29 +1,34 @@
-
 {
+  "site": "Klangakademie",
   "navbar": {
     "home": "Startseite",
     "products": "Produkte",
     "about": "Über uns",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "myAccount": "Mein Konto",
+    "myOrders": "Meine Bestellungen",
+    "logout": "Abmelden",
+    "loginSignup": "Anmelden / Registrieren"
   },
   "hero": {
-    "title": "Entdecken Sie die heilende Kraft des Klangs",
-    "subtitle": "Verwandeln Sie Ihren Geist, Körper und Ihre Seele mit unserer sorgfältig kuratierten Sammlung von Klangheitung-Instrumenten.",
-    "description": "Erleben Sie die transformative Kraft des Klangs mit unserer einzigartigen Auswahl an Instrumenten für Entspannung, Fokus und Wohlbefinden.",
-    "imageAlt": "Klangheitung-Instrumente"
+    "title": "Entdecken Sie die Kraft des Klangs in Ihrem Alltag",
+    "subtitle": "Erkunden Sie die besondere Welt der Klangschalen, Instrumente und Schwingungstherapie-Werkzeuge.",
+    "description": "Bei der Klangakademie glauben wir, dass die Schwingung des Klangs Gleichgewicht in Körper und Seele schaffen kann. Sorgfältig ausgewählte Himalaya-Klangschalen, Meinl Sonic Energy Instrumente und einzigartige Accessoires erwarten Sie, begleitet von Fachwissen und herzlicher Anleitung.",
+    "imageAlt": "Klangtherapie-Instrumente"
   },
   "categories": {
     "title": "Kategorien",
+    "all": "Alle",
     "handpans": "Handpans",
-    "steelTongueDrums": "Stahl-Zungen-Trommeln",
+    "steelTongueDrums": "Stahlzungentrommeln",
     "kalimbas": "Kalimbas",
     "crystalSingingBowls": "Kristall-Klangschalen",
     "crystalSingingChalices": "Kristall-Klangkelche",
     "singingBowls": "Klangschalen"
   },
   "products": {
-    "title": "Klangheitung-Instrumente",
-    "subtitle": "Entdecken Sie unsere sorgfältig kuratierte Sammlung von Premium-Klangheitung-Instrumenten. Jedes Stück ist darauf ausgelegt, Harmonie, Frieden und therapeutische Schwingungen in Ihr Leben zu bringen.",
+    "title": "Klangheilungs-Instrumente",
+    "subtitle": "Entdecken Sie unsere sorgfältig kuratierte Kollektion von Premium-Klangheilungs-Instrumenten. Jedes Stück bringt Harmonie, Frieden und heilende Schwingungen in Ihr Leben.",
     "featured": "Empfohlene Produkte",
     "search": "Instrumente suchen...",
     "filters": {
@@ -40,123 +45,120 @@
     "showing": "{{count}} von {{total}} Produkten angezeigt",
     "clearFilters": "Alle Filter löschen",
     "viewAll": "Alle Produkte anzeigen",
-    "noResults": "Keine Instrumente gefunden",
+    "noResults": "Keine Produkte gefunden (404).",
     "noResultsText": "Versuchen Sie, Ihre Filter oder Suchbegriffe anzupassen, um das perfekte Instrument zu finden.",
-    "available": "Sofort verfügbar"
+    "available": "Sofort verfügbar",
+    "detail": {
+      "salePrice": "Aktionspreis",
+      "regularPrice": "Regulärer Preis",
+      "variant": {
+        "Color": "Farbe",
+        "Size": "Größe"
+      },
+      "variantOption": {
+        "Color": {
+          "Red": "Rot",
+          "Blue": "Blau"
+        }
+      }
+    },
+    "view": {
+      "grid": "Raster",
+      "list": "Liste",
+      "discount": "RABATT",
+      "description": "Beschreibung",
+      "additionalInfo": "Zusätzliche Informationen",
+      "shortDescription": "Kurzbeschreibung",
+      "attributes": "Attribute",
+      "freeShipping": "Kostenloser Versand",
+      "guarantee": "Zufriedenheitsgarantie",
+      "easyReturns": "Einfache Rückgabe"
+    }
+  },
+  "checkout": {
+    "title": "Kasse",
+    "fields": {
+      "first_name": "Vorname",
+      "last_name": "Nachname",
+      "address_1": "Adresse",
+      "city": "Stadt",
+      "state": "Bundesland / Landkreis",
+      "postcode": "Postleitzahl",
+      "country": "Land",
+      "email": "E-Mail",
+      "phone": "Telefon"
+    },
+    "cartSummary": "Warenkorb Zusammenfassung",
+    "cart": {
+      "image": "Bild",
+      "product": "Produkt",
+      "unitPrice": "Stückpreis",
+      "quantity": "Menge"
+    },
+    "total": "Gesamt",
+    "payButton": "Mit Stripe bezahlen",
+    "redirecting": "Weiterleitung zur Stripe-Zahlung...",
+    "emptyCart": "Ihr Warenkorb ist leer.",
+    "stripeFailed": "Stripe-Zahlung konnte nicht erstellt werden."
   },
   "cart": {
     "title": "Einkaufswagen",
+    "emptyMessage": "Ihr Warenkorb ist leer.",
+    "image": "Bild",
+    "product": "Produkt",
+    "unitPrice": "Stückpreis",
+    "quantity": "Menge",
+    "action": "Aktion",
+    "noItems": "Keine Artikel im Warenkorb.",
+    "remove": "Entfernen",
+    "total": "Gesamt",
+    "checkout": "Zur Kasse",
+    "processing": "Wird verarbeitet...",
     "items": "{{count}} Artikel",
-    "empty": "Ihr Warenkorb ist leer",
-    "clearAll": "Alle löschen",
-    "total": "Gesamt: €{{amount}}",
-    "checkout": "Zur Kasse gehen",
+    "clearAll": "Alles löschen",
     "addToCart": "In den Warenkorb",
-    "addedToCart": "Zum Warenkorb hinzugefügt",
-    "addedDescription": "{{title}} wurde zu Ihrem Warenkorb hinzugefügt."
+    "addedToCart": "Hinzugefügt",
+    "addedDescription": "{{title}} wurde Ihrem Warenkorb hinzugefügt.",
+    "removeConfirm": "Möchten Sie diesen Artikel wirklich entfernen?",
+    "removed": "Produkt aus dem Warenkorb entfernt!"
   },
   "about": {
-    "title": "Über Marcus Weber",
-    "intro1": "Marcus Weber widmet sich der Aufgabe, die heilende Kraft des Klangs allen zugänglich zu machen. Mit jahrelanger Erfahrung in der Klangtherapie kuratiert er Instrumente, die Entspannung und Wohlbefinden fördern.",
-    "intro2": "Unsere Mission ist es, Ihnen zu helfen, die transformativen Effekte des Klangs zu entdecken, egal ob Sie Anfänger oder erfahrener Praktiker sind.",
-    "imageAlt": "Porträt von Marcus Weber",
-    "mission": "Unsere Mission",
-    "missionText": "Wir streben danach, hochwertige Klangheitung-Instrumente und Ressourcen bereitzustellen, um Ihre Reise zu Gleichgewicht und Harmonie zu unterstützen.",
+    "title": "Adrienn Pál",
+    "intro1": "Adrienn Pál setzt sich dafür ein, die heilende Kraft des Klangs für alle zugänglich zu machen. Willkommen im Klangakademie-Webshop! Mein Ziel ist es, die heilende, harmonisierende Kraft von Klängen und Schwingungen für alle zugänglich zu machen.",
+    "intro2": "Die hier erhältlichen Klangschalen, Gongs, Stimmgabeln und besonderen Instrumente dienen alle dem Gleichgewicht von Körper und Seele – sei es zur Entspannung, Meditation, Therapie oder einfach zur täglichen inneren Harmonie.\nZu jedem Instrument erhalten Sie fachkundige Beratung, detaillierte Beschreibungen und praktische Anleitung, wenn Sie möchten. Sie können mehr über die Instrumente lernen und bei meinen Schulungen üben – denn ich glaube, dass Klang nicht nur erklingt, sondern lehrt, heilt und verbindet.",
+    "imageAlt": "Porträt von Adrienn Pál",
+    "mission": "Warum uns wählen?",
+    "missionText": "Sorgfältig ausgewählte, hochwertige Instrumente\nEinzigartige Klangschalen-Beschreibungen (Frequenz, Klang, Chakra-Verbindung) – ein besonderer Service nur hier\nFachkundige Anleitung und Bildungsangebot\nSchneller, sicherer Versand.",
     "faq": "Häufig gestellte Fragen",
     "faqItems": {
-      "soundHealing": "Was ist Klangheitung?",
+      "soundHealing": "Was ist Klangtherapie?",
       "chooseInstrument": "Wie wähle ich das richtige Instrument?",
       "workshops": "Bieten Sie Workshops an?",
-      "benefits": "Was sind die Vorteile der Klangtherapie?"
+      "benefits": "Welche Vorteile bietet Klangtherapie?"
     },
     "faqAnswers": {
-      "soundHealing": "Klangheitung ist eine Praxis, die Vibrationen von Instrumenten nutzt, um körperliches und emotionales Wohlbefinden zu fördern.",
-      "chooseInstrument": "Berücksichtigen Sie Ihre Absicht und persönliche Vorliebe. Wir helfen Ihnen gerne dabei, das perfekte Instrument zu finden.",
-      "workshops": "Ja, wir bieten Workshops für alle Niveaus an. Schauen Sie auf unserer Veranstaltungsseite nach kommenden Sitzungen.",
-      "benefits": "Klangtherapie kann helfen, Stress zu reduzieren, die Konzentration zu verbessern und die allgemeine Gesundheit zu unterstützen."
+      "soundHealing": "Klangtherapie ist eine Methode, die die Schwingungen von Instrumenten nutzt, um das körperliche und geistige Wohlbefinden zu fördern.",
+      "chooseInstrument": "Absicht und persönliche Vorlieben sind wichtig. Wir helfen Ihnen gerne, das perfekte Instrument zu finden.",
+      "workshops": "Ja, wir bieten Workshops für alle Niveaus an. Schauen Sie in unseren Veranstaltungen nach Details.",
+      "benefits": "Klangtherapie kann helfen, Stress zu reduzieren, die Konzentration zu verbessern und die Gesundheit zu fördern."
     }
   },
   "contact": {
-    "title": "Kontaktieren Sie uns",
-    "subtitle": "Haben Sie Fragen zu unseren Klangheitung-Instrumenten? Wir würden gerne von Ihnen hören. Senden Sie uns eine E-Mail und wir antworten so schnell wie möglich.",
+    "title": "Kontakt",
+    "subtitle": "Haben Sie Fragen zu unseren Klangtherapie-Instrumenten? Wir freuen uns auf Ihre Nachricht. Senden Sie uns eine E-Mail und wir antworten bald.",
     "infoTitle": "Kontaktinformationen",
     "formTitle": "E-Mail senden",
-    "emailPrompt": "Klicken Sie auf die Schaltfläche unten, um uns eine E-Mail zu senden. Wir melden uns so schnell wie möglich bei Ihnen.",
+    "emailPrompt": "Klicken Sie unten, um uns eine E-Mail zu senden. Wir antworten bald.",
     "sendEmail": "E-Mail senden"
   },
   "privacy": {
     "title": "Datenschutzrichtlinie",
-    "subtitle": "Allgemeine Geschäftsbedingungen",
-    "documentTitle": "Datenschutzrichtlinie Dokument",
-    "lastUpdated": "Zuletzt aktualisiert: Dezember 2024 | Version 2.1",
-    "description": "Unsere umfassende Datenschutzrichtlinie erläutert, wie MEINL Sonic Energy Ihre persönlichen Daten sammelt, verwendet und schützt. Wir sind verpflichtet, die höchsten Standards des Datenschutzes und der Transparenz aufrechtzuerhalten.",
-    "viewPDF": "Datenschutzrichtlinie anzeigen (PDF)",
-    "downloadPDF": "PDF herunterladen",
-    "whatsCovered": "Was abgedeckt ist",
-    "quickSummary": "Kurze Zusammenfassung",
-    "keyHighlights": "Wichtige Datenschutz-Highlights",
-    "dataCollection": "Datensammlung",
-    "dataUsage": "Datenverwendung",
-    "yourRights": "Ihre Rechte",
-    "policyUpdates": "Richtlinien-Updates",
-    "privacyQuestions": "Haben Sie Datenschutzfragen?",
-    "contactInfo": "Kontaktinformationen",
-    "responseTime": "Antwortzeit",
-    "coveredItems": {
-      "practices": "Datensammlung und Nutzungspraktiken",
-      "cookies": "Cookie-Richtlinie und Tracking-Technologien",
-      "thirdParty": "Drittanbieter-Integrationen und Partnerschaften",
-      "rights": "Ihre Rechte und Wahlmöglichkeiten bezüglich Ihrer Daten",
-      "transfers": "Internationale Datenübertragungen",
-      "security": "Sicherheitsmaßnahmen und Datenschutz",
-      "contact": "Kontaktinformationen für Datenschutzanfragen"
-    },
-    "summaryItems": {
-      "necessary": "Wir sammeln nur notwendige Informationen",
-      "noSelling": "Ihre Daten werden niemals an Dritte verkauft",
-      "deletion": "Sie können jederzeit die Löschung Ihrer Daten beantragen",
-      "encryption": "Alle Daten sind verschlüsselt und sicher gespeichert",
-      "compliant": "DSGVO und CCPA konform",
-      "audits": "Regelmäßige Sicherheitsaudits und Updates",
-      "transparent": "Transparente Kommunikation über Änderungen"
-    },
-    "collectionItems": {
-      "contact": "Kontaktinformationen",
-      "orderHistory": "Bestellhistorie",
-      "websiteUsage": "Website-Nutzungsdaten",
-      "payment": "Zahlungsinformationen (sicher verarbeitet)"
-    },
-    "usageItems": {
-      "orders": "Bestellungen und Zahlungen verarbeiten",
-      "support": "Kundensupport und Kommunikation",
-      "improvement": "Verbesserung unserer Produkte und Dienstleistungen",
-      "compliance": "Rechtskonformität und Sicherheit"
-    },
-    "rightsItems": {
-      "access": "Zugang zu Ihren persönlichen Daten",
-      "correct": "Unrichtige Informationen korrigieren",
-      "delete": "Löschung der Daten beantragen",
-      "optOut": "Abmeldung von Marketing-Kommunikation"
-    },
-    "updates": {
-      "v21": "Version 2.1 - Dezember 2024",
-      "v21Description": "Aktualisierte Datenaufbewahrungsrichtlinien und verbesserte Sicherheitsmaßnahmen",
-      "v20": "Version 2.0 - September 2024",
-      "v20Description": "CCPA-Konformität hinzugefügt und verbessertes Cookie-Management",
-      "v15": "Version 1.5 - Mai 2024",
-      "v15Description": "Verbesserte DSGVO-Konformität und Klärung der Benutzerrechte"
-    },
-    "dpoDescription": "Unser Datenschutzbeauftragter steht zur Verfügung, um bei allen datenschutzbezogenen Fragen oder Bedenken zu helfen.",
-    "contactDetails": {
-      "email": "E-Mail: privacy@meinlsonic.com",
-      "phone": "Telefon: +1 (555) 123-4570",
-      "mail": "Post: Datenschutzbeauftragter, 123 Sound Street, Harmony City"
-    },
-    "responseDetails": {
-      "inquiry": "Wir antworten auf Datenschutzanfragen innerhalb von 72 Stunden",
-      "requests": "Datenanfragen werden innerhalb von 30 Tagen bearbeitet",
-      "emergency": "Notfall-Datenschutzprobleme: Sofortige Antwort"
-    }
+    "documentTitle": "Rechtsdokumente",
+    "lastUpdated": "Zuletzt aktualisiert: September 2025",
+    "description": "Laden Sie Rechtsdokumente in Ihrer bevorzugten Sprache herunter.",
+    "aszf": "Allgemeine Geschäftsbedingungen",
+    "complaint": "Beschwerdeinformationen",
+    "download": "DOCX herunterladen"
   },
   "shipping": {
     "title": "Versandinformationen",
@@ -168,25 +170,25 @@
     "packagingHandling": "Verpackung & Handhabung",
     "shippingProtection": "Versandschutz",
     "returnsExchanges": "Rücksendungen & Umtausch",
-    "needHelp": "Benötigen Sie Hilfe?",
+    "needHelp": "Brauchen Sie Hilfe?",
     "standardFeatures": {
       "freeShipping": "Kostenloser Versand bei Bestellungen über €100",
       "shippingFee": "€9,99 Versandgebühr bei Bestellungen unter €100",
       "delivery": "Lieferung innerhalb von 5-7 Werktagen",
-      "tracking": "Tracking-Informationen bereitgestellt"
+      "tracking": "Sendungsverfolgung bereitgestellt"
     },
     "expressFeatures": {
       "fee": "€19,99 Expressversandgebühr",
       "delivery": "Lieferung innerhalb von 2-3 Werktagen",
-      "priority": "Prioritätsbehandlung und -verarbeitung",
-      "realTimeTracking": "Echtzeit-Tracking-Updates"
+      "priority": "Priorisierte Bearbeitung",
+      "realTimeTracking": "Echtzeit-Tracking"
     },
     "zones": {
       "zone1": "Zone 1: EU",
       "zone1Countries": "Österreich, Belgien, Frankreich, Deutschland, Niederlande, Luxemburg",
       "zone1Time": "3-5 Werktage",
       "zone2": "Zone 2: Erweiterte EU",
-      "zone2Countries": "Italien, Spanien, Portugal, Polen, Tschechische Republik, Slowakei, Ungarn",
+      "zone2Countries": "Italien, Spanien, Portugal, Polen, Tschechien, Slowakei, Ungarn",
       "zone2Time": "5-7 Werktage",
       "zone3": "Zone 3: International",
       "zone3Countries": "Vereinigtes Königreich, Schweiz, Norwegen, USA, Kanada",
@@ -195,59 +197,120 @@
     "packaging": {
       "securePackaging": "Sichere Verpackung",
       "wrapping": "Jedes Instrument wird sorgfältig in Schutzmaterial verpackt",
-      "foam": "Maßgeschneiderte Schaumstoffeinsätze für empfindliche Gegenstände",
-      "boxes": "Stabile Kartons, die für Musikinstrumente entwickelt wurden",
-      "labels": "Zerbrechlich-Etiketten auf allen Paketen",
+      "foam": "Maßgeschneiderte Schaumstoffeinsätze für empfindliche Artikel",
+      "boxes": "Stabile Kartons für Musikinstrumente",
+      "labels": "Fragile-Etiketten auf allen Paketen",
       "processingTime": "Bearbeitungszeit",
       "processing": "Bestellungen werden innerhalb von 1-2 Werktagen bearbeitet",
-      "quality": "Qualitätskontrolle vor dem Versand",
-      "confirmation": "E-Mail-Bestätigung mit Tracking-Nummer",
+      "quality": "Qualitätskontrolle vor Versand",
+      "confirmation": "E-Mail-Bestätigung mit Sendungsverfolgung",
       "custom": "Spezielle Behandlung für Sonderbestellungen"
     },
     "protection": {
-      "insurance": "Versicherungsschutz",
-      "insuranceDescription": "Alle Sendungen sind automatisch bis zu ihrem vollen Wert versichert, ohne zusätzliche Kosten für Sie.",
+      "insurance": "Versicherung",
+      "insuranceDescription": "Alle Sendungen sind bis zum vollen Wert versichert, ohne zusätzliche Kosten.",
       "replacement": "Vollständiger Ersatz für beschädigte Artikel",
       "coverage": "Abdeckung für verlorene Pakete",
       "claims": "Schnelle Schadensbearbeitung",
       "guarantee": "Liefergarantie",
-      "guaranteeDescription": "Wir garantieren sichere Lieferung oder Ihr Geld zurück.",
+      "guaranteeDescription": "Wir garantieren sichere Lieferung oder Geld zurück.",
       "signature": "Unterschrift erforderlich für hochwertige Artikel",
-      "photo": "Fotonachweis der Lieferung",
-      "support": "Kundensupport für Lieferprobleme"
+      "photo": "Fotobeweis der Lieferung",
+      "support": "Kundensupport bei Lieferproblemen"
     },
     "returns": {
-      "description": "Wir möchten, dass Sie mit Ihrem Kauf vollständig zufrieden sind. Wenn Sie mit Ihrem Klangheitung-Instrument nicht zufrieden sind, bieten wir:",
-      "returnPolicy": "Rückgaberichtlinie",
-      "window": "30-tägiges Rückgabefenster",
+      "description": "Wir möchten, dass Sie mit Ihrem Kauf zufrieden sind. Wenn Sie mit Ihrem Klangtherapie-Instrument nicht zufrieden sind, bieten wir:",
+      "returnPolicy": "Rückgaberecht",
+      "window": "30 Tage Rückgabefrist",
       "condition": "Artikel müssen im Originalzustand sein",
-      "freeReturn": "Kostenloser Rückversand für defekte Artikel",
+      "freeReturn": "Kostenlose Rücksendung für defekte Artikel",
       "refund": "Vollständige Rückerstattung nach Prüfung",
       "exchangeProcess": "Umtauschprozess",
-      "authorization": "Kontaktieren Sie den Kundendienst für eine Autorisierung",
-      "label": "Erhalten Sie ein vorausbezahltes Rücksendeetikett",
+      "authorization": "Kontaktieren Sie den Kundenservice für Genehmigung",
+      "label": "Erhalten Sie ein vorfrankiertes Rücksendeetikett",
       "quickProcessing": "Schnelle Bearbeitung von Umtauschen",
       "priorityShipping": "Prioritätsversand für Ersatzartikel"
     },
     "help": {
-      "description": "Haben Sie Fragen zum Versand oder müssen Sie Ihre Bestellung verfolgen?",
-      "customerService": "Kundendienst",
+      "description": "Haben Sie Fragen zum Versand oder möchten Sie Ihre Bestellung verfolgen?",
+      "customerService": "Kundenservice",
       "email": "E-Mail: shipping@meinlsonic.com",
       "phone": "Telefon: +1 (555) 123-4567",
       "businessHours": "Geschäftszeiten",
-      "weekdays": "Montag - Freitag: 9:00 - 18:00 MEZ",
-      "saturday": "Samstag: 10:00 - 16:00 MEZ"
+      "weekdays": "Montag - Freitag: 9:00 - 18:00 Uhr",
+      "saturday": "Samstag: 10:00 - 16:00 Uhr"
     }
   },
   "footer": {
     "aboutTitle": "Über uns",
-    "aboutText": " zvukovaakademia bietet hochwertige Klangtherapie-Instrumente für Meditation, Entspannung und Klangheitung.",
-    "quickLinks": "Schnelllinks",
-    "shipping": "Versandinfo",
+    "aboutText": "Klangakademie bietet hochwertige Klangtherapie-Instrumente für Meditation, Entspannung und Klangheilung.",
+    "quickLinks": "Schnellzugriffe",
+    "shipping": "Versandinformationen",
     "privacy": "Datenschutzrichtlinie",
     "contactTitle": "Kontakt",
     "email": "E-Mail",
-    "copyright": "© 2025 zvukovaakademia. Alle Rechte vorbehalten.",
+    "copyright": "© 2025 Klangakademie. Alle Rechte vorbehalten.",
     "followUs": "Folgen Sie uns"
+  },
+  "auth": {
+    "loginRequired": "Anmeldung erforderlich",
+    "pleaseLoginToAddToCart": "Bitte melden Sie sich an, um dieses Produkt zum Warenkorb hinzuzufügen.",
+    "login": "Anmelden"
+  },
+  "common": {
+    "close": "Schließen",
+    "cancel": "Abbrechen",
+    "delete": "Löschen"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "message": "Die Seite, die Sie suchen, existiert nicht.",
+    "goHome": "Zur Startseite"
+  },
+  "paymentSuccess": {
+    "title": "Zahlung erfolgreich",
+    "message": "Vielen Dank für Ihren Einkauf! Ihre Zahlung wurde erfolgreich verarbeitet.",
+    "goHome": "Zur Startseite"
+  },
+  "myAccount": {
+    "title": "Mein Konto",
+    "name": "Name",
+    "email": "E-Mail",
+    "username": "Benutzername",
+    "loading": "Benutzerinformationen werden geladen..."
+  },
+  "myOrders": {
+    "title": "Meine Bestellungen",
+    "refresh": "Bestellungen aktualisieren",
+    "orderId": "Bestellnummer",
+    "date": "Datum",
+    "status": "Status",
+    "statuses": {
+      "pending": "Ausstehend",
+      "processing": "In Bearbeitung",
+      "completed": "Abgeschlossen",
+      "cancelled": "Storniert",
+      "refunded": "Erstattet"
+    },
+    "total": "Gesamt",
+    "items": "Artikel",
+    "actions": "Aktionen",
+    "view": "Ansehen",
+    "noOrders": "Keine Bestellungen gefunden.",
+    "detailsTitle": "Bestelldetails",
+    "deleteConfirmTitle": "Möchten Sie wirklich löschen?",
+    "deleteConfirmText": "Möchten Sie diese Bestellung wirklich löschen?",
+    "deletedTitle": "Gelöscht!",
+    "deletedText": "Die Bestellung wurde gelöscht."
+  },
+  "promo": {
+    "title": "Warum uns wählen?",
+    "intro": "Entdecken Sie unsere sorgfältig ausgewählten, handgefertigten Instrumente und einzigartigen Kreationen.",
+    "point1": "Qualitätsgeprüfte, ausgewählte Instrumente",
+    "point2": "Fachkundige Anleitung und Ausbildung",
+    "point3": "Einzigartige Tabellen und Beschreibungen zu Klangschalen – nur bei uns",
+    "point4": "Schneller, sicherer Versand",
+    "outro": "Lassen Sie die Kraft des Klangs in Ihren Alltag – wählen Sie jetzt aus unserem Webshop.",
+    "cta": "Botschafter ansehen"
   }
 }

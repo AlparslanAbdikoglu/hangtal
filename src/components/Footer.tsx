@@ -29,7 +29,7 @@ export const Footer = () => {
                 <Link to="/contact" className="text-sm hover:opacity-80">{t("navbar.contact")}</Link>
               </li>
               <li>
-                <Link to="/shipping" className="text-sm hover:opacity-80">{t("footer.shipping")}</Link>
+                <Link to="" className="text-sm hover:opacity-80">{t("footer.shipping")}</Link>
               </li>
               <li>
                 <Link to="/privacy" className="text-sm hover:opacity-80">{t("footer.privacy")}</Link>
@@ -40,7 +40,7 @@ export const Footer = () => {
           <div>
             <h3 className="font-bold text-lg mb-4">{t("footer.contactTitle")}</h3>
             <ul className="space-y-2 text-sm">
-              <li>{t("footer.email")}: info@com</li>
+              <li>{t("footer.email")}: zvukovaakademia@gmail.com</li>
             </ul>
           </div>
         </div>

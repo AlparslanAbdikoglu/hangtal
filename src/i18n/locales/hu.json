@@ -1,25 +1,30 @@
 {
+  "site": "Hangakadémia",
   "navbar": {
     "home": "Főoldal",
     "products": "Termékek",
     "about": "Rólunk",
-    "contact": "Kapcsolat"
+    "contact": "Kapcsolat",
+    "myAccount": "Fiókom",
+    "myOrders": "Rendeléseim",
+    "logout": "Kijelentkezés",
+    "loginSignup": "Bejelentkezés / Regisztráció"
   },
   "hero": {
-    "title": "Fedezd fel a hang gyógyító erejét",
-    "subtitle": "Alakítsd át elmédet, testedet és lelkedet gondosan válogatott hangterápiás hangszereinkkel.",
-    "description": "Tapasztald meg a hang átalakító erejét egyedi hangszerkínálatunkkal, amelyet relaxációhoz, fókuszhoz és jólléthez terveztünk.",
+    "title": "A hangok ereje a mindennapjaidban",
+    "subtitle": "fedezd fel a hangtálak, hangszerek és rezgésterápiás eszközök különleges világát.",
+    "description": "A Hangakadémiánál hiszünk abban, hogy a hang rezgése képes egyensúlyt teremteni testben és lélekben. Válogatott Himalájai hangtálak, Meinl Sonic Energy hangszerek és egyedi kiegészítők várnak, melyekkel te is megélheted a rezgések gyógyító erejét.\n Minden termékünkhöz szakmai tudás és szívből jövő útmutatás társul.",
     "imageAlt": "Hangterápiás hangszerek"
   },
   "categories": {
     "title": "Kategóriák",
     "all": "Összes",
-    "steelTongueDrums": "Acél nyelv dobok",
-    "handpans": "Handpanok",
-    "kalimbas": "Kalimbák",
-    "crystalSingingBowls": "Kristály énekes tálak",
-    "singingBowls": "Énekes tálak",
-    "windChimes": "Szélcsengők"
+    "handpans": "Hangtál",
+    "steelTongueDrums": "Acél nyelvdob",
+    "kalimbas": "Kalimba",
+    "crystalSingingBowls": "Kristály énektál",
+    "crystalSingingChalices": "Kristály énekserleg",
+    "singingBowls": "Éneklő tál"
   },
   "products": {
     "title": "Hanggyógyító hangszerek",
@@ -70,24 +75,61 @@
       "easyReturns": "Egyszerű visszaküldés"
     }
   },
+"checkout": {
+  "title": "Fizetés",
+  "fields": {
+    "first_name": "Keresztnév",
+    "last_name": "Vezetéknév",
+    "address_1": "Cím",
+    "city": "Város",
+    "state": "Állam / Megye",
+    "postcode": "Irányítószám",
+    "country": "Ország",
+    "email": "Email",
+    "phone": "Telefonszám"
+  },
+  "cartSummary": "Kosár összegzés",
+  "cart": {
+    "image": "Kép",
+    "product": "Termék",
+    "unitPrice": "Egységár",
+    "quantity": "Mennyiség"
+  },
+  "total": "Összesen",
+  "payButton": "Fizetés Stripe-on",
+  "redirecting": "Átirányítás a Stripe fizetésre...",
+  "emptyCart": "A kosár üres.",
+  "stripeFailed": "A Stripe fizetés létrehozása sikertelen."
+},
+
   "cart": {
     "title": "Bevásárló kosár",
-    "items": "{{count}} tétel",
-    "empty": "A kosár üres",
-    "clearAll": "Összes törlése",
-    "total": "Összesen: €{{amount}}",
+    "emptyMessage": "A kosár üres.",
+    "image": "Kép",
+    "product": "Termék",
+    "unitPrice": "Egységár",
+    "quantity": "Mennyiség",
+    "action": "Művelet",
+    "noItems": "Nincsenek tételek a kosárban.",
+    "remove": "Eltávolítás",
+    "total": "Összesen",
     "checkout": "Tovább a fizetéshez",
+    "processing": "Feldolgozás...",
+    "items": "{{count}} tétel",
+    "clearAll": "Összes törlése",
     "addToCart": "Kosárba",
     "addedToCart": "Kosárba helyezve",
-    "addedDescription": "{{title}} hozzáadva a kosárhoz."
+    "addedDescription": "{{title}} hozzáadva a kosárhoz.",
+    "removeConfirm": "Biztos törli a tételt?",
+    "removed": "A termék eltávolítva a kosárból!"
   },
   "about": {
-    "title": "Weber Márkus bemutatása",
-    "intro1": "Weber Márkus elkötelezett abban, hogy a hang gyógyító erejét mindenkihez eljuttassa. Sokéves hangterápiás tapasztalattal válogat olyan hangszereket, amelyek elősegítik a relaxációt és a jóllétet.",
-    "intro2": "Küldetésünk, hogy segítsünk felfedezni a hang átalakító hatását, akár kezdő, akár tapasztalt gyakorló vagy.",
-    "imageAlt": "Weber Márkus portréja",
-    "mission": "Küldetésünk",
-    "missionText": "Célunk, hogy kiváló minőségű hangterápiás hangszereket és forrásokat biztosítsunk az egyensúly és harmónia eléréséhez.",
+    "title": "Adrienn Pál",
+    "intro1": "Adrienn Pál elkötelezett abban, hogy a hang gyógyító erejét mindenkihez eljuttassa. Üdvözöllek a Hangakadémia webshopjában! Célom, hogy a hangok és rezgések gyógyító, harmonizáló ereje mindenki számára elérhető legyen.",
+"intro2": "A nálunk kapható hangtálak, gongok, hangvillák és különleges hangszerek mind a test és lélek egyensúlyát szolgálják – legyen szó relaxációról, meditációról, terápiáról vagy egyszerűen a mindennapi belső harmónia megteremtéséről.\nMinden hangszerhez szakértői tanácsot, részletes leírást és gyakorlati útmutatót is biztosítok, ha szeretnéd. A hangszerekről bővebben tanulhatsz, gyakorolhatsz a képzéseimen– mert hiszem, hogy a hang nem csupán megszólal, hanem tanít, gyógyít és összekapcsol.",
+    "imageAlt": "Adrienn Pál portréja",
+    "mission": "Miért válassz minket?",
+"missionText": "Gondosan válogatott, prémium minőségű hangszerek\nEgyedi hangtál-leírások (frekvencia, hang, csakrához kapcsolódás) – különleges szolgáltatásként csak nálunk\nSzakértői útmutatás és oktatási háttér\nGyors, biztonságos szállítás.",
     "faq": "Gyakran Ismételt Kérdések",
     "faqItems": {
       "soundHealing": "Mi az a hangterápia?",
@@ -112,77 +154,12 @@
   },
   "privacy": {
     "title": "Adatvédelmi szabályzat",
-    "subtitle": "Általános szerződési feltételek",
-    "documentTitle": "Adatvédelmi szabályzat dokumentum",
-    "lastUpdated": "Utolsó frissítés: 2024. december | 2.1 verzió",
-    "description": "Átfogó adatvédelmi szabályzatunk bemutatja, hogyan gyűjti, használja és védi a MEINL Sonic Energy az Ön személyes adatait. Elkötelezettek vagyunk az adatvédelem legmagasabb szintjének fenntartása és az átláthatóság iránt.",
-    "viewPDF": "Adatvédelmi szabályzat megtekintése (PDF)",
-    "downloadPDF": "PDF letöltése",
-    "whatsCovered": "Mit tartalmaz",
-    "quickSummary": "Gyors összefoglaló",
-    "keyHighlights": "Fő adatvédelmi kiemelések",
-    "dataCollection": "Adatgyűjtés",
-    "dataUsage": "Adatfelhasználás",
-    "yourRights": "Az Ön jogai",
-    "policyUpdates": "Szabályzat frissítések",
-    "privacyQuestions": "Adatvédelmi kérdései vannak?",
-    "contactInfo": "Kapcsolattartási információk",
-    "responseTime": "Válaszidő",
-    "coveredItems": {
-      "practices": "Adatgyűjtési és felhasználási gyakorlatok",
-      "cookies": "Cookie szabályzat és követési technológiák",
-      "thirdParty": "Harmadik féllel való integrációk és partnerségek",
-      "rights": "Az Ön jogai és választási lehetőségei az adataival kapcsolatban",
-      "transfers": "Nemzetközi adattovábbítások",
-      "security": "Biztonsági intézkedések és adatvédelem",
-      "contact": "Kapcsolattartási információk adatvédelmi kérdésekhez"
-    },
-    "summaryItems": {
-      "necessary": "Csak a szükséges információkat gyűjtjük",
-      "noSelling": "Az Ön adatait soha nem adjuk el harmadik félnek",
-      "deletion": "Bármikor kérheti adatai törlését",
-      "encryption": "Minden adat titkosított és biztonságosan tárolva",
-      "compliant": "GDPR és CCPA megfelelő",
-      "audits": "Rendszeres biztonsági auditok és frissítések",
-      "transparent": "Átlátható kommunikáció a változásokról"
-    },
-    "collectionItems": {
-      "contact": "Kapcsolattartási információk",
-      "orderHistory": "Rendelési előzmények",
-      "websiteUsage": "Weboldal használati adatok",
-      "payment": "Fizetési információk (biztonságosan feldolgozva)"
-    },
-    "usageItems": {
-      "orders": "Rendelések és fizetések feldolgozása",
-      "support": "Ügyfélszolgálat és kommunikáció",
-      "improvement": "Termékeink és szolgáltatásaink fejlesztése",
-      "compliance": "Jogi megfelelés és biztonság"
-    },
-    "rightsItems": {
-      "access": "Hozzáférés személyes adataihoz",
-      "correct": "Pontatlan információk javítása",
-      "delete": "Adatok törlésének kérése",
-      "optOut": "Kilépés a marketing kommunikációból"
-    },
-    "updates": {
-      "v21": "2.1 verzió - 2024. december",
-      "v21Description": "Frissített adatmegőrzési szabályzatok és fokozott biztonsági intézkedések",
-      "v20": "2.0 verzió - 2024. szeptember",
-      "v20Description": "CCPA megfelelés hozzáadása és javított cookie kezelés",
-      "v15": "1.5 verzió - 2024. május",
-      "v15Description": "Fokozott GDPR megfelelés és felhasználói jogok tisztázása"
-    },
-    "dpoDescription": "Adatvédelmi tisztviselőnk rendelkezésre áll, hogy segítsen bármilyen adatvédelemmel kapcsolatos kérdésben vagy aggodalomban.",
-    "contactDetails": {
-      "email": "E-mail: privacy@meinlsonic.com",
-      "phone": "Telefon: +1 (555) 123-4570",
-      "mail": "Levél: Adatvédelmi tisztviselő, 123 Sound Street, Harmony City"
-    },
-    "responseDetails": {
-      "inquiry": "72 órán belül válaszolunk az adatvédelmi megkeresésekre",
-      "requests": "Adatkérések 30 napon belül feldolgozva",
-      "emergency": "Sürgős adatvédelmi ügyek: Azonnali válasz"
-    }
+    "documentTitle": "Jogi dokumentumok",
+    "lastUpdated": "Utolsó frissítés: 2025. szeptember",
+    "description": "Töltse le a jogi dokumentumokat a kívánt nyelven.",
+    "aszf": "Általános Szerződési Feltételek (ÁSZF)",
+    "complaint": "Reklamációs tájékoztató",
+    "download": "Letöltés DOCX"
   },
   "shipping": {
     "title": "Szállítási információk",
@@ -282,7 +259,9 @@
     "login": "Bejelentkezés"
   },
   "common": {
-    "close": "Bezárás"
+    "close": "Bezárás",
+    "cancel": "Mégsem",
+    "delete": "Törlés"
   },
 
   "notFound": {
@@ -294,5 +273,50 @@
     "title": "Fizetés sikeres",
     "message": "Köszönjük a vásárlást! A fizetés sikeresen feldolgozva.",
     "goHome": "Vissza a főoldalra"
-}
-}
+  },
+  "myAccount": {
+    "title": "Fiókom",
+    "name": "Név",
+    "email": "E-mail",
+    "username": "Felhasználónév",
+    "loading": "Felhasználói információk betöltése..."
+  },
+  "myOrders": {
+    "title": "Rendeléseim",
+    "refresh": "Rendelések frissítése",
+    "orderId": "Rendelés azonosító",
+    "date": "Dátum",
+    "status": "Állapot",
+    "statuses": {
+      "pending": "Függőben",
+      "processing": "Feldolgozás alatt",
+      "completed": "Teljesítve",
+      "cancelled": "Törölve",
+      "refunded": "Visszatérítve"
+    },
+    "total": "Összeg",
+    "items": "Tételek",
+    "actions": "Műveletek",
+    "view": "Megtekintés",
+    "noOrders": "Nem található rendelés.",
+    "detailsTitle": "Rendelés részletei",
+    "deleteConfirmTitle": "Biztosan törölni szeretné?",
+    "deleteConfirmText": "Valóban törölni szeretné ezt a rendelést?",
+    "deletedTitle": "Törölve!",
+    "deletedText": "A rendelés törölve lett.",
+    "errorTitle": "Hiba",
+    "errorText": "Hiba történt a rendelés törlése során. Kérem, próbáld újra.",
+    "cart.action": {
+      "delete": "Törlés"
+  },
+  "promo": {
+    "title": "Miért válassz minket?",
+    "intro": "Fedezd fel gondosan válogatott, kézzel készített hangszereinket és egyedi alkotásainkat.",
+    "point1": "Minőségi, válogatott hangszerek",
+    "point2": "Szakértői útmutatás és oktatás",
+    "point3": "Egyedi táblázatok és leírások a hangtálakhoz – csak nálunk",
+    "point4": "Gyors, biztonságos szállítás",
+    "outro": "Engedd, hogy a hangok ereje belépjen a mindennapjaidba – válassz most webshopunk kínálatából.",
+    "cta": "Nagykövet megtekintése"
+  }
+}}

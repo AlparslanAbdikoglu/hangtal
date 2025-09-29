@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { getOrdersByUserId, getSingleOrderData, deleteOrderById } from "../lib/api";
 import swal from "sweetalert";
 import { Navbar } from "@/components/Navbar";
@@ -25,6 +26,7 @@ interface MyOrdersProps {
 }
 
 const MyOrders: React.FC<MyOrdersProps> = ({ loggedInUserData, setPageLoading }) => {
+  const { t } = useTranslation();
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [orderItems, setOrderItems] = useState<Order[]>([]);
   const [singleOrderData, setSingleOrderData] = useState<Order | null>(null);
@@ -72,17 +74,17 @@ const MyOrders: React.FC<MyOrdersProps> = ({ loggedInUserData, setPageLoading })
   const deleteSingleOrderData = (orderID: number) => {
     setPageLoading(true);
     swal({
-      title: "Are you sure?",
-      text: "Do you really want to delete this order?",
+      title: t("myOrders.deleteConfirmTitle", "Are you sure?"),
+      text: t("myOrders.deleteConfirmText", "Do you really want to delete this order?"),
       icon: "warning",
       dangerMode: true,
-      buttons: ["Cancel", "Delete"],
+      buttons: [t("common.cancel", "Cancel"), t("common.delete", "Delete")],
     }).then(async (willDelete) => {
       if (willDelete) {
         try {
           await deleteOrderById(orderID);
           await fetchAllOrders();
-          swal("Deleted!", "The order has been deleted.", "success");
+          swal(t("myOrders.deletedTitle", "Deleted!"), t("myOrders.deletedText", "The order has been deleted."), "success");
         } catch (error) {
           console.error(error);
         } finally {
@@ -100,14 +102,14 @@ const MyOrders: React.FC<MyOrdersProps> = ({ loggedInUserData, setPageLoading })
 
       <main className="flex-grow">
         <div className="max-w-6xl mx-auto p-6">
-          <h1 className="text-3xl font-bold mb-6">My Orders</h1>
+          <h1 className="text-3xl font-bold mb-6">{t("myOrders.title", "My Orders")}</h1>
 
           <div className="flex justify-end mb-6">
             <button
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition"
               onClick={handleRefreshOrders}
             >
-              Refresh Orders
+              {t("myOrders.refresh", "Refresh Orders")}
             </button>
           </div>
 
@@ -117,12 +119,12 @@ const MyOrders: React.FC<MyOrdersProps> = ({ loggedInUserData, setPageLoading })
                 <table className="min-w-full bg-white border border-gray-200 rounded">
                   <thead className="bg-gray-100">
                     <tr>
-                      <th className="py-3 px-6 text-left text-sm font-semibold">Order ID</th>
-                      <th className="py-3 px-6 text-left text-sm font-semibold">Date</th>
-                      <th className="py-3 px-6 text-left text-sm font-semibold">Status</th>
-                      <th className="py-3 px-6 text-left text-sm font-semibold">Total</th>
-                      <th className="py-3 px-6 text-left text-sm font-semibold">Items</th>
-                      <th className="py-3 px-6 text-left text-sm font-semibold">Actions</th>
+                      <th className="py-3 px-6 text-left text-sm font-semibold">{t("myOrders.orderId", "Order ID")}</th>
+                      <th className="py-3 px-6 text-left text-sm font-semibold">{t("myOrders.date", "Date")}</th>
+                      <th className="py-3 px-6 text-left text-sm font-semibold">{t("myOrders.status", "Status")}</th>
+                      <th className="py-3 px-6 text-left text-sm font-semibold">{t("myOrders.total", "Total")}</th>
+                      <th className="py-3 px-6 text-left text-sm font-semibold">{t("myOrders.items", "Items")}</th>
+                      <th className="py-3 px-6 text-left text-sm font-semibold">{t("myOrders.actions", "Actions")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
@@ -130,7 +132,7 @@ const MyOrders: React.FC<MyOrdersProps> = ({ loggedInUserData, setPageLoading })
                       <tr key={order.id}>
                         <td className="py-3 px-6">{order.id}</td>
                         <td className="py-3 px-6">{new Date(order.date_created).toLocaleDateString()}</td>
-                        <td className="py-3 px-6 capitalize">{order.status}</td>
+                        <td className="py-3 px-6 capitalize">{t(`myOrders.statuses.${order.status}`, order.status)}</td>
                         <td className="py-3 px-6">{order.currency_symbol} {order.total}</td>
                         <td className="py-3 px-6">
                           <ul className="list-disc pl-5">
@@ -144,14 +146,14 @@ const MyOrders: React.FC<MyOrdersProps> = ({ loggedInUserData, setPageLoading })
                             className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded mr-2"
                             onClick={() => getSingleOrderInformation(order.id)}
                           >
-                            View
+                            {t("myOrders.view", "View")}
                           </button>
                           {order.status === "completed" && (
                             <button
                               className="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded"
                               onClick={() => deleteSingleOrderData(order.id)}
                             >
-                              Delete
+                              {t("common.delete", "Delete")}
                             </button>
                           )}
                         </td>
@@ -161,7 +163,7 @@ const MyOrders: React.FC<MyOrdersProps> = ({ loggedInUserData, setPageLoading })
                 </table>
               </div>
             ) : (
-              <p className="text-center text-gray-700 text-lg">No orders found.</p>
+              <p className="text-center text-gray-700 text-lg">{t("myOrders.noOrders", "No orders found.")}</p>
             )}
           </div>
 
@@ -176,21 +178,21 @@ const MyOrders: React.FC<MyOrdersProps> = ({ loggedInUserData, setPageLoading })
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex justify-between items-center border-b px-6 py-4">
-                  <h2 className="text-xl font-semibold">Order Details</h2>
+                  <h2 className="text-xl font-semibold">{t("myOrders.detailsTitle", "Order Details")}</h2>
                   <button
                     className="text-gray-600 hover:text-gray-900"
                     onClick={() => setShowDetailsModal(false)}
-                    aria-label="Close modal"
+                    aria-label={t("common.close", "Close modal")}
                   >
                     &#x2715;
                   </button>
                 </div>
                 <div className="px-6 py-4">
-                  <p><strong>Order ID:</strong> {singleOrderData.id}</p>
-                  <p><strong>Date:</strong> {new Date(singleOrderData.date_created).toLocaleDateString()}</p>
-                  <p><strong>Status:</strong> {singleOrderData.status}</p>
-                  <p><strong>Total:</strong> {singleOrderData.currency_symbol}{singleOrderData.total}</p>
-                  <p><strong>Items:</strong></p>
+                  <p><strong>{t("myOrders.orderId", "Order ID")}:</strong> {singleOrderData.id}</p>
+                  <p><strong>{t("myOrders.date", "Date")}:</strong> {new Date(singleOrderData.date_created).toLocaleDateString()}</p>
+                  <p><strong>{t("myOrders.status", "Status")}:</strong> {t(`myOrders.statuses.${singleOrderData.status}`, singleOrderData.status)}</p>
+                  <p><strong>{t("myOrders.total", "Total")}:</strong> {singleOrderData.currency_symbol}{singleOrderData.total}</p>
+                  <p><strong>{t("myOrders.items", "Items")}:</strong></p>
                   <ul className="list-disc pl-6">
                     {singleOrderData.line_items.map((item) => (
                       <li key={item.id}>{item.name} ({item.quantity})</li>
@@ -202,7 +204,7 @@ const MyOrders: React.FC<MyOrdersProps> = ({ loggedInUserData, setPageLoading })
                     className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded"
                     onClick={() => setShowDetailsModal(false)}
                   >
-                    Close
+                    {t("common.close", "Close")}
                   </button>
                 </div>
               </div>

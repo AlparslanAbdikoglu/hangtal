@@ -1,19 +1,24 @@
-
 {
+  "site": "Zvuková akadémia",
   "navbar": {
     "home": "Domov",
     "products": "Produkty",
     "about": "O nás",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "myAccount": "Môj účet",
+    "myOrders": "Moje objednávky",
+    "logout": "Odhlásiť sa",
+    "loginSignup": "Prihlásiť / Registrovať"
   },
   "hero": {
-    "title": "Objavte liečivú silu zvuku",
-    "subtitle": "Transformujte svoju myseľ, telo a ducha s našou starostlivo vyskladanou kolekciou zvukových liečivých nástrojov.",
-    "description": "Zažite transformačnú silu zvuku s našou jedinečnou kolekciou nástrojov navrhnutých pre relaxáciu, sústredenosť a pohodu.",
-    "imageAlt": "Zvukové liečivé nástroje"
+    "title": "Objavte silu zvuku vo vašom každodennom živote",
+    "subtitle": "Preskúmajte špeciálny svet spievajúcich mís, nástrojov a vibračnej terapie.",
+    "description": "V Zvukovej akadémii veríme, že vibrácia zvuku dokáže vytvoriť rovnováhu v tele aj duši. Starostlivo vybrané himalájske spievajúce misy, Meinl Sonic Energy nástroje a jedinečné doplnky na vás čakajú, sprevádzané odbornými znalosťami a úprimným vedením.",
+    "imageAlt": "Nástroje zvukovej terapie"
   },
   "categories": {
     "title": "Kategórie",
+    "all": "Všetko",
     "handpans": "Handpany",
     "steelTongueDrums": "Oceľové jazykové bubny",
     "kalimbas": "Kalimby",
@@ -22,8 +27,8 @@
     "singingBowls": "Spievajúce misy"
   },
   "products": {
-    "title": "Zvukové liečivé nástroje",
-    "subtitle": "Objavte našu starostlivo vyskladanú kolekciu prémiových zvukových liečivých nástrojov. Každý kus je vytvorený na to, aby priniesol harmóniu, pokoj a terapeutické vibrácie do vášho života.",
+    "title": "Nástroje zvukovej terapie",
+    "subtitle": "Objavte našu starostlivo vybranú kolekciu prémiových nástrojov zvukovej terapie. Každý kus prináša harmóniu, pokoj a liečivé vibrácie do vášho života.",
     "featured": "Odporúčané produkty",
     "search": "Hľadať nástroje...",
     "filters": {
@@ -40,123 +45,120 @@
     "showing": "Zobrazuje sa {{count}} z {{total}} produktov",
     "clearFilters": "Vymazať všetky filtre",
     "viewAll": "Zobraziť všetky produkty",
-    "noResults": "Nenašli sa žiadne nástroje",
-    "noResultsText": "Skúste upraviť svoje filtre alebo vyhľadávacie výrazy na nájdenie dokonalého nástroja.",
-    "available": "Okamžite dostupné"
+    "noResults": "Nenašli sa žiadne produkty (404).",
+    "noResultsText": "Skúste upraviť filtre alebo vyhľadávacie výrazy na nájdenie dokonalého nástroja.",
+    "available": "Okamžite dostupné",
+    "detail": {
+      "salePrice": "Akciová cena",
+      "regularPrice": "Bežná cena",
+      "variant": {
+        "Color": "Farba",
+        "Size": "Veľkosť"
+      },
+      "variantOption": {
+        "Color": {
+          "Red": "Červená",
+          "Blue": "Modrá"
+        }
+      }
+    },
+    "view": {
+      "grid": "Mriežka",
+      "list": "Zoznam",
+      "discount": "ZĽAVA",
+      "description": "Popis",
+      "additionalInfo": "Dodatočné informácie",
+      "shortDescription": "Krátky popis",
+      "attributes": "Atribúty",
+      "freeShipping": "Doprava zdarma",
+      "guarantee": "Záruka spokojnosti",
+      "easyReturns": "Jednoduché vrátenie"
+    }
+  },
+  "checkout": {
+    "title": "Pokladňa",
+    "fields": {
+      "first_name": "Meno",
+      "last_name": "Priezvisko",
+      "address_1": "Adresa",
+      "city": "Mesto",
+      "state": "Štát / Okres",
+      "postcode": "PSČ",
+      "country": "Krajina",
+      "email": "E-mail",
+      "phone": "Telefón"
+    },
+    "cartSummary": "Súhrn košíka",
+    "cart": {
+      "image": "Obrázok",
+      "product": "Produkt",
+      "unitPrice": "Jednotková cena",
+      "quantity": "Množstvo"
+    },
+    "total": "Celkom",
+    "payButton": "Zaplaťte cez Stripe",
+    "redirecting": "Presmerovanie na platbu Stripe...",
+    "emptyCart": "Váš košík je prázdny.",
+    "stripeFailed": "Vytvorenie platby Stripe zlyhalo."
   },
   "cart": {
     "title": "Nákupný košík",
-    "items": "{{count}} položiek",
-    "empty": "Váš košík je prázdny",
-    "clearAll": "Vymazať všetko",
-    "total": "Celkom: €{{amount}}",
+    "emptyMessage": "Váš košík je prázdny.",
+    "image": "Obrázok",
+    "product": "Produkt",
+    "unitPrice": "Jednotková cena",
+    "quantity": "Množstvo",
+    "action": "Akcia",
+    "noItems": "Žiadne položky v košíku.",
+    "remove": "Odstrániť",
+    "total": "Celkom",
     "checkout": "Pokračovať k pokladni",
+    "processing": "Spracováva sa...",
+    "items": "{{count}} položiek",
+    "clearAll": "Vymazať všetko",
     "addToCart": "Pridať do košíka",
     "addedToCart": "Pridané do košíka",
-    "addedDescription": "{{title}} bol pridaný do vášho košíka."
+    "addedDescription": "{{title}} bol pridaný do vášho košíka.",
+    "removeConfirm": "Naozaj chcete túto položku odstrániť?",
+    "removed": "Produkt bol odstránený z košíka!"
   },
   "about": {
-    "title": "O Marcusovi Weberovi",
-    "intro1": "Marcus Weber sa venuje prinášaniu liečivej sily zvuku každému. So skúsenosťami so zvukovou terapiou vyberá nástroje, ktoré inšpirujú relaxáciu a pohodu.",
-    "intro2": "Naším poslaním je pomôcť vám objaviť transformačné účinky zvuku, či už ste začiatočník alebo skúsený praktik.",
-    "imageAlt": "Portrét Marcusa Webera",
-    "mission": "Naše poslanie",
-    "missionText": "Snažíme sa poskytovať vysokokvalitné zvukové liečivé nástroje a zdroje na podporu vašej cesty k rovnováhe a harmónii.",
+    "title": "Adrienn Pál",
+    "intro1": "Adrienn Pál sa venuje tomu, aby liečivá sila zvuku bola dostupná pre každého. Vitajte v e-shope Zvukovej akadémie! Mojím cieľom je sprístupniť liečivú, harmonizujúcu silu zvukov a vibrácií všetkým.",
+    "intro2": "Spievajúce misy, gongy, ladičky a špeciálne nástroje dostupné tu slúžia rovnováhe tela a duše – či už na relaxáciu, meditáciu, terapiu alebo jednoducho na každodennú vnútornú harmóniu.\nKu každému nástroju dostanete odborné rady, podrobné popisy a praktické vedenie, ak si želáte. O nástrojoch sa môžete dozvedieť viac a cvičiť na mojich školeniach – verím, že zvuk nielen znie, ale aj učí, lieči a spája.",
+    "imageAlt": "Portrét Adrienn Pál",
+    "mission": "Prečo si vybrať nás?",
+    "missionText": "Starostlivo vybrané, prémiové nástroje\nJedinečné popisy spievajúcich mís (frekvencia, zvuk, spojenie s čakrou) – špeciálna služba len u nás\nOdborné vedenie a vzdelávacie zázemie\nRýchle, bezpečné doručenie.",
     "faq": "Často kladené otázky",
     "faqItems": {
-      "soundHealing": "Čo je zvukové liečenie?",
+      "soundHealing": "Čo je zvuková terapia?",
       "chooseInstrument": "Ako si vybrať správny nástroj?",
       "workshops": "Ponúkate workshopy?",
       "benefits": "Aké sú výhody zvukovej terapie?"
     },
     "faqAnswers": {
-      "soundHealing": "Zvukové liečenie je prax, ktorá používa vibrácie z nástrojov na podporu fyzickej a emocionálnej pohody.",
-      "chooseInstrument": "Zvážte svoj zámer a osobné preferencie. Radi vám pomôžeme nájsť dokonalý nástroj.",
-      "workshops": "Áno, ponúkame workshopy pre všetky úrovne. Pozrite si našu stránku udalostí pre nadchádzajúce relácie.",
-      "benefits": "Zvuková terapia môže pomôcť znížiť stres, zlepšiť sústredenosť a podporiť celkové zdravie."
+      "soundHealing": "Zvuková terapia je metóda, ktorá využíva vibrácie nástrojov na podporu fyzickej a duševnej pohody.",
+      "chooseInstrument": "Dôležitý je zámer a osobné preferencie. Radi vám pomôžeme nájsť dokonalý nástroj.",
+      "workshops": "Áno, ponúkame workshopy pre všetky úrovne. Pozrite si naše podujatia pre podrobnosti.",
+      "benefits": "Zvuková terapia môže pomôcť znížiť stres, zlepšiť koncentráciu a podporiť zdravie."
     }
   },
   "contact": {
-    "title": "Kontaktujte nás",
-    "subtitle": "Máte otázky o našich zvukových liečivých nástrojoch? Radi by sme o vás počuli. Pošlite nám e-mail a odpovieme čo najskôr.",
+    "title": "Kontakt",
+    "subtitle": "Máte otázky o našich nástrojoch zvukovej terapie? Tešíme sa na vašu správu. Pošlite nám e-mail a čoskoro odpovieme.",
     "infoTitle": "Kontaktné informácie",
     "formTitle": "Poslať e-mail",
-    "emailPrompt": "Kliknite na tlačidlo nižšie a pošlite nám e-mail. Ozveme sa vám čo najskôr.",
+    "emailPrompt": "Kliknite nižšie a pošlite nám e-mail. Čoskoro odpovieme.",
     "sendEmail": "Poslať e-mail"
   },
   "privacy": {
     "title": "Zásady ochrany osobných údajov",
-    "subtitle": "Všeobecné obchodné podmienky",
-    "documentTitle": "Dokument zásad ochrany osobných údajov",
-    "lastUpdated": "Posledná aktualizácia: december 2024 | Verzia 2.1",
-    "description": "Naše komplexné zásady ochrany osobných údajov objasňujú, ako MEINL Sonic Energy zhromažďuje, používa a chráni vaše osobné informácie. Sme odhodlaní udržiavať najvyššie štandardy ochrany súkromia a transparentnosti.",
-    "viewPDF": "Zobraziť zásady ochrany osobných údajov (PDF)",
-    "downloadPDF": "Stiahnuť PDF",
-    "whatsCovered": "Čo je pokryté",
-    "quickSummary": "Rýchle zhrnutie",
-    "keyHighlights": "Kľúčové body ochrany súkromia",
-    "dataCollection": "Zhromažďovanie údajov",
-    "dataUsage": "Používanie údajov",
-    "yourRights": "Vaše práva",
-    "policyUpdates": "Aktualizácie zásad",
-    "privacyQuestions": "Máte otázky o súkromí?",
-    "contactInfo": "Kontaktné informácie",
-    "responseTime": "Čas odpovede",
-    "coveredItems": {
-      "practices": "Praktiky zhromažďovania a používania údajov",
-      "cookies": "Zásady súborov cookie a sledovacie technológie",
-      "thirdParty": "Integrácie tretích strán a partnerstvá",
-      "rights": "Vaše práva a možnosti týkajúce sa vašich údajov",
-      "transfers": "Medzinárodné prenosy údajov",
-      "security": "Bezpečnostné opatrenia a ochrana údajov",
-      "contact": "Kontaktné informácie pre otázky súkromia"
-    },
-    "summaryItems": {
-      "necessary": "Zhromažďujeme len potrebné informácie",
-      "noSelling": "Vaše údaje nikdy nepredávame tretím stranám",
-      "deletion": "Môžete kedykoľvek požiadať o vymazanie údajov",
-      "encryption": "Všetky údaje sú šifrované a bezpečne uložené",
-      "compliant": "V súlade s GDPR a CCPA",
-      "audits": "Pravidelné bezpečnostné audity a aktualizácie",
-      "transparent": "Transparentná komunikácia o zmenách"
-    },
-    "collectionItems": {
-      "contact": "Kontaktné informácie",
-      "orderHistory": "História objednávok",
-      "websiteUsage": "Údaje o používaní webových stránok",
-      "payment": "Platobné informácie (bezpečne spracovávané)"
-    },
-    "usageItems": {
-      "orders": "Spracovanie objednávok a platieb",
-      "support": "Zákaznícka podpora a komunikácia",
-      "improvement": "Zlepšovanie našich produktov a služieb",
-      "compliance": "Právne dodržiavanie a bezpečnosť"
-    },
-    "rightsItems": {
-      "access": "Prístup k vašim osobným údajom",
-      "correct": "Oprava nesprávnych informácií",
-      "delete": "Žiadosť o vymazanie údajov",
-      "optOut": "Odhlásenie z marketingovej komunikácie"
-    },
-    "updates": {
-      "v21": "Verzia 2.1 - december 2024",
-      "v21Description": "Aktualizované zásady uchovávania údajov a vylepšené bezpečnostné opatrenia",
-      "v20": "Verzia 2.0 - september 2024",
-      "v20Description": "Pridaná CCPA zhoda a vylepšené spravovanie súborov cookie",
-      "v15": "Verzia 1.5 - máj 2024",
-      "v15Description": "Vylepšená GDPR zhoda a objasnenie práv používateľov"
-    },
-    "dpoDescription": "Náš úradník pre ochranu údajov je k dispozícii na pomoc s akýmikoľvek otázkami alebo obavami súvisiacimi so súkromím.",
-    "contactDetails": {
-      "email": "E-mail: privacy@meinlsonic.com",
-      "phone": "Telefón: +1 (555) 123-4570",
-      "mail": "Pošta: Úradník pre ochranu údajov, 123 Sound Street, Harmony City"
-    },
-    "responseDetails": {
-      "inquiry": "Na otázky súkromia odpovedáme do 72 hodín",
-      "requests": "Žiadosti o údaje spracované do 30 dní",
-      "emergency": "Núdzové otázky súkromia: Okamžitá odpoveď"
-    }
+    "documentTitle": "Právne dokumenty",
+    "lastUpdated": "Posledná aktualizácia: september 2025",
+    "description": "Stiahnite si právne dokumenty vo vašom preferovanom jazyku.",
+    "aszf": "Všeobecné obchodné podmienky",
+    "complaint": "Informácie o reklamáciách",
+    "download": "Stiahnuť DOCX"
   },
   "shipping": {
     "title": "Informácie o doprave",
@@ -170,7 +172,7 @@
     "returnsExchanges": "Vrátenie a výmeny",
     "needHelp": "Potrebujete pomoc?",
     "standardFeatures": {
-      "freeShipping": "Bezplatná doprava pri objednávkach nad 100 €",
+      "freeShipping": "Doprava zdarma pri objednávkach nad 100 €",
       "shippingFee": "Poplatok za dopravu 9,99 € pri objednávkach pod 100 €",
       "delivery": "Doručenie do 5-7 pracovných dní",
       "tracking": "Poskytnuté informácie o sledovaní"
@@ -178,15 +180,15 @@
     "expressFeatures": {
       "fee": "Poplatok za expresnú dopravu 19,99 €",
       "delivery": "Doručenie do 2-3 pracovných dní",
-      "priority": "Prioritné spracovanie a manipulácia",
+      "priority": "Prioritné spracovanie",
       "realTimeTracking": "Aktualizácie sledovania v reálnom čase"
     },
     "zones": {
       "zone1": "Zóna 1: EÚ",
-      "zone1Countries": "Rakúsko, Belgicko, Francúzsko, Nemecko, Holandsko, Luxemburg",
+      "zone1Countries": "Rakúsko, Belgicko, Francúzsko, Nemecko, Holandsko, Luxembursko",
       "zone1Time": "3-5 pracovných dní",
       "zone2": "Zóna 2: Rozšírená EÚ",
-      "zone2Countries": "Taliansko, Španielsko, Portugalsko, Poľsko, Česká republika, Slovensko, Maďarsko",
+      "zone2Countries": "Taliansko, Španielsko, Portugalsko, Poľsko, Česko, Slovensko, Maďarsko",
       "zone2Time": "5-7 pracovných dní",
       "zone3": "Zóna 3: Medzinárodné",
       "zone3Countries": "Spojené kráľovstvo, Švajčiarsko, Nórsko, USA, Kanada",
@@ -196,8 +198,8 @@
       "securePackaging": "Bezpečné balenie",
       "wrapping": "Každý nástroj je starostlivo zabalený do ochranného materiálu",
       "foam": "Vlastné penové vložky pre krehké predmety",
-      "boxes": "Pevné kartónové krabice navrhnuté pre hudobné nástroje",
-      "labels": "Štítky pre krehké manipulovanie na všetkých balíkoch",
+      "boxes": "Pevné krabice pre hudobné nástroje",
+      "labels": "Štítky na krehké balíky",
       "processingTime": "Čas spracovania",
       "processing": "Objednávky spracované do 1-2 pracovných dní",
       "quality": "Kontrola kvality pred odoslaním",
@@ -205,49 +207,110 @@
       "custom": "Špeciálne spracovanie pre vlastné objednávky"
     },
     "protection": {
-      "insurance": "Poistné krytie",
-      "insuranceDescription": "Všetky zásielky sú automaticky poistené až do ich plnej hodnoty bez dodatočných nákladov pre vás.",
-      "replacement": "Úplná náhrada za poškodené predmety",
+      "insurance": "Poistenie",
+      "insuranceDescription": "Všetky zásielky sú poistené do plnej hodnoty bez ďalších poplatkov.",
+      "replacement": "Úplná náhrada za poškodené položky",
       "coverage": "Krytie pre stratené balíky",
-      "claims": "Rýchle spracovanie nárokov",
+      "claims": "Rýchle vybavenie reklamácií",
       "guarantee": "Záruka doručenia",
       "guaranteeDescription": "Garantujeme bezpečné doručenie alebo vrátenie peňazí.",
-      "signature": "Podpis potrebný pre vysoko hodnotné predmety",
-      "photo": "Fotografický dôkaz doručenia",
-      "support": "Zákaznícka podpora pre problémy s doručením"
+      "signature": "Podpis potrebný pre hodnotné položky",
+      "photo": "Fotodôkaz doručenia",
+      "support": "Zákaznícka podpora pri problémoch s doručením"
     },
     "returns": {
-      "description": "Chceme, aby ste boli úplne spokojní s vašou kúpou. Ak nie ste spokojní s vaším zvukovým liečivým nástrojom, ponúkame:",
+      "description": "Chceme, aby ste boli s nákupom spokojní. Ak nie ste spokojní s nástrojom zvukovej terapie, ponúkame:",
       "returnPolicy": "Zásady vrátenia",
-      "window": "30-dňové okno vrátenia",
-      "condition": "Predmety musia byť v pôvodnom stave",
-      "freeReturn": "Bezplatné vrátenie dopravy pre chybné predmety",
+      "window": "30-dňová lehota na vrátenie",
+      "condition": "Položky musia byť v pôvodnom stave",
+      "freeReturn": "Bezplatné vrátenie pre chybné položky",
       "refund": "Úplné vrátenie peňazí po kontrole",
       "exchangeProcess": "Proces výmeny",
       "authorization": "Kontaktujte zákaznícky servis pre autorizáciu",
-      "label": "Získajte predplatenú etiketu na vrátenie",
-      "quickProcessing": "Rýchle spracovanie výmen",
-      "priorityShipping": "Prioritná doprava pre náhradné predmety"
+      "label": "Dostanete predplatený štítok na vrátenie",
+      "quickProcessing": "Rýchle vybavenie výmen",
+      "priorityShipping": "Prioritná doprava pre náhradné položky"
     },
     "help": {
-      "description": "Máte otázky o doprave alebo potrebujete sledovať svoju objednávku?",
+      "description": "Máte otázky o doprave alebo chcete sledovať svoju objednávku?",
       "customerService": "Zákaznícky servis",
       "email": "E-mail: shipping@meinlsonic.com",
       "phone": "Telefón: +1 (555) 123-4567",
-      "businessHours": "Pracovné hodiny",
-      "weekdays": "Pondelok - Piatok: 9:00 - 18:00 CET",
-      "saturday": "Sobota: 10:00 - 16:00 CET"
+      "businessHours": "Otváracie hodiny",
+      "weekdays": "Pondelok - Piatok: 9:00 - 18:00",
+      "saturday": "Sobota: 10:00 - 16:00"
     }
   },
   "footer": {
     "aboutTitle": "O nás",
-    "aboutText": " zvukovaakademia ponúka vysokokvalitné nástroje zvukovej terapie pre meditáciu, relaxáciu a zvukové liečenie.",
+    "aboutText": "Zvuková akadémia ponúka kvalitné nástroje zvukovej terapie na meditáciu, relaxáciu a liečenie zvukom.",
     "quickLinks": "Rýchle odkazy",
     "shipping": "Informácie o doprave",
     "privacy": "Zásady ochrany osobných údajov",
     "contactTitle": "Kontakt",
     "email": "E-mail",
-    "copyright": "© 2025 zvukovaakademia. Všetky práva vyhradené.",
+    "copyright": "© 2025 Zvuková akadémia. Všetky práva vyhradené.",
     "followUs": "Sledujte nás"
+  },
+  "auth": {
+    "loginRequired": "Vyžaduje sa prihlásenie",
+    "pleaseLoginToAddToCart": "Prosím, prihláste sa, aby ste mohli pridať tento produkt do košíka.",
+    "login": "Prihlásiť sa"
+  },
+  "common": {
+    "close": "Zavrieť",
+    "cancel": "Zrušiť",
+    "delete": "Vymazať"
+  },
+  "notFound": {
+    "title": "Stránka nenájdená",
+    "message": "Stránka, ktorú hľadáte, neexistuje.",
+    "goHome": "Späť na domov"
+  },
+  "paymentSuccess": {
+    "title": "Platba úspešná",
+    "message": "Ďakujeme za váš nákup! Vaša platba bola úspešne spracovaná.",
+    "goHome": "Späť na domov"
+  },
+  "myAccount": {
+    "title": "Môj účet",
+    "name": "Meno",
+    "email": "E-mail",
+    "username": "Používateľské meno",
+    "loading": "Načítavajú sa informácie o používateľovi..."
+  },
+  "myOrders": {
+    "title": "Moje objednávky",
+    "refresh": "Obnoviť objednávky",
+    "orderId": "ID objednávky",
+    "date": "Dátum",
+    "status": "Stav",
+    "statuses": {
+      "pending": "Čaká na spracovanie",
+      "processing": "Spracováva sa",
+      "completed": "Dokončené",
+      "cancelled": "Zrušené",
+      "refunded": "Vrátené"
+    },
+    "total": "Celkom",
+    "items": "Položky",
+    "actions": "Akcie",
+    "view": "Zobraziť",
+    "noOrders": "Neboli nájdené žiadne objednávky.",
+    "detailsTitle": "Detaily objednávky",
+    "deleteConfirmTitle": "Naozaj chcete vymazať?",
+    "deleteConfirmText": "Naozaj chcete vymazať túto objednávku?",
+    "deletedTitle": "Vymazané!",
+    "deletedText": "Objednávka bola vymazaná."
+  },
+  "promo": {
+    "title": "Prečo si vybrať nás?",
+    "intro": "Objavte naše starostlivo vybrané, ručne vyrábané nástroje a jedinečné výtvory.",
+    "point1": "Kvalitné, vybrané nástroje",
+    "point2": "Odborné vedenie a vzdelávanie",
+    "point3": "Jedinečné tabuľky a popisy k spievajúcim mísam – iba u nás",
+    "point4": "Rýchle, bezpečné doručenie",
+    "outro": "Nechajte silu zvuku vstúpiť do vášho každodenného života – vyberte si z nášho e-shopu už teraz.",
+    "cta": "Zobraziť ambasádora"
   }
 }

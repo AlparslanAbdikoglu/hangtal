@@ -38,7 +38,7 @@ export const Navbar = () => {
           {/* Logo */}
         {/* Logo */}
 <div className="text-xl font-bold text-primary cursor-pointer" onClick={() => navigate('/')}>
-  {t("siteTitle", "SoundAcademy")}
+  {t("site", "SoundAcademy")}
 </div>
     
 

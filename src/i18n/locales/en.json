@@ -1,60 +1,53 @@
 {
+  "site": "SoundAcademy",
   "navbar": {
-    "siteTitle": "SoundAcademy",
     "home": "Home",
     "products": "Products",
     "about": "About",
     "contact": "Contact",
     "myAccount": "My Account",
-    "myOrders": "My Orders"
+    "myOrders": "My Orders",
+    "logout": "Logout",
+    "loginSignup": "Login / Signup"
   },
   "hero": {
-    "title": "Discover the Healing Power of Sound",
-    "subtitle": "Transform your mind, body, and spirit with our carefully curated collection of sound healing instruments.",
-    "description": "Experience the transformative power of sound with our unique selection of instruments designed for relaxation, focus, and well-being.",
-    "imageAlt": "Sound healing instruments"
+    "title": "Discover the Power of Sound in Your Everyday Life",
+    "subtitle": "Explore the special world of singing bowls, instruments, and vibrational therapy tools.",
+    "description": "At SoundAcademy, we believe that the vibration of sound can create balance in body and soul. Carefully selected Himalayan singing bowls, Meinl Sonic Energy instruments, and unique accessories await you, each accompanied by professional knowledge and heartfelt guidance.",
+    "imageAlt": "Sound therapy instruments"
   },
   "categories": {
     "title": "Categories",
     "all": "All",
-    "steelTongueDrums": "Steel Tongue Drums",
     "handpans": "Handpans",
+    "steelTongueDrums": "Steel Tongue Drums",
     "kalimbas": "Kalimbas",
     "crystalSingingBowls": "Crystal Singing Bowls",
-    "singingBowls": "Singing Bowls",
-    "windChimes": "Wind Chimes"
+    "crystalSingingChalices": "Crystal Singing Chalices",
+    "singingBowls": "Singing Bowls"
   },
   "products": {
     "title": "Sound Healing Instruments",
-    "subtitle": "Discover our carefully curated collection of premium sound healing instruments. Each piece is crafted to bring harmony, peace, and therapeutic vibrations to your life.",
+    "subtitle": "Discover our carefully curated collection of premium sound healing instruments. Each piece brings harmony, peace, and healing vibrations to your life.",
     "featured": "Featured Products",
     "search": "Search instruments...",
     "filters": {
-      "search": "Search products...",
-      "all": "All Categories",
-      "featured": "Featured",
-      "priceLowToHigh": "Price: Low to High",
-      "priceHighToLow": "Price: High to Low",
-      "name": "Name",
+      "all": "All",
       "allPrices": "All Prices",
-      "under100": "Under $100",
-      "100to500": "$100 to $500",
-      "over500": "Over $500",
-      "stockAvailable": "Stock available",
-      "inStock": "In Stock",
-      "outOfStock": "Out of Stock"
-    }
-  },
-  "showing": "Showing {{count}} of {{total}} products",
-  "clearFilters": "Clear All Filters",
-  "viewAll": "View All Products",
-  "noResults": "No items have been found (404).",
+      "under100": "Under €100",
+      "100to500": "€100 - €500",
+      "over500": "Over €500",
+      "featured": "Featured",
+      "priceLowHigh": "Price: Low to High",
+      "priceHighLow": "Price: High to Low",
+      "nameAZ": "Name: A to Z"
+    },
+    "showing": "Showing {{count}} / {{total}} products",
+    "clearFilters": "Clear All Filters",
+    "viewAll": "View All Products",
+    "noResults": "No products found (404).",
     "noResultsText": "Try adjusting your filters or search terms to find the perfect instrument.",
     "available": "Available immediately",
-    "view": {
-      "grid": "Grid",
-      "list": "List"
-    },
     "detail": {
       "salePrice": "Sale Price",
       "regularPrice": "Regular Price",
@@ -68,133 +61,94 @@
           "Blue": "Blue"
         }
       }
+    },
+    "view": {
+      "grid": "Grid",
+      "list": "List",
+      "discount": "DISCOUNT",
+      "description": "Description",
+      "additionalInfo": "Additional Info",
+      "shortDescription": "Short Description",
+      "attributes": "Attributes",
+      "freeShipping": "Free Shipping",
+      "guarantee": "Satisfaction Guarantee",
+      "easyReturns": "Easy Returns"
     }
-  ,
+  },
+  "checkout": {
+    "title": "Checkout",
+    "fields": {
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "address_1": "Address",
+      "city": "City",
+      "state": "State / County",
+      "postcode": "Postal Code",
+      "country": "Country",
+      "email": "Email",
+      "phone": "Phone"
+    },
+    "cartSummary": "Cart Summary",
+    "cart": {
+      "image": "Image",
+      "product": "Product",
+      "unitPrice": "Unit Price",
+      "quantity": "Quantity"
+    },
+    "total": "Total",
+    "payButton": "Pay with Stripe",
+    "redirecting": "Redirecting to Stripe payment...",
+    "emptyCart": "Your cart is empty.",
+    "stripeFailed": "Stripe payment creation failed."
+  },
   "cart": {
     "title": "Shopping Cart",
     "items": "{{count}} items",
     "empty": "Your cart is empty",
     "clearAll": "Clear All",
-
-    "addToCart": "Add to Cart",
-    "addedToCart": "Added to cart",
-    "addedDescription": "{{title}} has been added to your cart.",
-    "emptyMessage": "Your cart is empty.",
-    "noItems": "No items to display.",
-    "image": "Image",
-    "product": "Product",
-    "unitPrice": "Unit Price",
-    "quantity": "Quantity",
-    "action": "Action",
-    "remove": "Remove",
     "total": "Total",
-    "checkout": "Checkout"
+    "checkout": "Proceed to Checkout",
+    "addToCart": "Add to Cart",
+    "addedToCart": "Added to Cart",
+    "addedDescription": "{{title}} has been added to your cart."
   },
   "about": {
-    "title": "About zvukovaakademia",
-    "intro1": "zvukovaakademia is dedicated to bringing the healing power of sound to everyone. With years of experience in sound therapy, he curates instruments that inspire relaxation and well-being.",
-    "intro2": "Our mission is to help you discover the transformative effects of sound, whether you are a beginner or an experienced practitioner.",
-    "imageAlt": "Portrait of zvukovaakademia",
-    "mission": "Our Mission",
-    "missionText": "We strive to provide high-quality sound healing instruments and resources to support your journey towards balance and harmony.",
+    "title": "Adrienn Pál",
+    "intro1": "Adrienn Pál is dedicated to bringing the healing power of sound to everyone. Welcome to the SoundAcademy webshop! My goal is to make the healing, harmonizing power of sounds and vibrations accessible to all.",
+    "intro2": "The singing bowls, gongs, tuning forks, and special instruments available here all serve the balance of body and soul—whether for relaxation, meditation, therapy, or simply creating everyday inner harmony.\nEach instrument comes with expert advice, detailed descriptions, and practical guidance if you wish. You can learn more about the instruments and practice at my trainings—because I believe sound not only resonates, but teaches, heals, and connects.",
+    "imageAlt": "Portrait of Adrienn Pál",
+    "mission": "Why choose us?",
+    "missionText": "Carefully selected, premium quality instruments\nUnique singing bowl descriptions (frequency, sound, chakra connection)—a special service only here\nExpert guidance and educational background\nFast, secure shipping.",
     "faq": "Frequently Asked Questions",
     "faqItems": {
-      "soundHealing": "What is sound healing?",
+      "soundHealing": "What is sound therapy?",
       "chooseInstrument": "How do I choose the right instrument?",
       "workshops": "Do you offer workshops?",
       "benefits": "What are the benefits of sound therapy?"
     },
     "faqAnswers": {
-      "soundHealing": "Sound healing is a practice that uses vibrations from instruments to promote physical and emotional well-being.",
-      "chooseInstrument": "Consider your intention and personal preference. We are happy to guide you in finding the perfect instrument.",
-      "workshops": "Yes, we offer workshops for all levels. Check our events page for upcoming sessions.",
+      "soundHealing": "Sound therapy is a method that uses the vibrations of instruments to promote physical and mental well-being.",
+      "chooseInstrument": "Intention and personal preference are important. We are happy to help you find the perfect instrument.",
+      "workshops": "Yes, we offer workshops for all levels. Check our events for details.",
       "benefits": "Sound therapy can help reduce stress, improve focus, and support overall health."
     }
   },
   "contact": {
-    "title": "Contact Us",
-    "subtitle": "Have questions about our sound healing instruments? We'd love to hear from you. Send us an email and we'll respond as soon as possible.",
+    "title": "Contact",
+    "subtitle": "Do you have questions about our sound therapy instruments? We look forward to your message. Send us an email and we will reply soon.",
     "infoTitle": "Contact Information",
-    "formTitle": "Send an Email",
-    "emailPrompt": "Click the button below to send us an email. We'll get back to you as soon as possible.",
-    "sendEmail": "Send Email",
-    "email": "Email",
-    "phone": "Phone",
-    "address": "Address"
+    "formTitle": "Send Email",
+    "emailPrompt": "Click the button below to send us an email. We will reply soon.",
+    "sendEmail": "Send Email"
   },
   "privacy": {
     "title": "Privacy Policy",
-    "subtitle": "General Terms and Conditions",
-    "documentTitle": "Privacy Policy Document",
-    "lastUpdated": "Last updated: December 2024 | Version 2.1",
-    "description": "Our comprehensive privacy policy outlines how MEINL Sonic Energy collects, uses, and protects your personal information. We are committed to maintaining the highest standards of privacy protection and transparency.",
-    "viewPDF": "View Privacy Policy (PDF)",
-    "downloadPDF": "Download PDF",
-    "whatsCovered": "What's Covered",
-    "quickSummary": "Quick Summary",
-    "keyHighlights": "Key Privacy Highlights",
-    "dataCollection": "Data Collection",
-    "dataUsage": "Data Usage",
-    "yourRights": "Your Rights",
-    "policyUpdates": "Policy Updates",
-    "privacyQuestions": "Have Privacy Questions?",
-    "contactInfo": "Contact Information",
-    "responseTime": "Response Time",
-    "coveredItems": {
-      "practices": "Data collection and usage practices",
-      "cookies": "Cookie policy and tracking technologies",
-      "thirdParty": "Third-party integrations and partnerships",
-      "rights": "Your rights and choices regarding your data",
-      "transfers": "International data transfers",
-      "security": "Security measures and data protection",
-      "contact": "Contact information for privacy inquiries"
-    },
-    "summaryItems": {
-      "necessary": "We only collect necessary information",
-      "noSelling": "Your data is never sold to third parties",
-      "deletion": "You can request data deletion at any time",
-      "encryption": "All data is encrypted and securely stored",
-      "compliant": "GDPR and CCPA compliant",
-      "audits": "Regular security audits and updates",
-      "transparent": "Transparent communication about changes"
-    },
-    "collectionItems": {
-      "contact": "Contact information",
-      "orderHistory": "Order history",
-      "websiteUsage": "Website usage data",
-      "payment": "Payment information (securely processed)"
-    },
-    "usageItems": {
-      "orders": "Processing orders and payments",
-      "support": "Customer support and communication",
-      "improvement": "Improving our products and services",
-      "compliance": "Legal compliance and security"
-    },
-    "rightsItems": {
-      "access": "Access your personal data",
-      "correct": "Correct inaccurate information",
-      "delete": "Request data deletion",
-      "optOut": "Opt-out of marketing communications"
-    },
-    "updates": {
-      "v21": "Version 2.1 - December 2024",
-      "v21Description": "Updated data retention policies and enhanced security measures",
-      "v20": "Version 2.0 - September 2024",
-      "v20Description": "Added CCPA compliance and improved cookie management",
-      "v15": "Version 1.5 - May 2024",
-      "v15Description": "Enhanced GDPR compliance and user rights clarification"
-    },
-    "dpoDescription": "Our Data Protection Officer is available to help with any privacy-related questions or concerns.",
-    "contactDetails": {
-      "email": "Email: privacy@meinlsonic.com",
-      "phone": "Phone: +1 (555) 123-4570",
-      "mail": "Mail: Privacy Officer, 123 Sound Street, Harmony City"
-    },
-    "responseDetails": {
-      "inquiry": "We respond to privacy inquiries within 72 hours",
-      "requests": "Data requests processed within 30 days",
-      "emergency": "Emergency privacy issues: Immediate response"
-    }
+    "documentTitle": "Legal Documents",
+    "lastUpdated": "Last updated: September 2025",
+    "description": "Download legal documents in your preferred language.",
+    "aszf": "General Terms and Conditions",
+    "complaint": "Complaint Information",
+    "download": "Download DOCX"
   },
   "shipping": {
     "title": "Shipping Information",
@@ -255,7 +209,7 @@
       "support": "Customer support for delivery issues"
     },
     "returns": {
-      "description": "We want you to be completely satisfied with your purchase. If you're not happy with your sound healing instrument, we offer:",
+      "description": "We want you to be completely satisfied with your purchase. If you are not happy with your sound therapy instrument, we offer:",
       "returnPolicy": "Return Policy",
       "window": "30-day return window",
       "condition": "Items must be in original condition",
@@ -268,34 +222,35 @@
       "priorityShipping": "Priority shipping for replacement items"
     },
     "help": {
-      "description": "Have questions about shipping or need to track your order?",
+      "description": "Do you have questions about shipping or want to track your order?",
       "customerService": "Customer Service",
       "email": "Email: shipping@meinlsonic.com",
       "phone": "Phone: +1 (555) 123-4567",
       "businessHours": "Business Hours",
-      "weekdays": "Monday - Friday: 9:00 AM - 6:00 PM CET",
-      "saturday": "Saturday: 10:00 AM - 4:00 PM CET"
+      "weekdays": "Monday - Friday: 9:00 - 18:00 CET",
+      "saturday": "Saturday: 10:00 - 16:00 CET"
     }
   },
   "footer": {
     "aboutTitle": "About Us",
-    "aboutText": "zvukovaakademia offers high-quality sound therapy instruments for meditation, relaxation, and sound healing.",
+    "aboutText": "SoundAcademy offers high-quality sound therapy instruments for meditation, relaxation, and sound healing.",
     "quickLinks": "Quick Links",
-    "shipping": "Shipping Info",
+    "shipping": "Shipping Information",
     "privacy": "Privacy Policy",
     "contactTitle": "Contact",
     "email": "Email",
-    "copyright": "© 2025 zvukovaakademia. All rights reserved.",
+    "copyright": "© 2025 SoundAcademy. All rights reserved.",
     "followUs": "Follow Us"
-    
   },
   "auth": {
-    "loginRequired": "Login Required",
+    "loginRequired": "Login required",
     "pleaseLoginToAddToCart": "Please log in to add this product to your cart.",
-    "login": "Log In"
+    "login": "Login"
   },
   "common": {
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel",
+    "delete": "Delete"
   },
   "notFound": {
     "title": "Page Not Found",
@@ -304,6 +259,48 @@
   },
   "paymentSuccess": {
     "title": "Payment Successful",
-    "message": "Thank you for your purchase!"
+    "message": "Thank you for your purchase! Your payment has been processed successfully.",
+    "goHome": "Go to Home"
+  },
+  "myAccount": {
+    "title": "My Account",
+    "name": "Name",
+    "email": "Email",
+    "username": "Username",
+    "loading": "Loading user information..."
+  },
+  "myOrders": {
+    "title": "My Orders",
+    "refresh": "Refresh Orders",
+    "orderId": "Order ID",
+    "date": "Date",
+    "status": "Status",
+    "statuses": {
+      "pending": "Pending",
+      "processing": "Processing",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded"
+    },
+    "total": "Total",
+    "items": "Items",
+    "actions": "Actions",
+    "view": "View",
+    "noOrders": "No orders found.",
+    "detailsTitle": "Order Details",
+    "deleteConfirmTitle": "Are you sure you want to delete?",
+    "deleteConfirmText": "Do you really want to delete this order?",
+    "deletedTitle": "Deleted!",
+    "deletedText": "The order has been deleted."
+  },
+  "promo": {
+    "title": "Why choose us?",
+    "intro": "Discover our carefully selected, handmade instruments and unique creations.",
+    "point1": "Quality, selected instruments",
+    "point2": "Expert guidance and education",
+    "point3": "Unique charts and descriptions with singing bowls – only here",
+    "point4": "Fast, secure shipping",
+    "outro": "Let the power of sound enter your everyday life – choose from our webshop now.",
+    "cta": "View Ambassador"
   }
 }

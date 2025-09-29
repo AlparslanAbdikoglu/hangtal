@@ -13,7 +13,7 @@ export const Hero = () => {
           <p className="text-lg text-secondary-foreground max-w-xl">
             {t("hero.subtitle")}
           </p>
-          <p className="text-base text-muted-foreground max-w-lg">
+          <p className="text-base text-muted-foreground max-w-lg whitespace-pre-line">
             {t("hero.description")}
           </p>
         </div>

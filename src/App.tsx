@@ -49,14 +49,8 @@ function App() {
 
         <Route path="/cart" element={<Cart />} />
 
-        <Route
-          path="/checkout"
-          element={
-            <Checkout
-              loggedInUserData={JSON.stringify(loggedInUserData)}
-              clearCartItem={clearCartItem} cartItems={[]}            />
-          }
-        />
+        <Route path="/checkout" element={<Checkout />} />
+
         <Route
           path="/my-orders"
           element={

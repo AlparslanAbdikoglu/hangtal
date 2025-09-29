@@ -6,6 +6,7 @@ import React, {
   ReactNode,
 } from "react";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 // --- Types ---
 interface Product {
@@ -59,6 +60,7 @@ export const MyStoreProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [cart, setCart] = useState<Product[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loggedInUserData, setLoggedInUserData] = useState<UserData | null>(null);
+  const { t } = useTranslation();
 
   // --- Setters ---
   const setPageLoading = (status: boolean) => setLoader(status);
@@ -112,13 +114,13 @@ export const MyStoreProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   const removeItemsFromCart = (product: Product) => {
-    if (window.confirm("Are you sure want to remove?")) {
+    if (window.confirm(t("cart.removeConfirm", "Are you sure you want to remove this item?"))) {
       const cartFromStorage: Product[] = JSON.parse(localStorage.getItem("cart") || "[]");
       const updatedCart = cartFromStorage.filter((item) => item.id !== product.id);
 
       setCart(updatedCart);
       localStorage.setItem("cart", JSON.stringify(updatedCart));
-      toast.success("Product removed from Cart!");
+      toast.success(t("cart.removed", "Product removed from Cart!"));
     }
   };
 

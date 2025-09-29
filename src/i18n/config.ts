@@ -9,7 +9,7 @@ import sk from './locales/sk.json';
 import de from './locales/de.json';
 
 i18n
-  .use(LanguageDetector)
+  .use(LanguageDetector) // use this if you dont want to forcce a language
   .use(initReactI18next)
   .init({
     resources: {
@@ -18,7 +18,8 @@ i18n
       sk: { translation: sk },
       de: { translation: de },
     },
-    fallbackLng: 'en',
+    lng: "hu", // force
+    fallbackLng: 'hu',
     debug: false,
     interpolation: {
       escapeValue: false,
