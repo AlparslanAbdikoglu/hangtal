@@ -24,7 +24,11 @@
     "kalimbas": "Kalimby",
     "crystalSingingBowls": "Krištáľové spievajúce misy",
     "crystalSingingChalices": "Krištáľové spievajúce kalichy",
-    "singingBowls": "Spievajúce misy"
+    "singingBowls": "Spievajúce misy",
+    "accessorys": "Príslušenstvo",
+    "bowls": "Misy",
+    "gongsTamtams": "Gongy a tamtamy",
+    "stands": "Stojany"
   },
   "products": {
     "title": "Nástroje zvukovej terapie",
@@ -40,7 +44,8 @@
       "featured": "Odporúčané",
       "priceLowHigh": "Cena: Od najnižšej",
       "priceHighLow": "Cena: Od najvyššej",
-      "nameAZ": "Názov: A až Z"
+      "nameAZ": "Názov: A až Z",
+          "stockAvailable": "Skladom"
     },
     "showing": "Zobrazuje sa {{count}} z {{total}} produktov",
     "clearFilters": "Vymazať všetky filtre",

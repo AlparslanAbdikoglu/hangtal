@@ -24,7 +24,11 @@
     "kalimbas": "Kalimbas",
     "crystalSingingBowls": "Crystal Singing Bowls",
     "crystalSingingChalices": "Crystal Singing Chalices",
-    "singingBowls": "Singing Bowls"
+    "singingBowls": "Singing Bowls",
+    "accessorys": "Accessories",
+    "bowls": "Bowls",
+    "gongsTamtams": "Gongs and Tamtams",
+    "stands": "Stands"
   },
   "products": {
     "title": "Sound Healing Instruments",
@@ -40,7 +44,8 @@
       "featured": "Featured",
       "priceLowHigh": "Price: Low to High",
       "priceHighLow": "Price: High to Low",
-      "nameAZ": "Name: A to Z"
+      "nameAZ": "Name: A to Z",
+      "stockAvailable": "Available"
     },
     "showing": "Showing {{count}} / {{total}} products",
     "clearFilters": "Clear All Filters",

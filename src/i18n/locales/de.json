@@ -24,7 +24,11 @@
     "kalimbas": "Kalimbas",
     "crystalSingingBowls": "Kristall-Klangschalen",
     "crystalSingingChalices": "Kristall-Klangkelche",
-    "singingBowls": "Klangschalen"
+    "singingBowls": "Klangschalen",
+    "accessorys": "Zubehör",
+    "bowls": "Schalen",
+    "gongsTamtams": "Gongs und Tamtams",
+    "stands": "Ständer"
   },
   "products": {
     "title": "Klangheilungs-Instrumente",
@@ -40,7 +44,8 @@
       "featured": "Empfohlen",
       "priceLowHigh": "Preis: Niedrig bis Hoch",
       "priceHighLow": "Preis: Hoch bis Niedrig",
-      "nameAZ": "Name: A bis Z"
+      "nameAZ": "Name: A bis Z",
+          "stockAvailable": "Verfügbar"
     },
     "showing": "{{count}} von {{total}} Produkten angezeigt",
     "clearFilters": "Alle Filter löschen",

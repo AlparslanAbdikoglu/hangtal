@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import ProductDetailPage, { Product } from './ProductDetailPage';
+import React, { useEffect, useState } from "react";
+import ProductDetailPage, { Product } from "./ProductDetailPage";
 
 interface WooProductDetailContainerProps {
-  productId?: number;  // Optional numeric ID
-  productSlug?: string; // Optional slug
+  productId?: number;
+  productSlug?: string;
 }
 
-const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({ productId, productSlug }) => {
+const productCache = new Map<number | string, Product>();
+
+const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({
+  productId,
+  productSlug,
+}) => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,16 +27,21 @@ const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({ p
       setError(null);
 
       try {
-        let url = '';
+        // Check cache first
+        const cacheKey = productId ?? productSlug!;
+        if (productCache.has(cacheKey)) {
+          setProduct(productCache.get(cacheKey)!);
+          setLoading(false);
+          return;
+        }
 
+        let url = "";
         if (productId) {
-          // Fetch by numeric ID
-          url = `${apiUrl}/products/${productId}?consumer_key=${consumerKey}&consumer_secret=${consumerSecret}`;
+          url = `${apiUrl}/products/${productId}`;
         } else if (productSlug) {
-          // Fetch by slug (returns array)
-          url = `${apiUrl}/products?slug=${productSlug}&consumer_key=${consumerKey}&consumer_secret=${consumerSecret}`;
+          url = `${apiUrl}/products?slug=${productSlug}`;
         } else {
-          throw new Error('No product ID or slug provided');
+          throw new Error("No product ID or slug provided");
         }
 
         const res = await fetch(url, {
@@ -43,10 +53,8 @@ const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({ p
         }
 
         let data = await res.json();
-
-        // If fetching by slug, pick the first match
         if (Array.isArray(data)) {
-          if (data.length === 0) throw new Error('Product not found');
+          if (data.length === 0) throw new Error("Product not found");
           data = data[0];
         }
 
@@ -62,6 +70,7 @@ const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({ p
           attributes: data.attributes || [],
         };
 
+        productCache.set(cacheKey, productData);
         setProduct(productData);
       } catch (err: any) {
         setError(err.message);
@@ -71,9 +80,19 @@ const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({ p
     };
 
     fetchProduct();
-  }, [productId, productSlug, consumerKey, consumerSecret, apiUrl]);
+  }, [productId, productSlug, apiUrl, auth]);
 
-  if (loading) return <div className="text-center py-10">Loading product...</div>;
+  if (loading) {
+    return (
+      <div className="p-8 animate-pulse space-y-6 max-w-4xl mx-auto">
+        <div className="h-8 w-1/3 bg-muted rounded" />
+        <div className="h-96 bg-muted rounded" />
+        <div className="h-4 w-1/2 bg-muted rounded" />
+        <div className="h-4 w-2/3 bg-muted rounded" />
+      </div>
+    );
+  }
+
   if (error) return <div className="text-center py-10 text-red-600">Error: {error}</div>;
   if (!product) return <div className="text-center py-10">Product not found.</div>;
 

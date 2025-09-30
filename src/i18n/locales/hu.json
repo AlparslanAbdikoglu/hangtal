@@ -19,12 +19,16 @@
   "categories": {
     "title": "Kategóriák",
     "all": "Összes",
-    "handpans": "Hangtál",
-    "steelTongueDrums": "Acél nyelvdob",
-    "kalimbas": "Kalimba",
-    "crystalSingingBowls": "Kristály énektál",
-    "crystalSingingChalices": "Kristály énekserleg",
-    "singingBowls": "Éneklő tál"
+    "handpans": "Handpanek",
+    "steelTongueDrums": "Acél nyelvdobok",
+    "kalimbas": "Kalimbák",
+    "crystalSingingBowls": "Kristály éneklő tálak",
+    "crystalSingingChalices": "Kristály énekserlegek",
+    "singingBowls": "Éneklő tálak",
+    "accessorys": "Kiegészítők",
+    "bowls": "Tálak",
+    "gongsTamtams": "Gongok és tamtamok",
+    "stands": "Állványok"
   },
   "products": {
     "title": "Hanggyógyító hangszerek",
@@ -40,7 +44,8 @@
       "featured": "Kiemelt",
       "priceLowHigh": "Ár: Alacsonyról magasra",
       "priceHighLow": "Ár: Magasról alacsonyra",
-      "nameAZ": "Név: A-tól Z-ig"
+      "nameAZ": "Név: A-tól Z-ig",
+       "stockAvailable": "Készleten"
     },
     "showing": "{{count}} / {{total}} termék megjelenítése",
     "clearFilters": "Összes szűrő törlése",
@@ -318,5 +323,4 @@
     "point4": "Gyors, biztonságos szállítás",
     "outro": "Engedd, hogy a hangok ereje belépjen a mindennapjaidba – válassz most webshopunk kínálatából.",
     "cta": "Nagykövet megtekintése"
-  }
-}}
+  }}}
