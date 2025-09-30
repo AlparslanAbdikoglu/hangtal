@@ -8,6 +8,12 @@ backups/*.sql
 # Ignore vendor directories (dependencies) in specific plugins
 wp-backend/wp-backend/wp-content/plugins/*/vendor/
 wp-backend/wp-backend/wp-content/plugins/*/composer.lock
+wp-content/uploads
+# Ignore WordPress uploads
+wp-backend/wp-backend/wp-content/uploads/
+
+# Ignore temporary or backup files
+wp-backend/wp-backend/wp-content/upgrade-temp-backup/
 
 # Specific exception for the WooCommerce/Stripe plugins listed
 wp-backend/wp-backend/wp-content/plugins/stripe-checkout/composer.lock
