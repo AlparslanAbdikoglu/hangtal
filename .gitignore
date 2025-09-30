@@ -14,6 +14,11 @@ wp-backend/wp-backend/wp-content/uploads/
 
 # Ignore temporary or backup files
 wp-backend/wp-backend/wp-content/upgrade-temp-backup/
+# Ignore all plugins, uploads, and backups
+wp-backend/wp-backend/wp-content/plugins/
+wp-backend/wp-backend/wp-content/uploads/
+wp-backend/wp-backend/wp-content/upgrade-temp-backup/
+
 
 # Specific exception for the WooCommerce/Stripe plugins listed
 wp-backend/wp-backend/wp-content/plugins/stripe-checkout/composer.lock
