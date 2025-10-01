@@ -11,6 +11,12 @@ wp-backend/wp-backend/wp-content/plugins/*/composer.lock
 wp-content/uploads
 # Ignore WordPress uploads
 wp-backend/wp-backend/wp-content/uploads/
+# Ignore all WordPress themes and plugins
+wp-backend/wp-backend/wp-content/*
+
+# Specifically ignore the default theme
+wp-backend/wp-backend/wp-content/themes/twentytwentythree/
+
 
 # Ignore temporary or backup files
 wp-backend/wp-backend/wp-content/upgrade-temp-backup/
