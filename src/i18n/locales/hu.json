@@ -77,7 +77,7 @@
       "attributes": "Tulajdonságok",
       "freeShipping": "Ingyenes szállítás",
       "guarantee": "Elégedettségi garancia",
-      "easyReturns": "Egyszerű visszaküldés"
+      "easyReturns": "Könnyű visszaküldés"
     }
   },
 "checkout": {
@@ -98,7 +98,9 @@
     "image": "Kép",
     "product": "Termék",
     "unitPrice": "Egységár",
-    "quantity": "Mennyiség"
+    "quantity": "Mennyiség",
+    "action": "Művelet",
+    "remove": "Eltávolítás"
   },
   "total": "Összesen",
   "payButton": "Fizetés Stripe-on",

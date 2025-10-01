@@ -193,6 +193,15 @@ const Checkout: React.FC = () => {
                         <td className="p-2">{item.name}</td>
                         <td className="p-2">€{price.toFixed(2)}</td>
                         <td className="p-2">{item.quantity || 1}</td>
+                        <td className="p-2">
+                          <button
+                            type="button"
+                            className="text-red-600 hover:underline"
+                            onClick={() => clearCartItem()}
+                          >
+                            {t("checkout.cart.remove", "Eltávolítás")}
+                          </button>
+                        </td>
                       </tr>
                     );
                   })}

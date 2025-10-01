@@ -270,8 +270,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
                   title={product.name}
                   price={parseFloat(product.price)}
                   image={product.images?.[0]?.src || "/placeholder.jpg"}
-                  hasVideo={product.meta_data?.some((m) => m.key === "has_video" && m.value === "yes")}
-                  hasAudio={product.meta_data?.some((m) => m.key === "has_audio" && m.value === "yes")}
+                
                   available={product.stock_status === "instock"}
                   id={String(product.id)}
                   description={product.short_description || product.description}

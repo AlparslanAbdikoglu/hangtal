@@ -1,11 +1,9 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { registerStoreUser, loginUser, getLoggedInUserData } from "../lib/api";
 import { myStoreHook } from "../MyStoreContext";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
-import {} from "../lib/api.js"
 
 const Auth: React.FC = () => {
   const navigate = useNavigate();
@@ -28,44 +26,10 @@ const Auth: React.FC = () => {
     signup_password: "",
   });
 
+  // --- Handle form changes ---
   const handleOnChangeLoginFormData = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLoginData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleLoginFormSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setPageLoading(true);
-
-    try {
-      const response = await loginUser({
-        username: loginData.login_username,
-        password: loginData.login_password,
-      });
-
-      localStorage.setItem("auth_token", response.token);
-      setUserLoggedInStatus(true);
-
-      const userData = await getLoggedInUserData(response.token);
-      const loggedInUserData = {
-        id: userData.id,
-        name: userData.name,
-        email: response.user_email,
-        username: response.user_nicename,
-      };
-
-      localStorage.setItem("user_data", JSON.stringify(loggedInUserData));
-      setLoggedInUserData(loggedInUserData); // <-- fix here, pass object NOT string
-
-      toast.success("User logged in successfully");
-      setLoginData({ login_username: "", login_password: "" });
-      navigate("/cart");
-    } catch (err) {
-      console.error(err);
-      toast.error("Invalid login details");
-    } finally {
-      setPageLoading(false);
-    }
   };
 
   const handleOnChangeSignUpFormData = (e: ChangeEvent<HTMLInputElement>) => {
@@ -73,28 +37,84 @@ const Auth: React.FC = () => {
     setSignUpData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // --- Register User ---
   const handleSignUpFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setPageLoading(true);
 
     try {
-      await registerStoreUser({
-        name: signUpData.signup_name,
-        username: signUpData.signup_username,
-        email: signUpData.signup_email,
-        password: signUpData.signup_password,
+      const response = await fetch("/wp-json/wc-react/v1/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: signUpData.signup_username,
+          email: signUpData.signup_email,
+          password: signUpData.signup_password,
+          name: signUpData.signup_name,
+        }),
       });
 
-      toast.success("User registered successfully!");
-      setSignUpData({
-        signup_name: "",
-        signup_email: "",
-        signup_username: "",
-        signup_password: "",
-      });
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success("User registered successfully! Please log in.");
+        setSignUpData({
+          signup_name: "",
+          signup_email: "",
+          signup_username: "",
+          signup_password: "",
+        });
+      } else {
+        toast.error(data.message || "Signup failed");
+      }
     } catch (err) {
       console.error(err);
       toast.error("Signup failed");
+    } finally {
+      setPageLoading(false);
+    }
+  };
+
+  // --- Login User ---
+  const handleLoginFormSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setPageLoading(true);
+
+    try {
+      const response = await fetch("/wp-json/wc-react/v1/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: loginData.login_username,
+          password: loginData.login_password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.token) {
+        localStorage.setItem("auth_token", data.token);
+
+        const loggedInUserData = {
+          id: data.user_id,
+          name: data.user_display_name,
+          email: data.user_email,
+          username: data.user_nicename,
+        };
+
+        localStorage.setItem("user_data", JSON.stringify(loggedInUserData));
+        setUserLoggedInStatus(true);
+        setLoggedInUserData(loggedInUserData);
+
+        toast.success("Logged in successfully!");
+        setLoginData({ login_username: "", login_password: "" });
+        navigate("/cart");
+      } else {
+        toast.error(data.message || "Invalid login details");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Login failed");
     } finally {
       setPageLoading(false);
     }
