@@ -75,13 +75,13 @@ const Auth: React.FC = () => {
     }
   };
 
-  // --- Login User ---
+  // --- Login User using JWT plugin endpoint ---
   const handleLoginFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setPageLoading(true);
 
     try {
-      const response = await fetch("/wp-json/wc-react/v1/login", {
+      const response = await fetch("/wp-json/jwt-auth/v1/token", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -93,13 +93,15 @@ const Auth: React.FC = () => {
       const data = await response.json();
 
       if (response.ok && data.token) {
+        // Save token
         localStorage.setItem("auth_token", data.token);
 
+        // Map user data depending on your JWT plugin response
         const loggedInUserData = {
-          id: data.user_id,
-          name: data.user_display_name,
-          email: data.user_email,
-          username: data.user_nicename,
+          id: data.user_id || data.user?.id, // adjust if needed
+          name: data.user_display_name || data.user?.name || loginData.login_username,
+          email: data.user_email || data.user?.email || "",
+          username: data.user_nicename || loginData.login_username,
         };
 
         localStorage.setItem("user_data", JSON.stringify(loggedInUserData));
