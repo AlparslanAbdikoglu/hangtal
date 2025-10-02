@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { getOrdersByUserId, getSingleOrderData, deleteOrderById } from "../lib/api";
 import swal from "sweetalert";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { useTranslation } from "react-i18next";
 
-interface LineItem {
-  id: number;
-  name: string;
-  quantity: number;
-}
-
+interface LineItem { id: number; name: string; quantity: number; }
 interface Order {
   id: number;
   date_created: string;
   status: string;
-  total: string;
-  currency_symbol: string;
-  line_items: LineItem[];
+  total?: string;
+  currency_symbol?: string;
+  line_items?: LineItem[];
 }
 
 interface MyOrdersProps {
@@ -27,71 +22,47 @@ interface MyOrdersProps {
 
 const MyOrders: React.FC<MyOrdersProps> = ({ loggedInUserData, setPageLoading }) => {
   const { t } = useTranslation();
-  const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [orderItems, setOrderItems] = useState<Order[]>([]);
-  const [singleOrderData, setSingleOrderData] = useState<Order | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [singleOrder, setSingleOrder] = useState<Order | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
-  const fetchAllOrders = async () => {
+  const fetchOrders = async () => {
     setPageLoading(true);
     try {
       const user = JSON.parse(loggedInUserData);
-      const response = await getOrdersByUserId(user.id);
-      setOrderItems(response);
-      localStorage.setItem("orderItems", JSON.stringify(response));
-    } catch (error) {
-      console.error(error);
+      const data = await getOrdersByUserId(user.id);
+      setOrders(data || []);
+    } catch (err) {
+      console.error(err);
+      setOrders([]);
     } finally {
       setPageLoading(false);
     }
   };
 
-  useEffect(() => {
-    const cachedOrders = localStorage.getItem("orderItems");
-    if (cachedOrders) {
-      setOrderItems(JSON.parse(cachedOrders));
-    } else {
-      fetchAllOrders();
-    }
-  }, []);
+  useEffect(() => { fetchOrders(); }, []);
 
-  const handleRefreshOrders = () => {
-    fetchAllOrders();
-  };
-
-  const getSingleOrderInformation = async (orderID: number) => {
+  const handleView = async (id: number) => {
     setPageLoading(true);
     try {
-      const response = await getSingleOrderData(orderID);
-      setSingleOrderData(response);
-      setShowDetailsModal(true);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setPageLoading(false);
-    }
+      const data = await getSingleOrderData(id);
+      setSingleOrder(data || null);
+      setShowModal(true);
+    } catch (err) { console.error(err); }
+    finally { setPageLoading(false); }
   };
 
-  const deleteSingleOrderData = (orderID: number) => {
-    setPageLoading(true);
+  const handleDelete = (id: number) => {
     swal({
       title: t("myOrders.deleteConfirmTitle", "Are you sure?"),
       text: t("myOrders.deleteConfirmText", "Do you really want to delete this order?"),
       icon: "warning",
       dangerMode: true,
-      buttons: [t("common.cancel", "Cancel"), t("common.delete", "Delete")],
-    }).then(async (willDelete) => {
-      if (willDelete) {
-        try {
-          await deleteOrderById(orderID);
-          await fetchAllOrders();
-          swal(t("myOrders.deletedTitle", "Deleted!"), t("myOrders.deletedText", "The order has been deleted."), "success");
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setPageLoading(false);
-        }
-      } else {
-        setPageLoading(false);
+      buttons: [t("common.cancel","Cancel"), t("common.delete","Delete")],
+    }).then(async (confirm) => {
+      if (confirm) {
+        await deleteOrderById(id);
+        fetchOrders();
       }
     });
   };
@@ -99,120 +70,66 @@ const MyOrders: React.FC<MyOrdersProps> = ({ loggedInUserData, setPageLoading })
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
+      <main className="flex-grow p-6 max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6">{t("myOrders.title","My Orders")}</h1>
 
-      <main className="flex-grow">
-        <div className="max-w-6xl mx-auto p-6">
-          <h1 className="text-3xl font-bold mb-6">{t("myOrders.title", "My Orders")}</h1>
-
-          <div className="flex justify-end mb-6">
-            <button
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition"
-              onClick={handleRefreshOrders}
-            >
-              {t("myOrders.refresh", "Refresh Orders")}
-            </button>
+        {orders.length === 0 ? (
+          <div className="text-center text-gray-600 py-20">
+            {t("myOrders.noOrders","You have no orders yet.")}
           </div>
-
-          <div>
-            {orderItems.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="min-w-full bg-white border border-gray-200 rounded">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      <th className="py-3 px-6 text-left text-sm font-semibold">{t("myOrders.orderId", "Order ID")}</th>
-                      <th className="py-3 px-6 text-left text-sm font-semibold">{t("myOrders.date", "Date")}</th>
-                      <th className="py-3 px-6 text-left text-sm font-semibold">{t("myOrders.status", "Status")}</th>
-                      <th className="py-3 px-6 text-left text-sm font-semibold">{t("myOrders.total", "Total")}</th>
-                      <th className="py-3 px-6 text-left text-sm font-semibold">{t("myOrders.items", "Items")}</th>
-                      <th className="py-3 px-6 text-left text-sm font-semibold">{t("myOrders.actions", "Actions")}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {orderItems.map((order) => (
-                      <tr key={order.id}>
-                        <td className="py-3 px-6">{order.id}</td>
-                        <td className="py-3 px-6">{new Date(order.date_created).toLocaleDateString()}</td>
-                        <td className="py-3 px-6 capitalize">{t(`myOrders.statuses.${order.status}`, order.status)}</td>
-                        <td className="py-3 px-6">{order.currency_symbol} {order.total}</td>
-                        <td className="py-3 px-6">
-                          <ul className="list-disc pl-5">
-                            {order.line_items.map((item) => (
-                              <li key={item.id}>{item.name} ({item.quantity})</li>
-                            ))}
-                          </ul>
-                        </td>
-                        <td className="py-3 px-6">
-                          <button
-                            className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded mr-2"
-                            onClick={() => getSingleOrderInformation(order.id)}
-                          >
-                            {t("myOrders.view", "View")}
-                          </button>
-                          {order.status === "completed" && (
-                            <button
-                              className="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded"
-                              onClick={() => deleteSingleOrderData(order.id)}
-                            >
-                              {t("common.delete", "Delete")}
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <p className="text-center text-gray-700 text-lg">{t("myOrders.noOrders", "No orders found.")}</p>
-            )}
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full border">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="p-2 text-left">ID</th>
+                  <th className="p-2 text-left">{t("myOrders.date","Date")}</th>
+                  <th className="p-2 text-left">{t("myOrders.status","Status")}</th>
+                  <th className="p-2 text-left">{t("myOrders.total","Total")}</th>
+                  <th className="p-2 text-left">{t("myOrders.items","Items")}</th>
+                  <th className="p-2 text-left">{t("myOrders.actions","Actions")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map(o => (
+                  <tr key={o.id} className="border-t">
+                    <td className="p-2">{o.id}</td>
+                    <td className="p-2">{new Date(o.date_created).toLocaleDateString()}</td>
+                    <td className="p-2">{o.status}</td>
+                    <td className="p-2">{o.currency_symbol || "$"} {o.total || "0.00"}</td>
+                    <td className="p-2">
+                      {o.line_items?.length ? (
+                        <ul className="list-disc pl-5">
+                          {o.line_items.map(i => <li key={i.id}>{i.name} ({i.quantity})</li>)}
+                        </ul>
+                      ) : "—"}
+                    </td>
+                    <td className="p-2">
+                      <button className="bg-blue-500 px-2 py-1 text-white rounded" onClick={() => handleView(o.id)}>View</button>
+                      {o.status==="completed" && <button className="bg-red-600 px-2 py-1 text-white rounded ml-2" onClick={() => handleDelete(o.id)}>Delete</button>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
+        )}
 
-          {/* Modal */}
-          {showDetailsModal && singleOrderData && (
-            <div 
-              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-              onClick={() => setShowDetailsModal(false)}
-            >
-              <div
-                className="bg-white rounded-lg shadow-lg max-w-lg w-full mx-4"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="flex justify-between items-center border-b px-6 py-4">
-                  <h2 className="text-xl font-semibold">{t("myOrders.detailsTitle", "Order Details")}</h2>
-                  <button
-                    className="text-gray-600 hover:text-gray-900"
-                    onClick={() => setShowDetailsModal(false)}
-                    aria-label={t("common.close", "Close modal")}
-                  >
-                    &#x2715;
-                  </button>
-                </div>
-                <div className="px-6 py-4">
-                  <p><strong>{t("myOrders.orderId", "Order ID")}:</strong> {singleOrderData.id}</p>
-                  <p><strong>{t("myOrders.date", "Date")}:</strong> {new Date(singleOrderData.date_created).toLocaleDateString()}</p>
-                  <p><strong>{t("myOrders.status", "Status")}:</strong> {t(`myOrders.statuses.${singleOrderData.status}`, singleOrderData.status)}</p>
-                  <p><strong>{t("myOrders.total", "Total")}:</strong> {singleOrderData.currency_symbol}{singleOrderData.total}</p>
-                  <p><strong>{t("myOrders.items", "Items")}:</strong></p>
-                  <ul className="list-disc pl-6">
-                    {singleOrderData.line_items.map((item) => (
-                      <li key={item.id}>{item.name} ({item.quantity})</li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="border-t px-6 py-4 flex justify-end">
-                  <button
-                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded"
-                    onClick={() => setShowDetailsModal(false)}
-                  >
-                    {t("common.close", "Close")}
-                  </button>
-                </div>
-              </div>
+        {showModal && singleOrder && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded shadow max-w-lg w-full" onClick={e => e.stopPropagation()}>
+              <h2 className="text-xl font-bold mb-4">Order {singleOrder.id}</h2>
+              <p>Status: {singleOrder.status}</p>
+              <p>Total: {singleOrder.currency_symbol || "$"} {singleOrder.total || "0.00"}</p>
+              <ul className="list-disc pl-5">
+                {singleOrder.line_items?.map(i => <li key={i.id}>{i.name} ({i.quantity})</li>)}
+              </ul>
+              <button className="mt-4 bg-gray-300 px-4 py-2 rounded" onClick={() => setShowModal(false)}>Close</button>
             </div>
-          )}
-        </div>
-      </main>
+          </div>
+        )}
 
+      </main>
       <Footer />
     </div>
   );

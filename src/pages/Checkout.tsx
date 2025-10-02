@@ -1,112 +1,45 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { myStoreHook } from "@/MyStoreContext";
-import { toast } from "react-toastify";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
-interface Billing {
-  first_name: string;
-  last_name: string;
-  address_1: string;
-  city: string;
-  state: string;
-  postcode: string;
-  country: string;
-  email: string;
-  phone: string;
-}
-
-interface CheckoutData {
-  customer_id: string | number;
-  billing: Billing;
-}
-
 const Checkout: React.FC = () => {
-  const navigate = useNavigate();
-  const { cart, clearCartItem, loggedInUserData } = myStoreHook();
-  const userData = loggedInUserData || {};
+  const { cart, loggedInUserData } = myStoreHook();
   const { t } = useTranslation();
-
   const [isLoading, setIsLoading] = useState(false);
 
-  const [checkoutData, setCheckoutData] = useState<CheckoutData>({
-    customer_id: userData?.id || "",
-    billing: {
-      first_name: "",
-      last_name: "",
-      address_1: "",
-      city: "",
-      state: "",
-      postcode: "",
-      country: "",
-      email: userData?.email || "",
-      phone: "",
-    },
-  });
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setCheckoutData((prev) => ({
-      ...prev,
-      billing: {
-        ...prev.billing,
-        [name]: value,
-      },
-    }));
-  };
-
-  const totalPrice = cart.reduce((total, item) => {
-    const price =
-      parseFloat(item.sale_price || item.regular_price || item.price || "0") *
-      (item.quantity || 1);
-    return total + price;
-  }, 0);
-
-  const handleCheckoutSubmit = async (e: FormEvent | React.MouseEvent) => {
-    e.preventDefault();
-
-    if (cart.length === 0) {
-      toast.error(t("checkout.emptyCart"));
-      return;
-    }
-
+  const handleCheckout = async () => {
+    if (!cart.length) return toast.error(t("checkout.emptyCart"));
     setIsLoading(true);
 
     try {
-      const response = await fetch(
+      const res = await fetch(
         "https://zvukovaakademia.sk/wp-json/stripe/v1/create-checkout-session",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            products: cart.map((item) => ({
-              id: item.id,
-              quantity: item.quantity || 1,
-            })),
-            userEmail: checkoutData.billing.email,
-            billing: checkoutData.billing,
-            customer_id: checkoutData.customer_id,
+            products: cart.map((i) => ({ id: i.id, quantity: i.quantity || 1 })),
+            userEmail: loggedInUserData?.email || "",
+            customer_id: loggedInUserData?.id || "",
           }),
         }
       );
 
-      const data = await response.json();
-      if (response.ok && data.url) {
-        window.location.href = data.url;
-      } else {
-        toast.error(data.error || t("checkout.stripeFailed"));
-        setIsLoading(false);
-      }
-    } catch (error) {
-      console.error(error);
+      const data = await res.json();
+      if (res.ok && data.url) window.location.href = data.url;
+      else toast.error(data.error || t("checkout.stripeFailed"));
+    } catch (err) {
+      console.error(err);
       toast.error(t("checkout.stripeFailed"));
+    } finally {
       setIsLoading(false);
     }
   };
 
-  if (cart.length === 0) {
+  if (!cart.length)
     return (
       <div className="flex flex-col min-h-screen">
         <Navbar />
@@ -116,100 +49,56 @@ const Checkout: React.FC = () => {
         <Footer />
       </div>
     );
-  }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Navbar />
 
-      <main className="flex-grow">
-        <div className="max-w-5xl mx-auto p-6">
-          <h1 className="text-2xl font-bold mb-6">{t("checkout.title")}</h1>
+      <main className="flex-grow flex flex-col items-center justify-center p-6">
+        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
+          <h1 className="text-2xl font-bold mb-4">{t("checkout.title")}</h1>
 
-          {/* Billing Form */}
-          <form onSubmit={handleCheckoutSubmit} className="mb-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              {[
-                "first_name",
-                "last_name",
-                "address_1",
-                "city",
-                "state",
-                "postcode",
-                "country",
-                "phone",
-                "email",
-              ].map((field) => (
-                <input
-                  key={field}
-                  name={field}
-                  type={field === "email" ? "email" : "text"}
-                  placeholder={t(`checkout.fields.${field}`)}
-                  onChange={handleInputChange}
-                  className="border p-2"
-                  required={true}
-                  value={(checkoutData.billing as any)[field]}
-                />
-              ))}
-            </div>
+          <p className="mb-6 text-gray-700">
+            {t(
+              "checkout.disclaimer",
+              "You will be redirected to Stripe's secure checkout page to complete your purchase."
+            )}
+          </p>
 
-            <button
-              type="submit"
-              className="bg-yellow-600 text-white px-6 py-2 rounded hover:bg-yellow-700"
-              disabled={isLoading}
-            >
-              {isLoading ? t("checkout.redirecting") : t("checkout.payButton")}
-            </button>
-          </form>
+          <button
+            onClick={handleCheckout}
+            className="bg-yellow-600 text-white px-6 py-3 rounded-lg hover:bg-yellow-700 font-semibold transition-colors w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? t("checkout.redirecting") : t("checkout.payButton")}
+          </button>
 
-          {/* Cart Summary */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">{t("checkout.cartSummary")}</h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full border text-sm">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="p-2 text-left">{t("checkout.cart.image")}</th>
-                    <th className="p-2 text-left">{t("checkout.cart.product")}</th>
-                    <th className="p-2 text-left">{t("checkout.cart.unitPrice")}</th>
-                    <th className="p-2 text-left">{t("checkout.cart.quantity")}</th>
-                    <th className="p-2 text-left">{t("checkout.cart.action")}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cart.map((item) => {
-                    const price = parseFloat(
-                      item.sale_price || item.regular_price || item.price || "0"
-                    );
-                    return (
-                      <tr key={item.id} className="border-t">
-                        <td className="p-2">
-                          <img
-                            src={item.images?.[0]?.src || "/placeholder.svg"}
-                            alt={item.name}
-                            className="w-12 h-12 object-cover"
-                          />
-                        </td>
-                        <td className="p-2">{item.name}</td>
-                        <td className="p-2">€{price.toFixed(2)}</td>
-                        <td className="p-2">{item.quantity || 1}</td>
-                        <td className="p-2">
-                          <button
-                            type="button"
-                            className="text-red-600 hover:underline"
-                            onClick={() => clearCartItem()}
-                          >
-                            {t("checkout.cart.remove", "Eltávolítás")}
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+          <div className="mt-6 text-left text-gray-600">
+            <h2 className="font-semibold mb-2">{t("checkout.cartSummary")}</h2>
+            <ul className="divide-y divide-gray-200">
+              {cart.map((item) => {
+                const price =
+                  parseFloat(item.sale_price || item.regular_price || item.price || "0") *
+                  (item.quantity || 1);
+                return (
+                  <li key={item.id} className="py-2 flex justify-between">
+                    <span>{item.name} ({item.quantity || 1})</span>
+                    <span>€{price.toFixed(2)}</span>
+                  </li>
+                );
+              })}
+            </ul>
             <div className="mt-4 font-bold text-right">
-              {t("checkout.total")}: €{totalPrice.toFixed(2)}
+              {t("checkout.total")}: €
+              {cart
+                .reduce(
+                  (total, item) =>
+                    total +
+                    parseFloat(item.sale_price || item.regular_price || item.price || "0") *
+                      (item.quantity || 1),
+                  0
+                )
+                .toFixed(2)}
             </div>
           </div>
         </div>

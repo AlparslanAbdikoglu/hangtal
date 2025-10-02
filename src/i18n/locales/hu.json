@@ -106,7 +106,8 @@
   "payButton": "Fizetés Stripe-on",
   "redirecting": "Átirányítás a Stripe fizetésre...",
   "emptyCart": "A kosár üres.",
-  "stripeFailed": "A Stripe fizetés létrehozása sikertelen."
+  "stripeFailed": "A Stripe fizetés létrehozása sikertelen.",
+  "disclaimer": "A vásárlás befejezéséhez átirányítunk a Stripe biztonságos fizetési oldalára."
 },
 
   "cart": {
