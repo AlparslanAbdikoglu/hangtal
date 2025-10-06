@@ -32,12 +32,11 @@ const PurchaseHistory: React.FC<PurchaseHistoryProps> = ({ loggedInUserData, set
     try {
       const user = JSON.parse(loggedInUserData);
       const res = await fetch(
-        `/wp-json/stripe/v1/orders-by-user/${user.id}`, // <-- your custom REST endpoint
+        `/wp-json/stripe/v1/orders-by-user/${user.id}`,
         { credentials: "include" }
       );
       if (!res.ok) throw new Error("Failed to fetch orders");
       const data = await res.json();
-      // Only show completed orders
       setOrders(data.filter((o: Order) => o.status === "completed"));
     } catch (err) {
       console.error(err);
@@ -53,10 +52,10 @@ const PurchaseHistory: React.FC<PurchaseHistoryProps> = ({ loggedInUserData, set
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-grow p-6 max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">{t("myOrders.title","Rendeléseim")}</h1>
+        <h1 className="text-3xl font-bold mb-6">{t("myOrders.title", "Rendeléseim")}</h1>
         {orders.length === 0 ? (
           <div className="text-center text-gray-600 py-20">
-            {t("myOrders.noOrders","Nincs még rendelés.")}
+            {t("myOrders.noOrders", "Nincs még rendelés.")}
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -64,10 +63,10 @@ const PurchaseHistory: React.FC<PurchaseHistoryProps> = ({ loggedInUserData, set
               <thead className="bg-gray-100">
                 <tr>
                   <th className="p-2 text-left">ID</th>
-                  <th className="p-2 text-left">{t("myOrders.date","Dátum")}</th>
-                  <th className="p-2 text-left">{t("myOrders.status","Státusz")}</th>
-                  <th className="p-2 text-left">{t("myOrders.total","Összeg")}</th>
-                  <th className="p-2 text-left">{t("myOrders.items","Termékek")}</th>
+                  <th className="p-2 text-left">{t("myOrders.date", "Dátum")}</th>
+                  <th className="p-2 text-left">{t("myOrders.status", "Státusz")}</th>
+                  <th className="p-2 text-left">{t("myOrders.total", "Összeg")}</th>
+                  <th className="p-2 text-left">{t("myOrders.items", "Termékek")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -75,7 +74,7 @@ const PurchaseHistory: React.FC<PurchaseHistoryProps> = ({ loggedInUserData, set
                   <tr key={o.id} className="border-t">
                     <td className="p-2">{o.id}</td>
                     <td className="p-2">{new Date(o.date_created).toLocaleDateString()}</td>
-                    <td className="p-2">{o.status}</td>
+                    <td className="p-2">{t(`myOrders.statuses.${o.status}`, o.status)}</td>
                     <td className="p-2">{o.currency_symbol || "€"} {o.total || "0.00"}</td>
                     <td className="p-2">
                       {o.line_items?.length ? (
