@@ -53,16 +53,11 @@ function App() {
 
         <Route
           path="/my-orders"
-          element={
-            <MyOrders
-              setPageLoading={setPageLoading}
-              loggedInUserData={JSON.stringify(loggedInUserData)}
-            />
-          }
+          element={<PaymentSuccess />}
         />
         <Route
           path="/my-account"
-          element={<MyAccount loggedInUserData={JSON.stringify(loggedInUserData)}/>}
+          element={<MyAccount loggedInUserData={JSON.stringify(loggedInUserData)} />}
         />
        <Route path="/login" element={<Auth />} />
 
