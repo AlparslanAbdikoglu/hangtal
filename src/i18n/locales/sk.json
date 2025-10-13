@@ -154,7 +154,10 @@
     "infoTitle": "Kontaktné informácie",
     "formTitle": "Poslať e-mail",
     "emailPrompt": "Kliknite nižšie a pošlite nám e-mail. Čoskoro odpovieme.",
-    "sendEmail": "Poslať e-mail"
+    "sendEmail": "Poslať e-mail",
+    "email": "E-mail",
+    "phone": "Telefón",
+    "address": "Adresa"
   },
   "privacy": {
     "title": "Zásady ochrany osobných údajov",

@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const socialLinks = [
-	{ name: "Facebook", icon: <Facebook className="h-5 w-5" />, url: "https://facebook.com/meinlsonic" },
-	{ name: "Instagram", icon: <Instagram className="h-5 w-5" />, url: "https://instagram.com/meinlsonic" },
-	{ name: "YouTube", icon: <Youtube className="h-5 w-5" />, url: "https://youtube.com/meinlsonic" },
+	{ name: "Facebook", icon: <Facebook className="h-5 w-5" />, url: "https://www.facebook.com/profile.php?id=100027587995370" },
+	{ name: "Instagram", icon: <Instagram className="h-5 w-5" />, url: "https://www.instagram.com/hangakademia" },
+	{ name: "YouTube", icon: <Youtube className="h-5 w-5" />, url: "" },
 ];
 
 const Index = () => {
@@ -43,20 +43,20 @@ const Index = () => {
 				<h2 className="text-4xl font-bold mb-8">
 					{t("promo.title", "Miért válassz minket?")}
 				</h2>
-				<div className="mb-8 text-lg text-gray-700 max-w-lg mx-auto space-y-6">
+				<div className="mb-8 text-lg text-gray-700 max-w-lg mx-auto">
 					<p>
 						{t(
 							"promo.intro",
 							"Fedezd fel gondosan válogatott, kézzel készített hangszereink és egyedi alkotásaink világát."
 						)}
 					</p>
-					<ul className="list-none space-y-2 text-left">
-						<li>🔔 {t("promo.point1", "Minőségi, válogatott hangszerek")}</li>
-						<li>🌿 {t("promo.point2", "Szakértői útmutatás és oktatás")}</li>
+					<ul className="list-none space-y-2 text-middle mt-4">
+						<li> {t("promo.point1", "Minőségi, válogatott hangszerek")}</li>
+						<li> {t("promo.point2", "Szakértői útmutatás és oktatás")}</li>
 						<li>
-							✨ {t("promo.point3", "Egyedi táblázatok, leírások a hangtálak mellé – csak nálunk")}
+							 {t("promo.point3", "Egyedi táblázatok, leírások a hangtálak mellé – csak nálunk")}
 						</li>
-						<li>📦 {t("promo.point4", "Gyors, biztonságos szállítás")}</li>
+						<li> {t("promo.point4", "Gyors, biztonságos szállítás")}</li>
 					</ul>
 					<p>
 						{t(
@@ -67,7 +67,7 @@ const Index = () => {
 				</div>
 				<Link to="https://hangakademia.hu" target="_blank" rel="noopener noreferrer">
 					<button className="bg-primary text-white px-8 py-4 rounded-lg text-xl font-semibold hover:bg-primary/90 transition">
-						{t("promo.cta", "Nagykövet megtekintése")}
+						{t("promo.cta", "MeinSonic Energy Nagykövet megtekintése")}
 					</button>
 				</Link>
 			</section>

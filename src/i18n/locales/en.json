@@ -144,7 +144,10 @@
     "infoTitle": "Contact Information",
     "formTitle": "Send Email",
     "emailPrompt": "Click the button below to send us an email. We will reply soon.",
-    "sendEmail": "Send Email"
+    "sendEmail": "Send Email",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address"
   },
   "privacy": {
     "title": "Privacy Policy",

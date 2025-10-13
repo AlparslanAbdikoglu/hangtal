@@ -31,7 +31,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-primary">{t("contact.email")}</h3>
-                      <p className="text-muted-foreground">hangakademia@gmail.com</p>
+                      <p className="text-muted-foreground">zvukovaakademia@gmail.com</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
@@ -63,7 +63,7 @@ const Contact = () => {
               <h2 className="text-2xl font-bold text-primary mb-6">{t("contact.formTitle")}</h2>
               <p className="mb-6 text-muted-foreground text-center">{t("contact.emailPrompt")}</p>
               <a
-                href="mailto:hangakademia@gmail.com"
+                href="mailto:zvukovaakademia@gmail.com"
                 className="w-full"
                 style={{ textDecoration: "none" }}
               >

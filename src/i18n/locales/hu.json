@@ -11,9 +11,9 @@
     "loginSignup": "Bejelentkezés / Regisztráció"
   },
   "hero": {
-    "title": "A hangok ereje a mindennapjaidban",
+    "title": "Hangakadémia® a hangok ereje a mindennapjaidban",
     "subtitle": "fedezd fel a hangtálak, hangszerek és rezgésterápiás eszközök különleges világát.",
-    "description": "A Hangakadémiánál hiszünk abban, hogy a hang rezgése képes egyensúlyt teremteni testben és lélekben. Válogatott Himalájai hangtálak, Meinl Sonic Energy hangszerek és egyedi kiegészítők várnak, melyekkel te is megélheted a rezgések gyógyító erejét.\n Minden termékünkhöz szakmai tudás és szívből jövő útmutatás társul.",
+    "description": "A Hangakadémiánál® hiszünk abban, hogy a hang rezgése képes egyensúlyt teremteni testben és lélekben. Válogatott Himalájai hangtálak, Meinl Sonic Energy hangszerek és egyedi kiegészítők várnak, melyekkel te is megélheted a rezgések gyógyító erejét.\n Minden termékünkhöz szakmai tudás és szívből jövő útmutatás társul.",
     "imageAlt": "Hangterápiás hangszerek"
   },
   "categories": {
@@ -158,7 +158,10 @@
     "infoTitle": "Elérhetőségek",
     "formTitle": "E-mail küldése",
     "emailPrompt": "Kattintson az alábbi gombra, hogy e-mailt küldjön nekünk. Hamarosan válaszolunk.",
-    "sendEmail": "E-mail küldése"
+    "sendEmail": "E-mail küldése",
+    "email": "E-mail",
+    "phone": "Telefon",
+    "address": "Cím"
   },
   "privacy": {
     "title": "Adatvédelmi szabályzat",

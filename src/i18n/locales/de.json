@@ -154,7 +154,10 @@
     "infoTitle": "Kontaktinformationen",
     "formTitle": "E-Mail senden",
     "emailPrompt": "Klicken Sie unten, um uns eine E-Mail zu senden. Wir antworten bald.",
-    "sendEmail": "E-Mail senden"
+    "sendEmail": "E-Mail senden",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "address": "Adresse"
   },
   "privacy": {
     "title": "Datenschutzrichtlinie",

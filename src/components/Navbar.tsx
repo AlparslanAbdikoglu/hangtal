@@ -36,9 +36,16 @@ export const Navbar = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-        {/* Logo */}
-<div className="text-xl font-bold text-primary cursor-pointer" onClick={() => navigate('/')}>
-  {t("site", "SoundAcademy")}
+          <div
+  className="cursor-pointer flex items-center"
+  onClick={() => navigate('/')}
+>
+  <img
+    src="/images/PalAdri-logo-light.png"
+    alt="Hangakadémia logó"
+    className="h-30 w-auto"
+    style={{ maxHeight: 80 }}
+  />
 </div>
     
 
@@ -87,12 +94,14 @@ export const Navbar = () => {
                 >
                   {t('navbar.myAccount') || "My Account"}
                 </Link>
+                {/* 
                 <Link
                   to="/my-orders"
                   className="hidden md:inline-block text-primary hover:text-secondary transition-colors"
                 >
                   {t('navbar.myOrders') || "My Orders"}
                 </Link>
+                */}
                 <Button
                   variant="ghost"
                   size="icon"
@@ -142,9 +151,11 @@ export const Navbar = () => {
                   <Link to="/my-account" className="text-primary hover:text-secondary transition-colors px-2 py-1" onClick={() => setIsMenuOpen(false)}>
                     {t('navbar.myAccount') || "My Account"}
                   </Link>
+                  {/* 
                   <Link to="/my-orders" className="text-primary hover:text-secondary transition-colors px-2 py-1" onClick={() => setIsMenuOpen(false)}>
                     {t('navbar.myOrders') || "My Orders"}
                   </Link>
+                  */}
                   <button
                     onClick={handleLogout}
                     className="text-primary hover:text-secondary transition-colors px-2 py-1 text-left"

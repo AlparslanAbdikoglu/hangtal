@@ -53,11 +53,13 @@ const Cart = () => {
 
     return sale !== undefined ? (
       <>
-        <span className="line-through text-gray-400 mr-2">${regular.toFixed(2)}</span>
-        <span className="text-red-600">${sale.toFixed(2)}</span>
+        <span className="line-through text-gray-400 mr-2">
+          {regular.toFixed(2)} €
+        </span>
+        <span className="text-red-600">{sale.toFixed(2)} €</span>
       </>
     ) : (
-      <>${regular.toFixed(2)}</>
+      <>{regular.toFixed(2)} €</>
     );
   };
 
@@ -151,7 +153,7 @@ const Cart = () => {
 
             <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center mt-6 gap-4">
               <h3 className="text-xl font-semibold">
-                {t("cart.total")}: ${calculateTotalItemsPrice()}
+                {t("cart.total")}: {calculateTotalItemsPrice()} €
               </h3>
 
               <button
