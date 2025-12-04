@@ -35,7 +35,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPriceRange, setSelectedPriceRange] = useState({
-    label: t("products.filters.allPrices") || "All Prices",
+    label: t("products.filters.allPrices", "All Prices"),
     min: 0,
     max: Infinity,
   });
@@ -253,10 +253,10 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
                 onChange={(e) => setSortBy(e.target.value)}
                 className="border px-3 py-2 rounded w-full"
               >
-                <option value="featured">{t("products.filters.featured")}</option>
-                <option value="price-low">{t("products.filters.priceLowToHigh")}</option>
-                <option value="price-high">{t("products.filters.priceHighToLow")}</option>
-                <option value="name">{t("products.filters.name")}</option>
+                <option value="featured">{t("products.filters.featured", "Featured")}</option>
+                <option value="price-low">{t("products.filters.priceLowHigh", "Price: Low to High")}</option>
+                <option value="price-high">{t("products.filters.priceHighLow", "Price: High to Low")}</option>
+                <option value="name">{t("products.filters.nameAZ", "Name: A to Z")}</option>
               </select>
             </div>
           </div>
