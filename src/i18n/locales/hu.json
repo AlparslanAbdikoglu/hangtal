@@ -12,22 +12,22 @@
   },
   "hero": {
     "title": "Hangakadémia® a hangok ereje a mindennapjaidban",
-    "subtitle": "fedezd fel a hangtálak, hangszerek és rezgésterápiás eszközök különleges világát.",
-    "description": "A Hangakadémiánál® hiszünk abban, hogy a hang rezgése képes egyensúlyt teremteni testben és lélekben. Válogatott Himalájai hangtálak, Meinl Sonic Energy hangszerek és egyedi kiegészítők várnak, melyekkel te is megélheted a rezgések gyógyító erejét.\n Minden termékünkhöz szakmai tudás és szívből jövő útmutatás társul.",
+     "subtitle": "Merülj el a hangok gyógyító rezgésében.",
+    "description": "Eszközeink segítenek:\n• megnyugodni\n• elmélyülni\n• tisztulni\n• feltöltődni\n• harmonizálni a test–lélek rendszerét\n\nLegyen szó otthoni relaxációról, terápiás munkáról vagy professzionális hangkezelésről, nálunk megtalálod a fejlődésedhez szükséges hangszereket és tudást.\n\nVálogass prémium kategóriáinkból:\n\n• Himalájai hangtálak\n• Meinl Sonic Energy hangszerek\n• Kristálytálak\n• Hangvillák és frekvenciaeszközök\n• Gongok és rezgésterápiás hangszerek\n• Egyedi tálpárosítások, személyre szabott ajánlással\n• Exkluzív kiegészítők és tartozékok\n\nNálunk minden hangnak története van.",    
     "imageAlt": "Hangterápiás hangszerek"
   },
   "categories": {
-    "title": "Kategóriák",
+    "title": "Válogass prémium kategóriáinkból: Himalájai hangtálak",
     "all": "Összes",
     "handpans": "Handpanek",
     "steelTongueDrums": "Acél nyelvdobok",
     "kalimbas": "Kalimbák",
-    "crystalSingingBowls": "Kristály éneklő tálak",
-    "crystalSingingChalices": "Kristály énekserlegek",
-    "singingBowls": "Éneklő tálak",
-    "accessorys": "Kiegészítők",
+    "crystalSingingBowls": "Kristálytálak",
+    "crystalSingingChalices": "Hangvillák és frekvenciaeszközök",
+    "singingBowls": "Hangvillák",
+    "accessorys": "Exkluzív kiegészítők és tartozékok",
     "bowls": "Tálak",
-    "gongsTamtams": "Gongok és tamtamok",
+    "gongsTamtams": "Hangtálak",
     "stands": "Állványok"
   },
   "products": {
@@ -136,8 +136,8 @@
     "intro1": "Adrienn Pál elkötelezett abban, hogy a hang gyógyító erejét mindenkihez eljuttassa. Üdvözöllek a Hangakadémia webshopjában! Célom, hogy a hangok és rezgések gyógyító, harmonizáló ereje mindenki számára elérhető legyen.",
 "intro2": "A nálunk kapható hangtálak, gongok, hangvillák és különleges hangszerek mind a test és lélek egyensúlyát szolgálják – legyen szó relaxációról, meditációról, terápiáról vagy egyszerűen a mindennapi belső harmónia megteremtéséről.\nMinden hangszerhez szakértői tanácsot, részletes leírást és gyakorlati útmutatót is biztosítok, ha szeretnéd. A hangszerekről bővebben tanulhatsz, gyakorolhatsz a képzéseimen– mert hiszem, hogy a hang nem csupán megszólal, hanem tanít, gyógyít és összekapcsol.",
     "imageAlt": "Adrienn Pál portréja",
-    "mission": "Miért válassz minket?",
-"missionText": "Gondosan válogatott, prémium minőségű hangszerek\nEgyedi hangtál-leírások (frekvencia, hang, csakrához kapcsolódás) – különleges szolgáltatásként csak nálunk\nSzakértői útmutatás és oktatási háttér\nGyors, biztonságos szállítás.",
+    "mission": "Miért a Hangakadémia®? Miért válassz minket?",
+"missionText": "Szakmai útmutatás minden termékhez\nNem csak vásárolsz — támogatást is kapsz.\nMegtanítjuk, hogyan válaszd ki a hozzád illő hangtálat, milyen frekvenciát, méretet vagy rezgést érdemes használni, és hogyan illeszd be a mindennapi rutinodba.\n\nTanuld meg a hangok erejét\nA HangAkadémiánál® nem csupán webshop, hanem oktatási tér is.\nOnline és személyes képzéseinken megismerheted a hangtálmasszázs, hangfürdők, hangvillák és rezgésterápia világát — a kezdőtől a haladó szintig.\n\nMerülj el a hangok gyógyító rezgésében\nEszközeink segítenek:\n• megnyugodni\n• elmélyülni\n• tisztulni\n• feltöltődni\n• harmonizálni a test–lélek rendszerét\n\nLegyen szó otthoni relaxációról, terápiás munkáról vagy professzionális hangkezelésről, nálunk megtalálod a fejlődésedhez szükséges hangszereket és tudást ",
     "faq": "Gyakran Ismételt Kérdések",
     "faqItems": {
       "soundHealing": "Mi az a hangterápia?",
@@ -322,11 +322,11 @@
   },
   "promo": {
     "title": "Miért válassz minket?",
-    "intro": "Fedezd fel gondosan válogatott, kézzel készített hangszereinket és egyedi alkotásainkat.",
+    "intro": "A HangAkadémiánál® a hang több mint rezgés:kapocs önmagadhoz, a jelen pillanathoz, és ahhoz a belső harmóniához, amelyre mindannyian vágyunk.",
     "point1": "Minőségi, válogatott hangszerek",
     "point2": "Szakértői útmutatás és oktatás",
-    "point3": "Egyedi táblázatok és leírások a hangtálakhoz – csak nálunk",
-    "point4": "Gyors, biztonságos szállítás",
-    "outro": "Engedd, hogy a hangok ereje belépjen a mindennapjaidba – válassz most webshopunk kínálatából.",
-    "cta": "Nagykövet megtekintése"
+    "point3": "Gyors, biztonságos szállítás",
+    "point4": "A hangszereket gondosan csomagoljuk és extra figyelemmel küldjük útnak.Lépj be a hangok világába.",
+    "outro": "Válassz most webshopunk prémium kínálatából, és találd meg azt az eszközt, amely megszólít —a rezgést, amely elindít a belső harmónia útján.",
+    "cta": "Meinl Sonic Energy Magyarországi Szakmai Nagykövet megtekintése"
   }}}
