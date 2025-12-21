@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { Facebook, Instagram, Music2, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { HOMEPAGE_CATEGORY_IMAGE, KNOWN_CATEGORIES } from "@/constants/categories";
 
 const socialLinks = [
   { name: "Facebook", icon: <Facebook className="h-5 w-5" />, url: "https://www.facebook.com/profile.php?id=100027587995370" },
@@ -17,24 +18,12 @@ const socialLinks = [
 const Index = () => {
   const { t } = useTranslation();
 
-  // Updated categories with the full curated order from the Categories page
-  const categories = [
-    { id: "gongok", slug: "gongok", title: "Gongok", image: "/images/vizjeles_logo.webp" },
-    { id: "hangvillak", slug: "hangvillak", title: "Hangvillák", image: "/images/vizjeles_logo.webp" },
-    { id: "himalajai-hangtalak", slug: "himalajai-hangtalak", title: "Himalájai Hangtálak", image: "/images/vizjeles_logo.webp" },
-    { id: "kristaly-hangtalak-es-kelyhek", slug: "kristaly-hangtalak-es-kelyhek", title: "Kristályhangtálak és kelyhek", image: "/images/vizjeles_logo.webp" },
-    { id: "kalimbak", slug: "kalimbak", title: "Kalimbák", image: "/images/vizjeles_logo.webp" },
-    { id: "handpanak", slug: "handpanak", title: "Handpanak", image: "/images/vizjeles_logo.webp" },
-    { id: "acel-nyelvdobok", slug: "acel-nyelvdobok", title: "Acél Nyelvdobok", image: "/images/vizjeles_logo.webp" },
-    { id: "dobok", slug: "dobok", title: "Dobok", image: "/images/vizjeles_logo.webp" },
-    { id: "chimeok-hangjatekok", slug: "chimeok-hangjatekok", title: "Chimeok-Hangjátékok", image: "/images/vizjeles_logo.webp" },
-    { id: "hang-effektek", slug: "hang-effektek", title: "Hang effektek", image: "/images/vizjeles_logo.webp" },
-    { id: "didgeridoo", slug: "didgeridoo", title: "Didgeridoo", image: "/images/vizjeles_logo.webp" },
-    { id: "energia-rudak", slug: "energia-rudak", title: "Energia rudak", image: "/images/vizjeles_logo.webp" },
-    { id: "udok-dorzsfak", slug: "udok-dorzsfak", title: "Üdők, dörzsfák", image: "/images/vizjeles_logo.webp" },
-    { id: "taskak-tokok-huzatok", slug: "taskak-tokok-huzatok", title: "Táskák, tokok, huzatok", image: "/images/vizjeles_logo.webp" },
-    { id: "allvanyok", slug: "allvanyok", title: "Állványok", image: "/images/vizjeles_logo.webp" },
-  ];
+  const categories = KNOWN_CATEGORIES.map((category) => ({
+    id: category.slug,
+    slug: category.slug,
+    title: category.name,
+    image: category.image || HOMEPAGE_CATEGORY_IMAGE,
+  }));
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useTranslation } from "react-i18next";
+import { CATEGORY_ORDER_MAP, KNOWN_CATEGORIES } from "@/constants/categories";
 
 interface Category {
   id: number;
@@ -22,24 +23,9 @@ const hardcodedImages: Record<string, string> = {
   handpans: "https://zvukovaakademia.sk/wp-content/uploads/2025/09/handpan-stand.jpg",
 };
 
-const CATEGORY_ORDER = [
-  "Gongok",
-  "Hangvillák",
-  "Himalájai Hangtálak",
-  "Kristály Hangtálak és kelyhek",
-  "Kalimbák",
-  "Handpanak",
-  "Kiegészítők",
-  "Acél Nyelv Dobok",
-  "Dobok",
-  "Chimeok-Hangjátékok",
-  "Hang effektek",
-  "Didgeridoo",
-  "Energia rudak",
-  "Üdők, dörzsfák",
-  "Táskák, tokok, huzatok",
-  "Állványok",
-];
+const KNOWN_CATEGORY_BY_SLUG = new Map(
+  KNOWN_CATEGORIES.map((category) => [category.slug, category] as const)
+);
 
 const stripHtml = (html?: string) =>
   (html || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -55,19 +41,15 @@ const normalize = (s: string) =>
     .replace(/[,/]/g, " ")
     .replace(/\s+/g, " ");
 
-const sortByCustomOrder = (cats: Category[]) => {
-  const orderMap = new Map<string, number>();
-  CATEGORY_ORDER.forEach((name, idx) => orderMap.set(normalize(name), idx));
-
-  return [...cats].sort((a, b) => {
-    const ai = orderMap.get(normalize(a.name));
-    const bi = orderMap.get(normalize(b.name));
+const sortByCustomOrder = (cats: Category[]) =>
+  [...cats].sort((a, b) => {
+    const ai = CATEGORY_ORDER_MAP.get(a.slug);
+    const bi = CATEGORY_ORDER_MAP.get(b.slug);
     if (ai !== undefined && bi !== undefined) return ai - bi;
     if (ai !== undefined) return -1;
     if (bi !== undefined) return 1;
-    return a.name.localeCompare(b.name, "hu");
+    return normalize(a.name).localeCompare(normalize(b.name), "hu");
   });
-};
 
 const sortAlphabeticalHU = (cats: Category[]) =>
   [...cats].sort((a, b) => a.name.localeCompare(b.name, "hu"));
@@ -102,10 +84,16 @@ const Categories = () => {
         const data: Category[] = await res.json();
         const allCats = data
           .filter((cat) => cat.slug !== "uncategorized")
-          .map((cat) => ({
-            ...cat,
-            image: { src: hardcodedImages[cat.slug] || cat.image?.src || placeholderImage },
-          }));
+          .map((cat) => {
+            const known = KNOWN_CATEGORY_BY_SLUG.get(cat.slug);
+            return {
+              ...cat,
+              name: known?.name || cat.name,
+              image: {
+                src: known?.image || hardcodedImages[cat.slug] || cat.image?.src || placeholderImage,
+              },
+            };
+          });
 
         setCategories(allCats);
         setError(null);

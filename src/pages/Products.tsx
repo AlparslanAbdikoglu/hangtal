@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import { useTranslation } from "react-i18next";
+import { CATEGORY_ORDER_MAP, KNOWN_CATEGORIES } from "@/constants/categories";
 
 interface Product {
   id: number;
@@ -40,24 +41,6 @@ const VISIBLE_INCREMENT = 10;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 const PRODUCT_CACHE_KEY = "woo_products_cache";
 const CATEGORY_CACHE_KEY = "woo_categories_cache";
-
-const CATEGORY_ORDER = [
-  "Gongok",
-  "Hangvillák",
-  "Himalájai Hangtálak",
-  "Kristály Hangtálak és kelyhek",
-  "Kalimbák",
-  "Handpanak",
-  "Acél Nyelv Dobok",
-  "Dobok",
-  "Chimeok-Hangjátékok",
-  "Hang effektek",
-  "Didgeridoo",
-  "Energia rudak",
-  "Üdők, dörzsfák",
-  "Táskák, tokok, huzatok",
-  "Állványok",
-];
 
 const WEIGHT_RANGES = [
   { key: "all", min: 0, max: Infinity },
@@ -126,6 +109,11 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
     [t]
   );
 
+  const knownCategoryBySlug = useMemo(
+    () => new Map(KNOWN_CATEGORIES.map((category) => [category.slug, category] as const)),
+    []
+  );
+
   // ✅ FIX: keep only ONE selectedPriceRange (derived from selectedPriceRangeKey)
   const selectedPriceRange = useMemo(
     () => priceRanges.find((range) => range.key === selectedPriceRangeKey) ?? priceRanges[0],
@@ -174,12 +162,12 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
       const [first, ...rest] = list;
 
       const sortedRest = [...rest].sort((a, b) => {
-        const aIndex = CATEGORY_ORDER.findIndex((cat) => cat.toLowerCase() === a.label.toLowerCase());
-        const bIndex = CATEGORY_ORDER.findIndex((cat) => cat.toLowerCase() === b.label.toLowerCase());
+        const aIndex = CATEGORY_ORDER_MAP.get(a.key);
+        const bIndex = CATEGORY_ORDER_MAP.get(b.key);
 
-        if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
-        if (aIndex !== -1) return -1;
-        if (bIndex !== -1) return 1;
+        if (aIndex !== undefined && bIndex !== undefined) return aIndex - bIndex;
+        if (aIndex !== undefined) return -1;
+        if (bIndex !== undefined) return 1;
         return a.label.localeCompare(b.label);
       });
 
@@ -211,7 +199,10 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
           setCategories(
             sortCategoriesByOrder([
               { key: "all", label: t("products.filters.all") || "All Categories" },
-              ...cachedCategories.map((cat) => ({ key: cat.slug, label: cat.name })),
+              ...cachedCategories.map((cat) => ({
+                key: cat.slug,
+                label: knownCategoryBySlug.get(cat.slug)?.name || cat.name,
+              })),
             ])
           );
         }
@@ -225,7 +216,10 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
         setCategories(
           sortCategoriesByOrder([
             { key: "all", label: t("products.filters.all") || "All Categories" },
-            ...data.map((cat) => ({ key: cat.slug, label: cat.name })),
+            ...data.map((cat) => ({
+              key: cat.slug,
+              label: knownCategoryBySlug.get(cat.slug)?.name || cat.name,
+            })),
           ])
         );
 
@@ -236,7 +230,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
     };
 
     fetchCategories();
-  }, [apiUrl, auth, sortCategoriesByOrder, t]);
+  }, [apiUrl, auth, knownCategoryBySlug, sortCategoriesByOrder, t]);
 
   useEffect(() => {
     setCategories((prev) => sortCategoriesByOrder(prev));
