@@ -40,6 +40,7 @@ const VISIBLE_INCREMENT = 10;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 const PRODUCT_CACHE_KEY = "woo_products_cache";
 const CATEGORY_CACHE_KEY = "woo_categories_cache";
+
 const CATEGORY_ORDER = [
   "Gongok",
   "Hangvillák",
@@ -101,17 +102,31 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedPriceRange, setSelectedPriceRange] = useState({
-    label: t("products.filters.allPrices", "All Prices"),
-    min: 0,
-    max: Infinity,
-  });
+  const [selectedPriceRangeKey, setSelectedPriceRangeKey] = useState("all");
+  const [selectedWeightRangeKey, setSelectedWeightRangeKey] = useState("all");
+  const [selectedPitch, setSelectedPitch] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
-  const [viewMode, setViewMode] = useState("grid");
+  const [viewMode] = useState("grid");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [categories, setCategories] = useState<{ key: string; label: string }[]>([]);
-  const [visibleCount, setVisibleCount] = useState(VISIBLE_INCREMENT); // Initial visible count
+  const [visibleCount, setVisibleCount] = useState(VISIBLE_INCREMENT);
+
+  // priceRanges depends on i18n (t), so memoize it to avoid recreating each render
+  const priceRanges: PriceRange[] = useMemo(
+    () => [
+      { key: "all", label: t("products.filters.allPrices", "All Prices"), min: 0, max: Infinity },
+      { key: "0-10000", label: "0 - 10 000 Ft", min: 0, max: 10000 },
+      { key: "10000-30000", label: "10 000 - 30 000 Ft", min: 10000, max: 30000 },
+      { key: "30000-60000", label: "30 000 - 60 000 Ft", min: 30000, max: 60000 },
+      { key: "60000-100000", label: "60 000 - 100 000 Ft", min: 60000, max: 100000 },
+      { key: "100000-200000", label: "100 000 - 200 000 Ft", min: 100000, max: 200000 },
+      { key: "200000-1000000", label: "200 000 Ft+", min: 200000, max: 1000000 },
+    ],
+    [t]
+  );
+
+  // ✅ FIX: keep only ONE selectedPriceRange (derived from selectedPriceRangeKey)
   const selectedPriceRange = useMemo(
     () => priceRanges.find((range) => range.key === selectedPriceRangeKey) ?? priceRanges[0],
     [priceRanges, selectedPriceRangeKey]
@@ -122,7 +137,6 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
   const apiUrl = import.meta.env.VITE_WOO_API_URL;
   const auth = btoa(`${consumerKey}:${consumerSecret}`);
 
-  // Ref to store the previous values of our filtering dependencies
   const prevDeps = useRef({
     searchTerm,
     selectedCategory,
@@ -151,27 +165,28 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
   const getProductWeight = useCallback((product: Product) => {
     const weightValue = product.weight || product.meta_data?.find((m) => /weight/i.test(m.key))?.value;
     const parsed = weightValue ? parseFloat(String(weightValue).replace(/[^0-9.]/g, "")) : NaN;
-    return isNaN(parsed) ? null : parsed;
+    return Number.isNaN(parsed) ? null : parsed;
   }, []);
 
-  const sortCategoriesByOrder = useCallback((list: { key: string; label: string }[]) => {
-    if (!list.length) return list;
-    const [first, ...rest] = list;
-    const sortedRest = [...rest].sort((a, b) => {
-      const aIndex = CATEGORY_ORDER.findIndex((cat) => cat.toLowerCase() === a.label.toLowerCase());
-      const bIndex = CATEGORY_ORDER.findIndex((cat) => cat.toLowerCase() === b.label.toLowerCase());
+  const sortCategoriesByOrder = useCallback(
+    (list: { key: string; label: string }[]) => {
+      if (!list.length) return list;
+      const [first, ...rest] = list;
 
-      if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
-      if (aIndex !== -1) return -1;
-      if (bIndex !== -1) return 1;
-      return a.label.localeCompare(b.label);
-    });
+      const sortedRest = [...rest].sort((a, b) => {
+        const aIndex = CATEGORY_ORDER.findIndex((cat) => cat.toLowerCase() === a.label.toLowerCase());
+        const bIndex = CATEGORY_ORDER.findIndex((cat) => cat.toLowerCase() === b.label.toLowerCase());
 
-    return [
-      { ...first, label: t("products.filters.all") || first.label },
-      ...sortedRest,
-    ];
-  }, [t]);
+        if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+        if (aIndex !== -1) return -1;
+        if (bIndex !== -1) return 1;
+        return a.label.localeCompare(b.label);
+      });
+
+      return [{ ...first, label: t("products.filters.all") || first.label }, ...sortedRest];
+    },
+    [t]
+  );
 
   // Set category from URL or defaultCategory
   useEffect(() => {
@@ -204,15 +219,13 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
         const res = await fetch(`${apiUrl}/products/categories`, {
           headers: { Authorization: `Basic ${auth}` },
         });
+
         const data: ProductCategory[] = await res.json();
 
         setCategories(
           sortCategoriesByOrder([
             { key: "all", label: t("products.filters.all") || "All Categories" },
-            ...data.map((cat) => ({
-              key: cat.slug,
-              label: cat.name,
-            })),
+            ...data.map((cat) => ({ key: cat.slug, label: cat.name })),
           ])
         );
 
@@ -221,6 +234,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
         console.error("Failed to fetch categories", err);
       }
     };
+
     fetchCategories();
   }, [apiUrl, auth, sortCategoriesByOrder, t]);
 
@@ -247,7 +261,6 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
 
         const data: Product[] = await res.json();
 
-        // Handle grouped product prices
         const updatedData = await Promise.all(
           data.map(async (product) => {
             if (product.type === "grouped") {
@@ -298,10 +311,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
         if (bIndex !== -1) return 1;
         return a.label.localeCompare(b.label);
       });
-      return [
-        { ...prev[0], label: t("products.filters.all") || prev[0].label },
-        ...sortedRest,
-      ];
+      return [{ ...prev[0], label: t("products.filters.all") || prev[0].label }, ...sortedRest];
     });
   }, [t]);
 
@@ -316,12 +326,10 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
           (product.description || "").toLowerCase().includes(searchTerm.toLowerCase());
 
         const matchesCategory =
-          selectedCategory === "all" ||
-          product.categories?.some((c) => c.slug === selectedCategory);
+          selectedCategory === "all" || product.categories?.some((c) => c.slug === selectedCategory);
 
         const matchesPrice =
-          parseFloat(product.price) >= selectedPriceRange.min &&
-          parseFloat(product.price) <= selectedPriceRange.max;
+          parseFloat(product.price) >= selectedPriceRange.min && parseFloat(product.price) <= selectedPriceRange.max;
 
         const weight = getProductWeight(product);
         const matchesWeight =
@@ -350,7 +358,6 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
         }
       });
 
-    // Check if any filter has actually changed before resetting the visible count
     const hasFilterChanged =
       prevDeps.current.searchTerm !== searchTerm ||
       prevDeps.current.selectedCategory !== selectedCategory ||
@@ -363,7 +370,6 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
       setVisibleCount(VISIBLE_INCREMENT);
     }
 
-    // Update the ref with current values
     prevDeps.current = {
       searchTerm,
       selectedCategory,
@@ -383,18 +389,18 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
       params.delete("category");
     }
     window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
-    }, [
-      getProductPitch,
-      getProductWeight,
-      products,
-      searchTerm,
-      selectedCategory,
-      selectedPriceRange,
-      selectedPriceRangeKey,
-      selectedWeightRangeKey,
-      selectedPitch,
-      sortBy,
-    ]);
+  }, [
+    getProductPitch,
+    getProductWeight,
+    products,
+    searchTerm,
+    selectedCategory,
+    selectedPriceRange,
+    selectedPriceRangeKey,
+    selectedWeightRangeKey,
+    selectedPitch,
+    sortBy,
+  ]);
 
   const weightCounts = useMemo(() => {
     const baseFiltered = products.filter((product) => {
@@ -403,12 +409,10 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
         (product.description || "").toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesCategory =
-        selectedCategory === "all" ||
-        product.categories?.some((c) => c.slug === selectedCategory);
+        selectedCategory === "all" || product.categories?.some((c) => c.slug === selectedCategory);
 
       const matchesPrice =
-        parseFloat(product.price) >= selectedPriceRange.min &&
-        parseFloat(product.price) <= selectedPriceRange.max;
+        parseFloat(product.price) >= selectedPriceRange.min && parseFloat(product.price) <= selectedPriceRange.max;
 
       const pitch = getProductPitch(product);
       const matchesPitch = selectedPitch === "all" || pitch === selectedPitch;
@@ -425,8 +429,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
       }).length;
     });
     return counts;
-    }, [getProductPitch, getProductWeight, products, searchTerm, selectedCategory, selectedPriceRange, selectedPitch]);
-
+  }, [getProductPitch, getProductWeight, products, searchTerm, selectedCategory, selectedPriceRange, selectedPitch]);
 
   if (loading) return <div className="p-12 text-center">{t("products.loading", "Loading products...")}</div>;
   if (error) return <div className="p-12 text-center text-red-500">{error}</div>;
@@ -497,11 +500,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
                 ))}
               </select>
 
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="border px-3 py-2 rounded w-full"
-              >
+              <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="border px-3 py-2 rounded w-full">
                 <option value="featured">{t("products.filters.featured", "featured")}</option>
                 <option value="popular">{t("products.filters.popular", "Most popular")}</option>
                 <option value="newest">{t("products.filters.newest", "Newest")}</option>
@@ -513,14 +512,17 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
 
           {/* Product Grid */}
           <div className="flex-grow">
-            <div className={`grid ${viewMode === "grid" ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" : "grid-cols-1"} p-1`}>
+            <div
+              className={`grid ${
+                viewMode === "grid" ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" : "grid-cols-1"
+              } p-1`}
+            >
               {filteredProducts.slice(0, visibleCount).map((product) => (
                 <ProductCard
                   key={product.id}
                   title={product.name}
                   price={parseFloat(product.price)}
                   image={product.images?.[0]?.src || "/placeholder.jpg"}
-                
                   available={product.stock_status === "instock"}
                   id={String(product.id)}
                   description={product.short_description || product.description}
@@ -533,7 +535,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
             {filteredProducts.length > visibleCount && (
               <div className="flex justify-center mt-8">
                 <button
-                  onClick={() => setVisibleCount(prevCount => prevCount + VISIBLE_INCREMENT)}
+                  onClick={() => setVisibleCount((prevCount) => prevCount + VISIBLE_INCREMENT)}
                   className="bg-primary text-primary-foreground font-bold py-2 px-6 rounded-lg shadow-md hover:bg-primary-foreground hover:text-primary transition-colors duration-200"
                 >
                   {t("products.loadMore", "Load More")}
