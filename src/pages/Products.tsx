@@ -92,6 +92,8 @@ const setCache = <T,>(key: string, data: T) => {
   localStorage.setItem(key, JSON.stringify({ timestamp: Date.now(), data }));
 };
 
+type PriceRange = { key: string; label: string; min: number; max: number };
+
 const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProps) => {
   const { t } = useTranslation();
 
@@ -99,14 +101,17 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const priceRanges = useMemo(() => [
-    { key: "all", label: t("products.filters.allPrices"), min: 0, max: Infinity },
-    { key: "under100", label: t("products.filters.under100"), min: 0, max: 100 },
-    { key: "100to500", label: t("products.filters.100to500"), min: 100, max: 500 },
-    { key: "over500", label: t("products.filters.over500"), min: 500, max: Infinity },
-    { key: "over1000", label: t("products.filters.over1000"), min: 1000, max: Infinity },
-    { key: "over1500", label: t("products.filters.over1500"), min: 1500, max: Infinity },
-  ], [t]);
+  const priceRanges: PriceRange[] = useMemo(
+    () => [
+      { key: "all", label: t("products.filters.allPrices"), min: 0, max: Infinity },
+      { key: "under100", label: t("products.filters.under100"), min: 0, max: 100 },
+      { key: "100to500", label: t("products.filters.100to500"), min: 100, max: 500 },
+      { key: "over500", label: t("products.filters.over500"), min: 500, max: Infinity },
+      { key: "over1000", label: t("products.filters.over1000"), min: 1000, max: Infinity },
+      { key: "over1500", label: t("products.filters.over1500"), min: 1500, max: Infinity },
+    ],
+    [t]
+  );
   const [selectedPriceRangeKey, setSelectedPriceRangeKey] = useState("all");
   const [selectedWeightRangeKey, setSelectedWeightRangeKey] = useState("all");
   const [selectedPitch, setSelectedPitch] = useState<string>("all");
@@ -387,7 +392,18 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
       params.delete("category");
     }
     window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
-  }, [getProductPitch, getProductWeight, products, searchTerm, selectedCategory, selectedPriceRange, selectedPriceRangeKey, selectedWeightRangeKey, selectedPitch, sortBy]);
+    }, [
+      getProductPitch,
+      getProductWeight,
+      products,
+      searchTerm,
+      selectedCategory,
+      selectedPriceRange,
+      selectedPriceRangeKey,
+      selectedWeightRangeKey,
+      selectedPitch,
+      sortBy,
+    ]);
 
   const weightCounts = useMemo(() => {
     const baseFiltered = products.filter((product) => {
@@ -418,7 +434,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
       }).length;
     });
     return counts;
-  }, [getProductPitch, getProductWeight, products, searchTerm, selectedCategory, selectedPriceRange, selectedPriceRangeKey, selectedPitch]);
+    }, [getProductPitch, getProductWeight, products, searchTerm, selectedCategory, selectedPriceRange, selectedPitch]);
 
 
   if (loading) return <div className="p-12 text-center">{t("products.loading", "Loading products...")}</div>;
