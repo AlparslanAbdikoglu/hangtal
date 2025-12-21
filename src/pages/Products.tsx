@@ -71,10 +71,10 @@ const getCachedData = <T,>(key: string): T | null => {
   return null;
 };
 
-const setCache = <T,>(key: string, data: T) => {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(key, JSON.stringify({ timestamp: Date.now(), data }));
-};
+  const setCache = <T,>(key: string, data: T) => {
+    if (typeof window === "undefined") return;
+    localStorage.setItem(key, JSON.stringify({ timestamp: Date.now(), data }));
+  };
 
 type PriceRange = { key: string; label: string; min: number; max: number };
 
@@ -176,6 +176,10 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
     [t]
   );
 
+  useEffect(() => {
+    setCategories((prev) => sortCategoriesByOrder(prev));
+  }, [sortCategoriesByOrder, t]);
+
   // Set category from URL or defaultCategory
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -232,10 +236,6 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
     fetchCategories();
   }, [apiUrl, auth, knownCategoryBySlug, sortCategoriesByOrder, t]);
 
-  useEffect(() => {
-    setCategories((prev) => sortCategoriesByOrder(prev));
-  }, [sortCategoriesByOrder, t]);
-
   // Fetch products
   useEffect(() => {
     const fetchProducts = async () => {
@@ -291,23 +291,6 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
 
     fetchProducts();
   }, [apiUrl, auth, setPageLoading, t]);
-
-  useEffect(() => {
-    setCategories((prev) => {
-      if (!prev.length) return prev;
-      const [, ...rest] = prev;
-      const sortedRest = rest.sort((a, b) => {
-        const aIndex = CATEGORY_ORDER.findIndex((cat) => cat.toLowerCase() === a.label.toLowerCase());
-        const bIndex = CATEGORY_ORDER.findIndex((cat) => cat.toLowerCase() === b.label.toLowerCase());
-
-        if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
-        if (aIndex !== -1) return -1;
-        if (bIndex !== -1) return 1;
-        return a.label.localeCompare(b.label);
-      });
-      return [{ ...prev[0], label: t("products.filters.all") || prev[0].label }, ...sortedRest];
-    });
-  }, [t]);
 
   // Filtering logic
   useEffect(() => {
