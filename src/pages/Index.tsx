@@ -81,7 +81,7 @@ const Index = () => {
         <h2 className="text-3xl font-bold mb-8">{t("categories.title", "Válogass prémium kategóriáinkból")}</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {categories.map((category) => (
-            <Link key={category.id} to={`/products?category=${category.slug}`}>
+            <Link key={category.id} to={`/categories?category=${category.slug}`}>
               <CategoryCard {...category} />
             </Link>
           ))}

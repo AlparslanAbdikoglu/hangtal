@@ -74,6 +74,15 @@ const Categories = () => {
   const auth = btoa(`${consumerKey}:${consumerSecret}`);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const categoryParam = params.get("category");
+
+    if (categoryParam) {
+      navigate(`/products?category=${categoryParam}`);
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     const fetchCategories = async () => {
       try {
         const res = await fetch(`${apiUrl}/products/categories?per_page=100`, {
