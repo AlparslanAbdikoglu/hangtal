@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { myStoreHook } from "@/MyStoreContext";
+import { useMyStore } from "@/MyStoreContext";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer"; // <-- import Footer
 import { FaRegFrown } from "react-icons/fa";
@@ -15,12 +15,12 @@ interface Product {
   sale_price?: string;
   quantity?: number;
   images?: { src: string }[];
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const Cart = () => {
   const { t } = useTranslation();
-  const { isAuthenticated, cart, removeItemsFromCart } = myStoreHook();
+  const { isAuthenticated, cart, removeItemsFromCart } = useMyStore();
   const [cartItems, setCartItems] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();

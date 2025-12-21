@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { myStoreHook } from "@/MyStoreContext";
+import { useMyStore } from "@/MyStoreContext";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
 const Checkout: React.FC = () => {
-  const { cart, loggedInUserData } = myStoreHook();
+  const { cart, loggedInUserData } = useMyStore();
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 

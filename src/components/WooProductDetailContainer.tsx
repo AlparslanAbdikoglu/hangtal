@@ -72,8 +72,9 @@ const WooProductDetailContainer: React.FC<WooProductDetailContainerProps> = ({
 
         productCache.set(cacheKey, productData);
         setProduct(productData);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : "Unknown error";
+        setError(message);
       } finally {
         setLoading(false);
       }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import swal from "sweetalert";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -30,7 +30,7 @@ const MyOrders: React.FC<MyOrdersProps> = ({ loggedInUserData, setPageLoading })
   const [singleOrder, setSingleOrder] = useState<Order | null>(null);
   const [showModal, setShowModal] = useState(false);
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     setPageLoading(true);
     try {
       const user = JSON.parse(loggedInUserData);
@@ -51,11 +51,11 @@ const MyOrders: React.FC<MyOrdersProps> = ({ loggedInUserData, setPageLoading })
     } finally {
       setPageLoading(false);
     }
-  };
+  }, [loggedInUserData, setPageLoading]);
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [fetchOrders]);
 
   const handleView = (order: Order) => {
     setSingleOrder(order);

@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-import { myStoreHook } from "@/MyStoreContext";
+import { useMyStore } from "@/MyStoreContext";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,7 +16,7 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   // Destructure cart, auth info and logout function from your store
-  const { cart, isAuthenticated, setUserLogout } = myStoreHook();
+  const { cart, isAuthenticated, setUserLogout } = useMyStore();
 
   // Calculate total quantity of items in cart (sum quantities or default 1)
   const itemCount = Array.isArray(cart)
