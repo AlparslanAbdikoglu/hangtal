@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { myStoreHook } from "../MyStoreContext";
+import { useMyStore } from "../MyStoreContext";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 
@@ -12,7 +12,7 @@ const Auth: React.FC = () => {
     setUserLoggedInStatus,
     setLoggedInUserData,
     setPageLoading,
-  } = myStoreHook();
+  } = useMyStore();
 
   const [loginData, setLoginData] = useState({
     login_username: "",

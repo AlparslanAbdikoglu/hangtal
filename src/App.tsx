@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { myStoreHook } from "./MyStoreContext";
+import { useMyStore } from "./MyStoreContext";
 import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -27,7 +27,7 @@ function App() {
     addProductsToCart,
     loggedInUserData,
     clearCartItem,
-  } = myStoreHook();
+  } = useMyStore();
 
   return (
     <Router>

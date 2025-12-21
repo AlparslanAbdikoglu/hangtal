@@ -55,9 +55,10 @@ const Categories = () => {
           }));
         setCategories(allCats);
         setError(null);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error fetching categories:", err);
-        setError(err.message || "Error");
+        const message = err instanceof Error ? err.message : "Error";
+        setError(message);
       }
     };
 

@@ -21,6 +21,12 @@ i18n
     lng: "hu", // force
     fallbackLng: 'hu',
     debug: false,
+    detection: {
+      // Default to Hungarian unless a user has explicitly chosen another language
+      order: ['localStorage', 'sessionStorage', 'cookie'],
+      caches: ['localStorage'],
+    },
+    supportedLngs: ['hu', 'en', 'sk', 'de'],
     interpolation: {
       escapeValue: false,
     },

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
@@ -9,6 +9,8 @@ interface Product {
   name: string;
   type?: string;
   price: string;
+  weight?: string;
+  featured?: boolean;
   regular_price?: string;
   sale_price?: string;
   description?: string;
@@ -16,7 +18,16 @@ interface Product {
   stock_status?: string;
   categories: { id: number; name: string; slug: string }[];
   images: { id: number; src: string }[];
+  attributes?: { id: number; name: string; options: string[] }[];
+  date_created?: string;
+  total_sales?: number;
   meta_data?: { key: string; value: string }[];
+}
+
+interface ProductCategory {
+  id: number;
+  name: string;
+  slug: string;
 }
 
 interface ProductsProps {
@@ -26,6 +37,60 @@ interface ProductsProps {
 }
 
 const VISIBLE_INCREMENT = 10;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const PRODUCT_CACHE_KEY = "woo_products_cache";
+const CATEGORY_CACHE_KEY = "woo_categories_cache";
+const CATEGORY_ORDER = [
+  "Gongok",
+  "Hangvillák",
+  "Himalájai Hangtálak",
+  "Kristály Hangtálak és kelyhek",
+  "Kalimbák",
+  "Handpanak",
+  "Acél Nyelv Dobok",
+  "Dobok",
+  "Chimeok-Hangjátékok",
+  "Hang effektek",
+  "Didgeridoo",
+  "Energia rudak",
+  "Üdők, dörzsfák",
+  "Táskák, tokok, huzatok",
+  "Állványok",
+];
+
+const WEIGHT_RANGES = [
+  { key: "all", min: 0, max: Infinity },
+  { key: "0-500", min: 0, max: 500 },
+  { key: "500-1000", min: 500, max: 1000 },
+  { key: "1000-1500", min: 1000, max: 1500 },
+  { key: "1500-2000", min: 1500, max: 2000 },
+  { key: "2000-3000", min: 2000, max: 3000 },
+  { key: "3000-5000", min: 3000, max: 5000 },
+];
+
+const PITCHES = ["C", "D", "E", "F", "G", "A", "B/H"] as const;
+
+const getCachedData = <T,>(key: string): T | null => {
+  if (typeof window === "undefined") return null;
+  const cached = localStorage.getItem(key);
+  if (!cached) return null;
+
+  try {
+    const parsed = JSON.parse(cached) as { timestamp: number; data: T };
+    if (Date.now() - parsed.timestamp < CACHE_DURATION) {
+      return parsed.data;
+    }
+  } catch (error) {
+    console.warn(`Failed to parse cache for ${key}`, error);
+  }
+
+  return null;
+};
+
+const setCache = <T,>(key: string, data: T) => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(key, JSON.stringify({ timestamp: Date.now(), data }));
+};
 
 const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProps) => {
   const { t } = useTranslation();
@@ -34,17 +99,27 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedPriceRange, setSelectedPriceRange] = useState({
-    label: t("products.filters.allPrices") || "All Prices",
-    min: 0,
-    max: Infinity,
-  });
+  const priceRanges = useMemo(() => [
+    { key: "all", label: t("products.filters.allPrices"), min: 0, max: Infinity },
+    { key: "under100", label: t("products.filters.under100"), min: 0, max: 100 },
+    { key: "100to500", label: t("products.filters.100to500"), min: 100, max: 500 },
+    { key: "over500", label: t("products.filters.over500"), min: 500, max: Infinity },
+    { key: "over1000", label: t("products.filters.over1000"), min: 1000, max: Infinity },
+    { key: "over1500", label: t("products.filters.over1500"), min: 1500, max: Infinity },
+  ], [t]);
+  const [selectedPriceRangeKey, setSelectedPriceRangeKey] = useState("all");
+  const [selectedWeightRangeKey, setSelectedWeightRangeKey] = useState("all");
+  const [selectedPitch, setSelectedPitch] = useState<string>("all");
   const [sortBy, setSortBy] = useState("featured");
   const [viewMode, setViewMode] = useState("grid");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [categories, setCategories] = useState<{ key: string; label: string }[]>([]);
   const [visibleCount, setVisibleCount] = useState(VISIBLE_INCREMENT); // Initial visible count
+  const selectedPriceRange = useMemo(
+    () => priceRanges.find((range) => range.key === selectedPriceRangeKey) ?? priceRanges[0],
+    [priceRanges, selectedPriceRangeKey]
+  );
 
   const consumerKey = import.meta.env.VITE_WOO_CONSUMER_KEY;
   const consumerSecret = import.meta.env.VITE_WOO_CONSUMER_SECRET;
@@ -52,7 +127,55 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
   const auth = btoa(`${consumerKey}:${consumerSecret}`);
 
   // Ref to store the previous values of our filtering dependencies
-  const prevDeps = useRef({ searchTerm, selectedCategory, selectedPriceRange, sortBy });
+  const prevDeps = useRef({
+    searchTerm,
+    selectedCategory,
+    selectedPriceRangeKey,
+    selectedWeightRangeKey,
+    selectedPitch,
+    sortBy,
+  });
+
+  const normalizePitch = useCallback((pitch?: string) => {
+    if (!pitch) return null;
+    const normalized = pitch.trim().toUpperCase();
+    if (normalized === "B" || normalized === "H") return "B/H";
+    return PITCHES.includes(normalized as (typeof PITCHES)[number]) ? normalized : null;
+  }, []);
+
+  const getProductPitch = useCallback(
+    (product: Product) => {
+      const attributePitch = product.attributes?.find((attr) => /hang|note|pitch/i.test(attr.name))?.options?.[0];
+      const metaPitch = product.meta_data?.find((m) => /hang|note|pitch/i.test(m.key))?.value;
+      return normalizePitch(String(attributePitch || metaPitch || ""));
+    },
+    [normalizePitch]
+  );
+
+  const getProductWeight = useCallback((product: Product) => {
+    const weightValue = product.weight || product.meta_data?.find((m) => /weight/i.test(m.key))?.value;
+    const parsed = weightValue ? parseFloat(String(weightValue).replace(/[^0-9.]/g, "")) : NaN;
+    return isNaN(parsed) ? null : parsed;
+  }, []);
+
+  const sortCategoriesByOrder = useCallback((list: { key: string; label: string }[]) => {
+    if (!list.length) return list;
+    const [first, ...rest] = list;
+    const sortedRest = [...rest].sort((a, b) => {
+      const aIndex = CATEGORY_ORDER.findIndex((cat) => cat.toLowerCase() === a.label.toLowerCase());
+      const bIndex = CATEGORY_ORDER.findIndex((cat) => cat.toLowerCase() === b.label.toLowerCase());
+
+      if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+      if (aIndex !== -1) return -1;
+      if (bIndex !== -1) return 1;
+      return a.label.localeCompare(b.label);
+    });
+
+    return [
+      { ...first, label: t("products.filters.all") || first.label },
+      ...sortedRest,
+    ];
+  }, [t]);
 
   // Set category from URL or defaultCategory
   useEffect(() => {
@@ -71,35 +194,62 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        const cachedCategories = getCachedData<ProductCategory[]>(CATEGORY_CACHE_KEY);
+
+        if (cachedCategories) {
+          setCategories(
+            sortCategoriesByOrder([
+              { key: "all", label: t("products.filters.all") || "All Categories" },
+              ...cachedCategories.map((cat) => ({ key: cat.slug, label: cat.name })),
+            ])
+          );
+        }
+
         const res = await fetch(`${apiUrl}/products/categories`, {
           headers: { Authorization: `Basic ${auth}` },
         });
-        const data = await res.json();
-        setCategories([
-          { key: "all", label: t("products.filters.all") || "All Categories" },
-          ...data.map((cat: any) => ({
-            key: cat.slug,
-            label: cat.name,
-          })),
-        ]);
+        const data: ProductCategory[] = await res.json();
+
+        setCategories(
+          sortCategoriesByOrder([
+            { key: "all", label: t("products.filters.all") || "All Categories" },
+            ...data.map((cat) => ({
+              key: cat.slug,
+              label: cat.name,
+            })),
+          ])
+        );
+
+        setCache(CATEGORY_CACHE_KEY, data);
       } catch (err) {
         console.error("Failed to fetch categories", err);
       }
     };
     fetchCategories();
-  }, []);
+  }, [apiUrl, auth, sortCategoriesByOrder, t]);
+
+  useEffect(() => {
+    setCategories((prev) => sortCategoriesByOrder(prev));
+  }, [sortCategoriesByOrder, t]);
 
   // Fetch products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setPageLoading(true);
+        const cachedProducts = getCachedData<Product[]>(PRODUCT_CACHE_KEY);
+
+        if (cachedProducts) {
+          setProducts(cachedProducts);
+          setLoading(false);
+        }
+
         const res = await fetch(`${apiUrl}/products?per_page=100`, {
           headers: { Authorization: `Basic ${auth}`, "Content-Type": "application/json" },
         });
         if (!res.ok) throw new Error("Failed to fetch products");
 
-        let data: Product[] = await res.json();
+        const data: Product[] = await res.json();
 
         // Handle grouped product prices
         const updatedData = await Promise.all(
@@ -125,21 +275,44 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
         );
 
         setProducts(updatedData);
+        setCache(PRODUCT_CACHE_KEY, updatedData);
         setLoading(false);
         setPageLoading(false);
       } catch (err) {
         console.error(err);
-        setError("Failed to fetch products.");
+        setError(t("products.error", "Failed to fetch products."));
         setLoading(false);
         setPageLoading(false);
       }
     };
 
     fetchProducts();
-  }, [setPageLoading]);
+  }, [apiUrl, auth, setPageLoading, t]);
+
+  useEffect(() => {
+    setCategories((prev) => {
+      if (!prev.length) return prev;
+      const [, ...rest] = prev;
+      const sortedRest = rest.sort((a, b) => {
+        const aIndex = CATEGORY_ORDER.findIndex((cat) => cat.toLowerCase() === a.label.toLowerCase());
+        const bIndex = CATEGORY_ORDER.findIndex((cat) => cat.toLowerCase() === b.label.toLowerCase());
+
+        if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+        if (aIndex !== -1) return -1;
+        if (bIndex !== -1) return 1;
+        return a.label.localeCompare(b.label);
+      });
+      return [
+        { ...prev[0], label: t("products.filters.all") || prev[0].label },
+        ...sortedRest,
+      ];
+    });
+  }, [t]);
 
   // Filtering logic
   useEffect(() => {
+    const weightRange = WEIGHT_RANGES.find((range) => range.key === selectedWeightRangeKey) || WEIGHT_RANGES[0];
+
     const filtered = products
       .filter((product) => {
         const matchesSearch =
@@ -154,7 +327,15 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
           parseFloat(product.price) >= selectedPriceRange.min &&
           parseFloat(product.price) <= selectedPriceRange.max;
 
-        return matchesSearch && matchesCategory && matchesPrice;
+        const weight = getProductWeight(product);
+        const matchesWeight =
+          selectedWeightRangeKey === "all" ||
+          (weight !== null && weight >= weightRange.min && weight < weightRange.max);
+
+        const pitch = getProductPitch(product);
+        const matchesPitch = selectedPitch === "all" || pitch === selectedPitch;
+
+        return matchesSearch && matchesCategory && matchesPrice && matchesWeight && matchesPitch;
       })
       .sort((a, b) => {
         switch (sortBy) {
@@ -162,26 +343,39 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
             return parseFloat(a.price) - parseFloat(b.price);
           case "price-high":
             return parseFloat(b.price) - parseFloat(a.price);
+          case "popular":
+            return (b.total_sales || 0) - (a.total_sales || 0);
+          case "newest":
+            return new Date(b.date_created || 0).getTime() - new Date(a.date_created || 0).getTime();
           case "name":
             return a.name.localeCompare(b.name);
           default:
-            return 0;
+            return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
         }
       });
-      
+
     // Check if any filter has actually changed before resetting the visible count
     const hasFilterChanged =
       prevDeps.current.searchTerm !== searchTerm ||
       prevDeps.current.selectedCategory !== selectedCategory ||
-      prevDeps.current.selectedPriceRange !== selectedPriceRange ||
-      prevDeps.current.sortBy !== sortBy;
+      prevDeps.current.selectedPriceRangeKey !== selectedPriceRangeKey ||
+      prevDeps.current.sortBy !== sortBy ||
+      prevDeps.current.selectedWeightRangeKey !== selectedWeightRangeKey ||
+      prevDeps.current.selectedPitch !== selectedPitch;
 
     if (hasFilterChanged) {
-        setVisibleCount(VISIBLE_INCREMENT);
+      setVisibleCount(VISIBLE_INCREMENT);
     }
-    
+
     // Update the ref with current values
-    prevDeps.current = { searchTerm, selectedCategory, selectedPriceRange, sortBy };
+    prevDeps.current = {
+      searchTerm,
+      selectedCategory,
+      selectedPriceRangeKey,
+      selectedWeightRangeKey,
+      selectedPitch,
+      sortBy,
+    };
 
     setFilteredProducts(filtered);
 
@@ -193,16 +387,41 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
       params.delete("category");
     }
     window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
-  }, [products, searchTerm, selectedCategory, selectedPriceRange, sortBy]);
+  }, [getProductPitch, getProductWeight, products, searchTerm, selectedCategory, selectedPriceRange, selectedPriceRangeKey, selectedWeightRangeKey, selectedPitch, sortBy]);
 
-  const priceRanges = [
-    { label: t("products.filters.allPrices"), min: 0, max: Infinity },
-    { label: t("products.filters.under100"), min: 0, max: 100 },
-    { label: t("products.filters.100to500"), min: 100, max: 500 },
-    { label: t("products.filters.over500"), min: 500, max: Infinity },
-  ];
+  const weightCounts = useMemo(() => {
+    const baseFiltered = products.filter((product) => {
+      const matchesSearch =
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (product.description || "").toLowerCase().includes(searchTerm.toLowerCase());
 
-  if (loading) return <div className="p-12 text-center">Loading products...</div>;
+      const matchesCategory =
+        selectedCategory === "all" ||
+        product.categories?.some((c) => c.slug === selectedCategory);
+
+      const matchesPrice =
+        parseFloat(product.price) >= selectedPriceRange.min &&
+        parseFloat(product.price) <= selectedPriceRange.max;
+
+      const pitch = getProductPitch(product);
+      const matchesPitch = selectedPitch === "all" || pitch === selectedPitch;
+
+      return matchesSearch && matchesCategory && matchesPrice && matchesPitch;
+    });
+
+    const counts: Record<string, number> = {};
+    WEIGHT_RANGES.forEach((range) => {
+      if (range.key === "all") return;
+      counts[range.key] = baseFiltered.filter((product) => {
+        const weight = getProductWeight(product);
+        return weight !== null && weight >= range.min && weight < range.max;
+      }).length;
+    });
+    return counts;
+  }, [getProductPitch, getProductWeight, products, searchTerm, selectedCategory, selectedPriceRange, selectedPriceRangeKey, selectedPitch]);
+
+
+  if (loading) return <div className="p-12 text-center">{t("products.loading", "Loading products...")}</div>;
   if (error) return <div className="p-12 text-center text-red-500">{error}</div>;
 
   return (
@@ -234,16 +453,39 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
               </select>
 
               <select
-                value={selectedPriceRange.label}
-                onChange={(e) => {
-                  const selected = priceRanges.find((r) => r.label === e.target.value);
-                  if (selected) setSelectedPriceRange(selected);
-                }}
+                value={selectedPriceRangeKey}
+                onChange={(e) => setSelectedPriceRangeKey(e.target.value)}
                 className="border px-3 py-2 rounded w-full"
               >
                 {priceRanges.map((range) => (
-                  <option key={range.label} value={range.label}>
+                  <option key={range.key} value={range.key}>
                     {range.label}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedWeightRangeKey}
+                onChange={(e) => setSelectedWeightRangeKey(e.target.value)}
+                className="border px-3 py-2 rounded w-full"
+              >
+                <option value="all">{t("products.filters.allWeights", "All weights")}</option>
+                {WEIGHT_RANGES.filter((r) => r.key !== "all").map((range) => (
+                  <option key={range.key} value={range.key}>
+                    {t(`products.filters.weight.${range.key}`)} ({weightCounts[range.key] ?? 0})
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedPitch}
+                onChange={(e) => setSelectedPitch(e.target.value)}
+                className="border px-3 py-2 rounded w-full"
+              >
+                <option value="all">{t("products.filters.allPitches", "All pitches")}</option>
+                {PITCHES.map((pitch) => (
+                  <option key={pitch} value={pitch}>
+                    {t(`products.filters.pitch.${pitch}`, pitch)}
                   </option>
                 ))}
               </select>
@@ -254,9 +496,10 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
                 className="border px-3 py-2 rounded w-full"
               >
                 <option value="featured">{t("products.filters.featured", "featured")}</option>
-                <option value="price-low">{t("products.filters.priceLowToHigh", "priceLowToHigh")}</option>
-                <option value="price-high">{t("products.filters.priceHighToLow", "priceHighToLow")}</option>
-                <option value="name">{t("products.filters.name", "name")}</option>
+                <option value="popular">{t("products.filters.popular", "Most popular")}</option>
+                <option value="newest">{t("products.filters.newest", "Newest")}</option>
+                <option value="price-low">{t("products.filters.priceLowHigh", "priceLowHigh")}</option>
+                <option value="price-high">{t("products.filters.priceHighLow", "priceHighLow")}</option>
               </select>
             </div>
           </div>
@@ -286,7 +529,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
                   onClick={() => setVisibleCount(prevCount => prevCount + VISIBLE_INCREMENT)}
                   className="bg-primary text-primary-foreground font-bold py-2 px-6 rounded-lg shadow-md hover:bg-primary-foreground hover:text-primary transition-colors duration-200"
                 >
-                  Load More
+                  {t("products.loadMore", "Load More")}
                 </button>
               </div>
             )}

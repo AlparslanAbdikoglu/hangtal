@@ -8,7 +8,7 @@ import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { useTranslation } from 'react-i18next';
 import { ShoppingCart } from 'lucide-react';
-import { myStoreHook } from '../MyStoreContext'; // Adjust path accordingly
+import { useMyStore } from "../MyStoreContext"; // Adjust path accordingly
 
 export interface ProductImage {
   id: number;
@@ -40,7 +40,7 @@ interface ProductDetailPageProps {
 
 const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product }) => {
   const { t } = useTranslation();
-  const { addToCart } = myStoreHook();
+  const { addToCart } = useMyStore();
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});

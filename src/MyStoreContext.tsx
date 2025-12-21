@@ -17,7 +17,7 @@ interface Product {
   sale_price?: string;
   quantity?: number;
   images?: { src: string }[];
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface UserData {
@@ -25,7 +25,7 @@ interface UserData {
   name?: string;
   email?: string;
   username?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface MyStoreContextType {
@@ -186,4 +186,4 @@ export const MyStoreProvider: React.FC<{ children: ReactNode }> = ({ children })
 };
 
 // --- Custom Hook ---
-export const myStoreHook = (): MyStoreContextType => useContext(MyStoreContext);
+export const useMyStore = (): MyStoreContextType => useContext(MyStoreContext);
