@@ -39,38 +39,45 @@ const Index = () => {
 			<Hero />
 
 			{/* Promo Section */}
-			<section className="container py-16 bg-background w-full text-center max-w-4xl mx-auto">
-				<h2 className="text-4xl font-bold mb-8">
-					{t("promo.title", "Miért válassz minket?")}
-				</h2>
-				<div className="mb-8 text-lg text-gray-700 max-w-lg mx-auto">
-					<p>
-						{t(
-							"promo.intro",
-							"Fedezd fel gondosan válogatott, kézzel készített hangszereink és egyedi alkotásaink világát."
-						)}
-					</p>
-					<ul className="list-none space-y-2 text-middle mt-4">
-						<li> {t("promo.point1", "Minőségi, válogatott hangszerek")}</li>
-						<li> {t("promo.point2", "Szakértői útmutatás és oktatás")}</li>
-						<li>
-							 {t("promo.point3", "Egyedi táblázatok, leírások a hangtálak mellé – csak nálunk")}
-						</li>
-						<li> {t("promo.point4", "Gyors, biztonságos szállítás")}</li>
-					</ul>
-					<p>
-						{t(
-							"promo.outro",
-							"Engedd, hogy a hangok ereje belépjen a mindennapjaidba  válassz most webshopunk kínálatából."
-						)}
-					</p>
-				</div>
-				<Link to="https://hangakademia.hu" target="_blank" rel="noopener noreferrer">
-					<button className="bg-primary text-white px-8 py-4 rounded-lg text-xl font-semibold hover:bg-primary/90 transition">
-						{t("promo.cta", "MeinSonic Energy Nagykövet megtekintése")}
-					</button>
-				</Link>
-			</section>
+                        <section className="container py-16 bg-background w-full max-w-4xl mx-auto">
+                                <h2 className="text-4xl font-bold mb-8 text-center">
+                                        {t("promo.title", "HANGAKADÉMIA® – A hangok ereje a mindennapjaidban")}
+                                </h2>
+                                <div className="mb-8 text-lg text-gray-700 space-y-4 leading-relaxed">
+                                        <p>{t("promo.intro", "Fedezd fel a hangtálak, hangszerek és rezgésalapú hangélmények különleges világát.")}</p>
+                                        <p>
+                                                {t(
+                                                        "promo.belief",
+                                                        "A Hangakadémiánál® hiszünk abban, hogy a hang tudatos használata támogatja a belső egyensúlyt, a nyugalmat és a mélyebb jelenlétet. Webshopunkban gondosan válogatott Himalájai hangtálakat, professzionális Meinl Sonic Energy hangszereket és prémium kiegészítőket találsz – minden darabot személyesen kipróbálva, szakmai ajánlással."
+                                                )}
+                                        </p>
+                                        <div className="space-y-2">
+                                                <h3 className="text-2xl font-semibold">{t("promo.whyTitle", "Miért a Hangakadémia®?")}</h3>
+                                                <p>{t("promo.benefit1", "Prémium minőségű, gondosan válogatott hangszerek – szakmai háttérrel.")}</p>
+                                                <p>{t("promo.background1", "A Hangakadémia® nem csupán egy webshop.")}</p>
+                                                <p>
+                                                        {t(
+                                                                "promo.background2",
+                                                                "Minden hangtálat és hangszert személyesen válogatunk, kipróbálunk és szakmai szempontok alapján ajánlunk."
+                                                        )}
+                                                </p>
+                                                <p>
+                                                        {t(
+                                                                "promo.partnership",
+                                                                "A Hangakadémia® a Meinl Sonic Energy hivatalos szakmai partnere, alapítója, Pál Adrienn, Magyarország hivatalos Meinl Sonic Energy szakmai nagykövete."
+                                                        )}
+                                                </p>
+                                                <p>{t("promo.value", "Nálunk nem csak eszközt vásárolsz – útmutatást, tudást és megbízható szakmai hátteret is kapsz.")}</p>
+                                        </div>
+                                </div>
+                                <div className="text-center">
+                                        <Link to="https://hangakademia.hu" target="_blank" rel="noopener noreferrer">
+                                                <button className="bg-primary text-white px-8 py-4 rounded-lg text-xl font-semibold hover:bg-primary/90 transition">
+                                                        {t("promo.cta", "👉 Ismerd meg a Hangakadémiát® és a Meinl Sonic Energy Magyarországi Nagykövetét")}
+                                                </button>
+                                        </Link>
+                                </div>
+                        </section>
 
 			{/* Categories Section */}
 			<section className="container py-16">

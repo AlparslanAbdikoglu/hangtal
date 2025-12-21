@@ -494,14 +494,16 @@
       "delete": "Törlés"
     },
     "promo": {
-      "title": "Miért válassz minket?",
-      "intro": "A HangAkadémiánál® a hang több mint rezgés:kapocs önmagadhoz, a jelen pillanathoz, és ahhoz a belső harmóniához, amelyre mindannyian vágyunk.",
-      "point1": "Minőségi, válogatott hangszerek",
-      "point2": "Szakértői útmutatás és oktatás",
-      "point3": "Gyors, biztonságos szállítás",
-      "point4": "A hangszereket gondosan csomagoljuk és extra figyelemmel küldjük útnak.Lépj be a hangok világába.",
-      "outro": "Válassz most webshopunk prémium kínálatából, és találd meg azt az eszközt, amely megszólít —a rezgést, amely elindít a belső harmónia útján.",
-      "cta": "Meinl Sonic Energy Magyarországi Szakmai Nagykövet megtekintése"
+      "title": "HANGAKADÉMIA® – A hangok ereje a mindennapjaidban",
+      "intro": "Fedezd fel a hangtálak, hangszerek és rezgésalapú hangélmények különleges világát.",
+      "belief": "A Hangakadémiánál® hiszünk abban, hogy a hang tudatos használata támogatja a belső egyensúlyt, a nyugalmat és a mélyebb jelenlétet. Webshopunkban gondosan válogatott Himalájai hangtálakat, professzionális Meinl Sonic Energy hangszereket és prémium kiegészítőket találsz – minden darabot személyesen kipróbálva, szakmai ajánlással.",
+      "whyTitle": "Miért a Hangakadémia®?",
+      "benefit1": "Prémium minőségű, gondosan válogatott hangszerek – szakmai háttérrel.",
+      "background1": "A Hangakadémia® nem csupán egy webshop.",
+      "background2": "Minden hangtálat és hangszert személyesen válogatunk, kipróbálunk és szakmai szempontok alapján ajánlunk.",
+      "partnership": "A Hangakadémia® a Meinl Sonic Energy hivatalos szakmai partnere, alapítója, Pál Adrienn, Magyarország hivatalos Meinl Sonic Energy szakmai nagykövete.",
+      "value": "Nálunk nem csak eszközt vásárolsz – útmutatást, tudást és megbízható szakmai hátteret is kapsz.",
+      "cta": "👉 Ismerd meg a Hangakadémiát® és a Meinl Sonic Energy Magyarországi Nagykövetét"
     }
   }
 }
