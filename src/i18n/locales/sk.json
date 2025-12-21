@@ -154,25 +154,175 @@
     "removed": "Produkt bol odstránený z košíka!"
   },
   "about": {
-    "title": "Adrienn Pál",
-    "intro1": "Adrienn Pál sa venuje tomu, aby liečivá sila zvuku bola dostupná pre každého. Vitajte v e-shope Zvukovej akadémie! Mojím cieľom je sprístupniť liečivú, harmonizujúcu silu zvukov a vibrácií všetkým.",
-    "intro2": "Spievajúce misy, gongy, ladičky a špeciálne nástroje dostupné tu slúžia rovnováhe tela a duše – či už na relaxáciu, meditáciu, terapiu alebo jednoducho na každodennú vnútornú harmóniu.\nKu každému nástroju dostanete odborné rady, podrobné popisy a praktické vedenie, ak si želáte. O nástrojoch sa môžete dozvedieť viac a cvičiť na mojich školeniach – verím, že zvuk nielen znie, ale aj učí, lieči a spája.",
-    "imageAlt": "Portrét Adrienn Pál",
-    "mission": "Prečo si vybrať nás?",
-    "missionText": "Starostlivo vybrané, prémiové nástroje\nJedinečné popisy spievajúcich mís (frekvencia, zvuk, spojenie s čakrou) – špeciálna služba len u nás\nOdborné vedenie a vzdelávacie zázemie\nRýchle, bezpečné doručenie.",
-    "faq": "Často kladené otázky",
-    "faqItems": {
-      "soundHealing": "Čo je zvuková terapia?",
-      "chooseInstrument": "Ako si vybrať správny nástroj?",
-      "workshops": "Ponúkate workshopy?",
-      "benefits": "Aké sú výhody zvukovej terapie?"
-    },
-    "faqAnswers": {
-      "soundHealing": "Zvuková terapia je metóda, ktorá využíva vibrácie nástrojov na podporu fyzickej a duševnej pohody.",
-      "chooseInstrument": "Dôležitý je zámer a osobné preferencie. Radi vám pomôžeme nájsť dokonalý nástroj.",
-      "workshops": "Áno, ponúkame workshopy pre všetky úrovne. Pozrite si naše podujatia pre podrobnosti.",
-      "benefits": "Zvuková terapia môže pomôcť znížiť stres, zlepšiť koncentráciu a podporiť zdravie."
-    }
+    "title": "A HangAkadémia® – ahol a hang tudássá válik",
+    "imageAlt": "A HangAkadémia® alapítója",
+    "introParagraphs": [
+      "A HangAkadémia® egy strukturált szakmai szemlélet mentén működő webshop, amelynek kínálata következetes szakmai szűrés és tapasztalati alapú válogatás eredménye.",
+      "A hangszerek itt nem pusztán termékek, hanem olyan eszközök, amelyek hangzásukban, karakterükben és funkcionális alkalmazhatóságukban is megfelelnek a képviselt szakmai elveknek."
+    ],
+    "sections": [
+      {
+        "title": "A HangAkadémia® célja",
+        "paragraphs": [
+          "A HangAkadémia® célja, hogy világos, megbízható és szakmailag értelmezhető választási keretet biztosítson mindazok számára, akik a hangszerekkel való munkát tudatos döntésekre, felelősségvállalásra és hosszú távú szemléletre alapozzák – legyen szó személyes használatról, oktatási környezetről vagy professzionális gyakorlatról."
+        ]
+      },
+      {
+        "title": "Pál Adrienn– alapító, szakmai vezető",
+        "paragraphs": [
+          "Pál Adrienn a HangAkadémia® alapítója és szakmai vezetője.",
+          "Munkájának középpontjában a hangtálak, hangvillák, gongok és egyéb rezgésalapú hangszerek tudatos, felelős és szakmailag megalapozott alkalmazása áll."
+        ],
+        "listTitle": "Számára kiemelten fontos, hogy minden hangszer:",
+        "listItems": [
+          "minőségében ellenőrzött legyen",
+          "hangzásában tiszta és kiegyensúlyozott",
+          "rezgéskarakterében következetes",
+          "és valódi szakmai értéket képviseljen"
+        ],
+        "closingParagraph": "A HangAkadémia® webshop kínálata ennek a szemléletnek az eredménye: minden hangszer személyes válogatáson és szakmai szűrésen megy keresztül."
+      },
+      {
+        "title": "Hivatalos szakmai háttér",
+        "paragraphs": [
+          "A HangAkadémia® a Meinl Sonic Energy hivatalos szakmai partnere.",
+          "Pál Adriennl Magyarország hivatalos Meinl Sonic Energy szakmai nagykövete, közvetlen kapcsolatban a gyártó nemzetközi csapatával."
+        ],
+        "listTitle": "Ez a szakmai együttműködés biztosítja, hogy a webshopban:",
+        "listItems": [
+          "kizárólag eredeti, ellenőrzött forrásból származó hangszerek jelenjenek meg",
+          "naprakész termékkínálat legyen elérhető",
+          "hiteles, szakmailag megalapozott információk álljanak a vásárlók rendelkezésére"
+        ]
+      },
+      {
+        "title": "Miért válaszd a HangAkadémiát?",
+        "features": [
+          {
+            "title": "Személyesen válogatott hangszerek",
+            "description": "Minden hangszer gondos kiválasztás eredménye. A hang tisztasága, a rezgés minősége és az anyaghasználat alapvető szempont a kínálat összeállításakor."
+          },
+          {
+            "title": "Szakértői útmutatás",
+            "description": "A HangAkadémiánál® nem csupán vásárolsz. Segítünk eligazodni a hangmagasságok, frekvenciák, méretek és hangkarakterek között, hogy valóban a hozzád illő hangszer kerüljön hozzád."
+          },
+          {
+            "title": "Oktatási háttér",
+            "description": "A Hangakadémia® mögött aktív oktatási tevékenység áll. Online és személyes képzéseinken strukturált rendszerben adjuk át a hangszerek tudatos használatához szükséges ismereteket."
+          },
+          {
+            "title": "Prémium minőség és biztonság",
+            "description": "A hangszereket gondosan csomagolva, fokozott figyelemmel juttatjuk el hozzád, hogy a minőség már az első megszólaláskor érezhető legyen."
+          }
+        ]
+      },
+      {
+        "title": "A Hangakadémia® szemlélete",
+        "paragraphs": [
+          "A HangAkadémiánál® a hang egyszerre élmény és minőség.",
+          "Lehet önfeledt, lehet elmélyítő, lehet inspiráló – számunkra azonban mindig fontos, hogyan szólal meg, milyen minőséget képvisel, és milyen kapcsolatot teremt az ember és a hangszer között.",
+          "Minden hangszer, amely a kínálatunkba kerül, ezt a szemléletet tükrözi: tudatos választás, tiszta hangzás és szakmai megbízhatóság."
+        ]
+      }
+    ],
+    "faqTitle": "GYIK",
+    "faqItems": [
+      {
+        "question": "Mi az a hangterápia / hangalapú hangmunka?",
+        "answerParagraphs": [
+          "A hangterápia a hang és a rezgés tudatos alkalmazásán alapuló megközelítés, amely különböző hangszerek segítségével a hallás, az észlelés és a figyelem folyamatára épül.",
+          "A gyakorlat középpontjában nem diagnózis vagy gyógyítás áll, hanem a hangélmény strukturált, célzott használata egyéni vagy csoportos környezetben."
+        ]
+      },
+      {
+        "question": "Milyen célra használhatók a webshopban kapható hangszerek?",
+        "answerParagraphs": ["A HangAkadémia® kínálatában szereplő hangszerek használhatók:"],
+        "listItems": [
+          "otthoni relaxációra",
+          "meditációs vagy figyelem fókuszáló gyakorlatokhoz",
+          "oktatási környezetben",
+          "professzionális hangmunkához (pl. hangfürdők, csoportos hangélmények)"
+        ],
+        "closing": "A hangszerek nem minősülnek orvosi vagy terápiás eszköznek."
+      },
+      {
+        "question": "Hogyan válasszam ki a számomra megfelelő hangszert?",
+        "answerParagraphs": ["A megfelelő hangszer kiválasztása több tényezőtől függ, például:"],
+        "listItems": [
+          "milyen célra szeretnéd használni",
+          "milyen hangmagasság vagy hangkarakter áll közel hozzád",
+          "otthoni vagy professzionális környezetben alkalmazod-e"
+        ],
+        "closing": "Ha bizonytalan vagy, lehetőséget biztosítunk személyre szabott szakmai ajánlásra, amely segít eligazodni a kínálatban."
+      },
+      {
+        "question": "Miben különbözik a HangAkadémia® webshop más hangszer webshopoktól?",
+        "answerParagraphs": [
+          "A HangAkadémia® kínálata nem tömeges termékkatalógus.",
+          "Minden hangszer szakmai szempontok szerint válogatott, személyes tapasztalaton és következetes szemléleten alapul.",
+          "A webshop mögött aktív oktatási és szakmai háttér áll, amely biztosítja a hiteles tájékoztatást és az egységes minőségi szemléletet."
+        ]
+      },
+      {
+        "question": "Kapok segítséget a hangszerek használatához?",
+        "answerParagraphs": [
+          "Igen.",
+          "A HangAkadémia® célja, hogy a vásárlók ne csak hangszert kapjanak, hanem érthető szakmai útmutatást is."
+        ],
+        "listItems": [
+          "termékleírásokon keresztül",
+          "egyedi ajánlás formájában",
+          "oktatási anyagokon és képzéseken keresztül"
+        ]
+      },
+      {
+        "question": "Tartotok képzéseket, workshopokat?",
+        "answerParagraphs": [
+          "Igen.",
+          "A HangAkadémia® oktatási tevékenysége keretében online és személyes képzéseket is kínál, strukturált rendszerben, különböző szinteken."
+        ],
+        "closing": "Az aktuális képzések és események mindig a hivatalos felületekeinken érhetők el.",
+        "linkText": "Oktatások megtekintése",
+        "linkUrl": "https://hangakademia.hu/oktatasok.html"
+      },
+      {
+        "question": "A hangszerek rendelkeznek egészségügyi vagy gyógyászati hatással?",
+        "answerParagraphs": [
+          "A webshopban kapható hangszerek nem egészségügyi eszközök, és nem helyettesítenek orvosi vagy terápiás kezeléseket.",
+          "A hangszerek használata élményalapú, oktatási és kreatív célokat szolgál."
+        ]
+      },
+      {
+        "question": "Kezdők is vásárolhatnak a webshopból?",
+        "answerParagraphs": [
+          "Igen.",
+          "A kínálat összeállításakor figyelünk arra, hogy kezdők számára is jól használható hangszerek elérhetők legyenek, megfelelő szakmai magyarázattal és ajánlással."
+        ]
+      },
+      {
+        "question": "Professzionális felhasználók számára is megfelelőek a hangszerek?",
+        "answerParagraphs": [
+          "Igen.",
+          "A HangAkadémia® kínálata alkalmas professzionális hangmunkára is, például:"
+        ],
+        "listItems": [
+          "csoportos hangélményekhez",
+          "oktatáshoz",
+          "különböző hangfürdők lebonyolításához"
+        ],
+        "closing": "A választásnál azonban fontos a megfelelő hangszer és méret kiválasztása."
+      },
+      {
+        "question": "Mit tegyek, ha nem vagyok biztos a választásomban?",
+        "answerParagraphs": [
+          "Ha bizonytalan vagy, javasoljuk, hogy vedd fel velünk a kapcsolatot.",
+          "Szívesen segítünk eligazodni a hangszerek között, és szakmai szempontok alapján ajánlunk megoldást."
+        ]
+      }
+    ],
+    "quoteLabel": "Személyes üzenet tőlem",
+    "quoteText": "„A hanggal való munka számomra figyelmet és tiszteletet jelent. Minden hangszer, amely a Hangakadémián megjelenik, ezen a szemléleten keresztül érkezik.”",
+    "quoteAuthor": "— Adrienn Pál"
   },
   "contact": {
     "title": "Kontakt",
