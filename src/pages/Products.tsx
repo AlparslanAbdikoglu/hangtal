@@ -101,20 +101,11 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const priceRanges: PriceRange[] = useMemo(
-    () => [
-      { key: "all", label: t("products.filters.allPrices"), min: 0, max: Infinity },
-      { key: "under100", label: t("products.filters.under100"), min: 0, max: 100 },
-      { key: "100to500", label: t("products.filters.100to500"), min: 100, max: 500 },
-      { key: "over500", label: t("products.filters.over500"), min: 500, max: Infinity },
-      { key: "over1000", label: t("products.filters.over1000"), min: 1000, max: Infinity },
-      { key: "over1500", label: t("products.filters.over1500"), min: 1500, max: Infinity },
-    ],
-    [t]
-  );
-  const [selectedPriceRangeKey, setSelectedPriceRangeKey] = useState("all");
-  const [selectedWeightRangeKey, setSelectedWeightRangeKey] = useState("all");
-  const [selectedPitch, setSelectedPitch] = useState<string>("all");
+  const [selectedPriceRange, setSelectedPriceRange] = useState({
+    label: t("products.filters.allPrices", "All Prices"),
+    min: 0,
+    max: Infinity,
+  });
   const [sortBy, setSortBy] = useState("featured");
   const [viewMode, setViewMode] = useState("grid");
   const [loading, setLoading] = useState(true);
