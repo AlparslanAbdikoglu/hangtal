@@ -41,10 +41,9 @@ const Index = () => {
 			{/* Promo Section */}
                         <section className="container py-16 bg-background w-full max-w-4xl mx-auto">
                                 <h2 className="text-4xl font-bold mb-8 text-center">
-                                        {t("promo.title", "HANGAKADÉMIA® – A hangok ereje a mindennapjaidban")}
+                                        {t("promo.title", "Miért a Hangakadémia®?")}
                                 </h2>
                                 <div className="mb-8 text-lg text-gray-700 space-y-2 leading-relaxed">
-                                        <h3 className="text-2xl font-semibold">{t("promo.whyTitle", "Miért a Hangakadémia®?")}</h3>
                                         <p>{t("promo.benefit1", "Prémium minőségű, gondosan válogatott hangszerek – szakmai háttérrel.")}</p>
                                         <p>{t("promo.background1", "A Hangakadémia® nem csupán egy webshop.")}</p>
                                         <p>
