@@ -35,7 +35,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPriceRange, setSelectedPriceRange] = useState({
-    label: t("products.filters.allPrices") || "All Prices",
+    label: t("products.filters.allPrices", "All Prices"),
     min: 0,
     max: Infinity,
   });
