@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useTranslation } from 'react-i18next';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 type Feature = {
   title: string;
@@ -101,43 +102,39 @@ const About = () => {
           {faqItems?.length > 0 && (
             <section className="space-y-4">
               <h2 className="text-3xl font-bold text-primary">{faqTitle}</h2>
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <Accordion type="multiple" className="divide-y rounded-lg border">
                 {faqItems.map((faq) => (
-                  <div
-                    key={faq.question}
-                    className="h-full p-4 rounded-lg border bg-muted/50 space-y-2"
-                  >
-                    <h3 className="text-xl font-semibold text-primary">{faq.question}</h3>
+                  <AccordionItem key={faq.question} value={faq.question} className="px-4">
+                    <AccordionTrigger className="text-lg text-primary">{faq.question}</AccordionTrigger>
+                    <AccordionContent className="space-y-3 text-foreground">
+                      {faq.answerParagraphs?.map((paragraph, index) => (
+                        <p key={index}>{paragraph}</p>
+                      ))}
 
-                    {faq.answerParagraphs?.map((paragraph, index) => (
-                      <p key={index} className="text-foreground">
-                        {paragraph}
-                      </p>
-                    ))}
+                      {faq.listItems && (
+                        <ul className="list-disc list-inside space-y-1">
+                          {faq.listItems.map((item, index) => (
+                            <li key={index}>{item}</li>
+                          ))}
+                        </ul>
+                      )}
 
-                    {faq.listItems && (
-                      <ul className="list-disc list-inside space-y-1 text-foreground">
-                        {faq.listItems.map((item, index) => (
-                          <li key={index}>{item}</li>
-                        ))}
-                      </ul>
-                    )}
+                      {faq.closing && <p>{faq.closing}</p>}
 
-                    {faq.closing && <p className="text-foreground">{faq.closing}</p>}
-
-                    {faq.linkUrl && faq.linkText && (
-                      <a
-                        href={faq.linkUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary underline font-medium"
-                      >
-                        {faq.linkText}
-                      </a>
-                    )}
-                  </div>
+                      {faq.linkUrl && faq.linkText && (
+                        <a
+                          href={faq.linkUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary underline font-medium"
+                        >
+                          {faq.linkText}
+                        </a>
+                      )}
+                    </AccordionContent>
+                  </AccordionItem>
                 ))}
-              </div>
+              </Accordion>
             </section>
           )}
 
