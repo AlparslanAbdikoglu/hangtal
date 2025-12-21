@@ -149,15 +149,9 @@ const Categories = () => {
 
   const handleCardClick = useCallback(
     (category: Category) => {
-      const hasSubs = categories?.some((c) => c.parent === category.id);
-      if (hasSubs) {
-        setCurrentParent(category);
-        setBreadcrumbs((prev) => [...prev, category]);
-      } else {
-        navigate(`/products?category=${category.slug}`);
-      }
+      navigate(`/products?category=${category.slug}`);
     },
-    [categories, navigate]
+    [navigate]
   );
 
   const handleBackClick = () => {
