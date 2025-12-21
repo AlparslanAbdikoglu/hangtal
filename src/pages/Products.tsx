@@ -253,10 +253,10 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
                 onChange={(e) => setSortBy(e.target.value)}
                 className="border px-3 py-2 rounded w-full"
               >
-                <option value="featured">{t("products.filters.featured", "Featured")}</option>
-                <option value="price-low">{t("products.filters.priceLowHigh", "Price: Low to High")}</option>
-                <option value="price-high">{t("products.filters.priceHighLow", "Price: High to Low")}</option>
-                <option value="name">{t("products.filters.nameAZ", "Name: A to Z")}</option>
+                <option value="featured">{t("products.filters.featured", "featured")}</option>
+                <option value="price-low">{t("products.filters.priceLowToHigh", "priceLowToHigh")}</option>
+                <option value="price-high">{t("products.filters.priceHighToLow", "priceHighToLow")}</option>
+                <option value="name">{t("products.filters.name", "name")}</option>
               </select>
             </div>
           </div>
