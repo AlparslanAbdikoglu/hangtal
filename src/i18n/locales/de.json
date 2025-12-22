@@ -142,6 +142,8 @@
     "action": "Aktion",
     "noItems": "Keine Artikel im Warenkorb.",
     "remove": "Entfernen",
+    "itemsSection": "Artikel in deinem Warenkorb",
+    "reviewItems": "Überprüfe unten deine Artikel",
     "total": "Gesamt",
     "checkout": "Zur Kasse",
     "processing": "Wird verarbeitet...",
@@ -150,6 +152,7 @@
     "addToCart": "In den Warenkorb",
     "addedToCart": "Hinzugefügt",
     "addedDescription": "{{title}} wurde Ihrem Warenkorb hinzugefügt.",
+    "secureStripe": "Sichere Zahlung über Stripe",
     "removeConfirm": "Möchten Sie diesen Artikel wirklich entfernen?",
     "removed": "Produkt aus dem Warenkorb entfernt!"
   },

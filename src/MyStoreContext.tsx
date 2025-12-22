@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { DEFAULT_CURRENCY, formatMoney, getCurrencyInfo } from "@/utils/currency";
 
 // --- Types ---
 interface Product {
@@ -18,6 +19,11 @@ interface Product {
   sale_price?: string;
   quantity?: number;
   images?: { src: string }[];
+  currency?: string;
+  currency_code?: string;
+  currency_symbol?: string;
+  prices?: { currency_code?: string; currency_symbol?: string };
+  meta_data?: { key: string; value: unknown }[];
   [key: string]: unknown;
 }
 
@@ -49,6 +55,8 @@ interface MyStoreContextType {
     product_id: number | string;
     quantity?: number;
     variants?: Record<string, string>;
+    currencyCode?: string;
+    currencySymbol?: string;
   }) => void;
 }
 
@@ -67,17 +75,22 @@ export const MyStoreProvider: React.FC<{ children: ReactNode }> = ({ children })
   const setPageLoading = useCallback((status: boolean) => setLoader(status), []);
 
   const renderProductPrice = (product: Product): JSX.Element => {
-    if (product.sale_price) {
+    const currency = getCurrencyInfo(product);
+    const regular = parseFloat((product.regular_price ?? product.price ?? "0").toString());
+    const sale = product.sale_price ? parseFloat(product.sale_price.toString()) : undefined;
+
+    if (sale !== undefined) {
       return (
         <>
           <span className="text-muted text-decoration-line-through">
-            ${product.regular_price}
+            {formatMoney(regular, currency)}
           </span>{" "}
-          <span className="text-danger">${product.sale_price}</span>
+          <span className="text-danger">{formatMoney(sale, currency)}</span>
         </>
       );
     }
-    return <>{`$${product.regular_price || product.price}`}</>;
+
+    return <>{formatMoney(regular, currency)}</>;
   };
 
   const setUserLoggedInStatus = (status: boolean) => {
@@ -100,15 +113,26 @@ export const MyStoreProvider: React.FC<{ children: ReactNode }> = ({ children })
   const addProductsToCart = useCallback((product: Product) => {
     const cartFromStorage: Product[] = JSON.parse(localStorage.getItem("cart") || "[]");
 
-    const existingIndex = cartFromStorage.findIndex((item) => item.id === product.id);
+    const currency = getCurrencyInfo(product);
+    const normalizedQuantity =
+      typeof product.quantity === "number" && product.quantity > 0 ? product.quantity : 1;
+    const normalizedProduct: Product = {
+      ...product,
+      currency: product.currency || currency.code,
+      currency_symbol: product.currency_symbol || currency.symbol,
+      prices: product.prices || { currency_code: currency.code, currency_symbol: currency.symbol },
+      quantity: normalizedQuantity,
+    };
+
+    const existingIndex = cartFromStorage.findIndex((item) => item.id === normalizedProduct.id);
     const updatedCart = [...cartFromStorage];
 
     if (existingIndex >= 0) {
       const existing = { ...updatedCart[existingIndex] };
-      existing.quantity = (existing.quantity || 1) + (product.quantity || 1);
+      existing.quantity = (existing.quantity || 1) + normalizedQuantity;
       updatedCart[existingIndex] = existing;
     } else {
-      updatedCart.push({ ...product, quantity: product.quantity || 1 });
+      updatedCart.push(normalizedProduct);
     }
 
     setCart(updatedCart);
@@ -136,14 +160,20 @@ export const MyStoreProvider: React.FC<{ children: ReactNode }> = ({ children })
       product_id: number | string;
       quantity?: number;
       variants?: Record<string, string>;
+      currencyCode?: string;
+      currencySymbol?: string;
     }) => {
+      const currencyCode = item.currencyCode || DEFAULT_CURRENCY.code;
       const productToAdd: Product = {
         id: Number(item.product_id),
         name: item.title,
         regular_price: item.price.toString(),
         quantity: item.quantity || 1,
         images: [{ src: item.image }],
-        price: ""
+        price: "",
+        currency: currencyCode,
+        currency_symbol: item.currencySymbol,
+        prices: { currency_code: currencyCode, currency_symbol: item.currencySymbol }
       };
       addProductsToCart(productToAdd);
     },

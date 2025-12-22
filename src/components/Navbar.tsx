@@ -37,16 +37,15 @@ export const Navbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div
-  className="cursor-pointer flex items-center"
-  onClick={() => navigate('/')}
->
-  <img
-    src="/images/PalAdri-logo-light.png"
-    alt="Hangakadémia logó"
-    className="h-30 w-auto"
-    style={{ maxHeight: 80 }}
-  />
-</div>
+            className="cursor-pointer flex items-center"
+            onClick={() => navigate('/')}
+          >
+            <img
+              src="/images/PalAdri-logo-light.png"
+              alt="HangAkadémia logó"
+              className="h-20 md:h-32 lg:h-40 w-auto"
+            />
+          </div>
     
 
           {/* Mobile menu button */}
@@ -62,15 +61,20 @@ export const Navbar = () => {
 
           {/* Desktop nav links */}
           <div className="hidden md:flex items-center space-x-6">
-  <Link to="/" className="text-primary hover:text-secondary transition-colors">{t('navbar.home')}</Link>
-  <Link to="/categories" className="text-primary hover:text-secondary transition-colors">{t('navbar.products')}</Link>
-  <Link to="/about" className="text-primary hover:text-secondary transition-colors">{t('navbar.about')}</Link>
-  <Link to="/contact" className="text-primary hover:text-secondary transition-colors">{t('navbar.contact')}</Link>
-</div>
+            <Link to="/" className="text-primary hover:text-secondary transition-colors">{t('navbar.home')}</Link>
+            <Link to="/categories" className="text-primary hover:text-secondary transition-colors">{t('navbar.products')}</Link>
+            <Link to="/about" className="text-primary hover:text-secondary transition-colors">{t('navbar.about')}</Link>
+            <Link to="/contact" className="text-primary hover:text-secondary transition-colors">{t('navbar.contact')}</Link>
+          </div>
 
 
           {/* Right controls: Language, Cart, Auth (login/logout and new pages) */}
           <div className="flex items-center space-x-4">
+            <img
+              src="/images/sonic-energy-logo.svg"
+              alt="Sonic Energy Collection logó"
+              className="hidden sm:block h-14 md:h-16 w-auto"
+            />
             <LanguageSwitcher />
 
             <Link

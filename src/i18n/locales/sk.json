@@ -142,6 +142,8 @@
     "action": "Akcia",
     "noItems": "Žiadne položky v košíku.",
     "remove": "Odstrániť",
+    "itemsSection": "Položky vo vašom košíku",
+    "reviewItems": "Skontrolujte nižšie svoje položky",
     "total": "Celkom",
     "checkout": "Pokračovať k pokladni",
     "processing": "Spracováva sa...",
@@ -150,6 +152,7 @@
     "addToCart": "Pridať do košíka",
     "addedToCart": "Pridané do košíka",
     "addedDescription": "{{title}} bol pridaný do vášho košíka.",
+    "secureStripe": "Bezpečná platba cez Stripe",
     "removeConfirm": "Naozaj chcete túto položku odstrániť?",
     "removed": "Produkt bol odstránený z košíka!"
   },

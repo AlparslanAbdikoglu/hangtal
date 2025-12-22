@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useMyStore } from "@/MyStoreContext";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { DEFAULT_CURRENCY, formatMoney, getCurrencyInfo } from "@/utils/currency";
 
 const Checkout: React.FC = () => {
   const { cart, loggedInUserData } = useMyStore();
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
+
+  const summaryCurrency = useMemo(
+    () => (cart.length ? getCurrencyInfo(cart[0]) : DEFAULT_CURRENCY),
+    [cart]
+  );
 
   const handleCheckout = async () => {
     if (!cart.length) return toast.error(t("checkout.emptyCart"));
@@ -80,25 +86,26 @@ const Checkout: React.FC = () => {
                 const price =
                   parseFloat(item.sale_price || item.regular_price || item.price || "0") *
                   (item.quantity || 1);
+                const currency = getCurrencyInfo(item);
                 return (
                   <li key={item.id} className="py-2 flex justify-between">
                     <span>{item.name} ({item.quantity || 1})</span>
-                    <span>€{price.toFixed(2)}</span>
+                    <span>{formatMoney(price, currency)}</span>
                   </li>
                 );
               })}
             </ul>
             <div className="mt-4 font-bold text-right">
-              {t("checkout.total")}: €
-              {cart
-                .reduce(
+              {t("checkout.total")}: {formatMoney(
+                cart.reduce(
                   (total, item) =>
                     total +
                     parseFloat(item.sale_price || item.regular_price || item.price || "0") *
                       (item.quantity || 1),
                   0
-                )
-                .toFixed(2)}
+                ),
+                summaryCurrency
+              )}
             </div>
           </div>
         </div>
