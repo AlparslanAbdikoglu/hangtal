@@ -43,7 +43,7 @@ export const Navbar = () => {
             <img
               src="/images/PalAdri-logo-light.png"
               alt="Hangakadémia logó"
-              className="h-16 md:h-20 w-auto"
+              className="h-20 md:h-24 w-auto"
             />
           </div>
     
@@ -73,7 +73,7 @@ export const Navbar = () => {
             <img
               src="/images/sonic-energy-logo.svg"
               alt="Sonic Energy Collection logó"
-              className="hidden sm:block h-12 w-auto"
+              className="hidden sm:block h-14 md:h-16 w-auto"
             />
             <LanguageSwitcher />
 

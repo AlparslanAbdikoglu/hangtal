@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import { HOMEPAGE_CATEGORY_IMAGE, KNOWN_CATEGORIES } from "@/constants/categories";
+import { useProductSuggestions } from "@/hooks/useProductSuggestions";
+import { FaRegFrown } from "react-icons/fa";
 
 const socialLinks = [
   { name: "Facebook", icon: <Facebook className="h-5 w-5" />, url: "https://www.facebook.com/profile.php?id=100027587995370" },
@@ -21,6 +23,7 @@ const Index = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const { suggestions, loading, hasNoResults } = useProductSuggestions(searchTerm);
 
   const categories = KNOWN_CATEGORIES.map((category) => ({
     id: category.slug,
@@ -36,19 +39,61 @@ const Index = () => {
     navigate(trimmedTerm ? `/products?search=${encodeURIComponent(trimmedTerm)}` : "/products");
   };
 
+  const handleSuggestionClick = (term: string) => {
+    setSearchTerm(term);
+    navigate(`/products?search=${encodeURIComponent(term)}`);
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">
-          <form onSubmit={handleSearch} className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
-            <Input
-              type="search"
-              value={searchTerm}
-              onChange={(event) => setSearchTerm(event.target.value)}
-              placeholder={t("products.search") || "Search products..."}
-              className="flex-1"
-            />
+          <form onSubmit={handleSearch} className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4 relative">
+            <div className="relative flex-1">
+              <Input
+                type="search"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder={t("products.search") || "Search products..."}
+                className="w-full"
+              />
+
+              {(loading || suggestions.length > 0 || hasNoResults) && (
+                <div className="absolute left-0 right-0 mt-1 bg-white border rounded-lg shadow-lg z-20 max-h-64 overflow-y-auto">
+                  {loading && (
+                    <div className="px-3 py-2 text-sm text-gray-500">{t("products.loading", "Loading products...")}</div>
+                  )}
+
+                  {!loading && suggestions.length > 0 && (
+                    <ul className="divide-y">
+                      {suggestions.map((suggestion) => (
+                        <li key={suggestion.id}>
+                          <button
+                            type="button"
+                            onClick={() => handleSuggestionClick(suggestion.name)}
+                            className="w-full text-left px-3 py-2 hover:bg-gray-100"
+                          >
+                            <div className="font-semibold">{suggestion.name}</div>
+                            {suggestion.price && (
+                              <div className="text-sm text-gray-500">{suggestion.price} Ft</div>
+                            )}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {hasNoResults && (
+                    <div className="px-3 py-4 text-sm text-gray-500 flex items-center gap-2">
+                      <FaRegFrown className="text-xl" />
+                      <span>{t("products.noResults", "No products match your search.")}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
             <Button type="submit" className="md:w-auto w-full">
               {t("products.search") || "Search products"}
             </Button>

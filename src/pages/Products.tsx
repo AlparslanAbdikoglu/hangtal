@@ -5,6 +5,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { useTranslation } from "react-i18next";
 import { CATEGORY_ORDER_MAP, KNOWN_CATEGORIES } from "@/constants/categories";
 import { FaRegFrown } from "react-icons/fa";
+import { useProductSuggestions } from "@/hooks/useProductSuggestions";
 
 interface Product {
   id: number;
@@ -95,6 +96,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
   const [error, setError] = useState("");
   const [categories, setCategories] = useState<{ key: string; label: string }[]>([]);
   const [visibleCount, setVisibleCount] = useState(VISIBLE_INCREMENT);
+  const { suggestions, loading: suggestionsLoading, hasNoResults: suggestionNone } = useProductSuggestions(searchTerm);
 
   // priceRanges depends on i18n (t), so memoize it to avoid recreating each render
   const priceRanges: PriceRange[] = useMemo(
@@ -455,13 +457,51 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
           {/* Sidebar Filters */}
           <div className="w-full md:w-64 flex-shrink-0">
             <div className="flex flex-col gap-4">
-              <input
-                type="text"
-                placeholder={t("products.search") || "Search products..."}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="border px-3 py-2 rounded w-full"
-              />
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder={t("products.search") || "Search products..."}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="border px-3 py-2 rounded w-full"
+                />
+
+                {(suggestionsLoading || suggestions.length > 0 || suggestionNone) && (
+                  <div className="absolute left-0 right-0 mt-1 bg-white border rounded-lg shadow-lg z-30 max-h-64 overflow-y-auto">
+                    {suggestionsLoading && (
+                      <div className="px-3 py-2 text-sm text-gray-500">
+                        {t("products.loading", "Loading products...")}
+                      </div>
+                    )}
+
+                    {!suggestionsLoading && suggestions.length > 0 && (
+                      <ul className="divide-y">
+                        {suggestions.map((suggestion) => (
+                          <li key={suggestion.id}>
+                            <button
+                              type="button"
+                              onClick={() => setSearchTerm(suggestion.name)}
+                              className="w-full text-left px-3 py-2 hover:bg-gray-100"
+                            >
+                              <div className="font-semibold">{suggestion.name}</div>
+                              {suggestion.price && (
+                                <div className="text-sm text-gray-500">{suggestion.price} Ft</div>
+                              )}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {suggestionNone && (
+                      <div className="px-3 py-4 text-sm text-gray-500 flex items-center gap-2">
+                        <FaRegFrown className="text-xl" />
+                        <span>{t("products.noResults", "No products match your search.")}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
 
               <select
                 value={selectedCategory}
