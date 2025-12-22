@@ -40,7 +40,18 @@ interface ProductPageProps {
 
 const stripHtml = (html?: string) => {
   if (!html) return "";
-  return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    return (doc.body.textContent || "").replace(/\s+/g, " ").trim();
+  } catch {
+    return html
+      .replace(/<[^>]*>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
 };
 
 const formatCurrency = (value: number, currency: string) => {
@@ -298,13 +309,13 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => navigate(-1)}
-                className="inline-flex items-center gap-1 rounded-lg border px-3 py-1.5 text-primary hover:bg-primary/10"
+                className="inline-flex items-center gap-1 rounded-lg border px-3 py-1.5 text-foreground font-semibold hover:bg-primary/10"
               >
                 ← Vissza
               </button>
               <button
                 onClick={() => navigate("/categories")}
-                className="inline-flex items-center gap-1 rounded-lg border px-3 py-1.5 text-primary hover:bg-primary/10"
+                className="inline-flex items-center gap-1 rounded-lg border px-3 py-1.5 text-foreground font-semibold hover:bg-primary/10"
               >
                 Kategóriák
               </button>
