@@ -20,6 +20,7 @@ interface Product {
   meta_data?: { key: string; value: string }[];
   categories?: { id: number; name: string; slug: string }[];
   quantity?: number;
+  [key: string]: any;
 }
 
 interface Variation {
@@ -194,9 +195,7 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
           data.meta_data?.find((meta) =>
             ["currency", "_currency", "current_currency", "_order_currency"].includes(meta.key)
           )?.value ||
-          // @ts-expect-error Store API compatibility
           (data.prices?.currency_code as string | undefined) ||
-          // @ts-expect-error Optional WooCommerce currency field
           (data.currency as string | undefined) ||
           "HUF";
 
