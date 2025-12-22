@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { formatWooPrice } from "@/lib/currency";
+import { useMyStore } from "@/MyStoreContext";
 
 interface Product {
   id: number;
@@ -40,16 +42,10 @@ const stripHtml = (html?: string) => {
   return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 };
 
-const moneyHuf = (n: number) =>
-  new Intl.NumberFormat("hu-HU", {
-    style: "currency",
-    currency: "HUF",
-    maximumFractionDigits: 0,
-  }).format(n);
-
 const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { addProductsToCart } = useMyStore();
 
   const consumerKey = import.meta.env.VITE_WOO_CONSUMER_KEY;
   const consumerSecret = import.meta.env.VITE_WOO_CONSUMER_SECRET;
@@ -81,6 +77,8 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
     const v = selectedVariation?.price;
     return parseFloat(v ?? base ?? "0");
   }, [product, selectedVariation]);
+
+  const formatPrice = useCallback((price: number) => formatWooPrice(price), []);
 
   const inStock = useMemo(() => {
     if (!product) return false;
@@ -208,13 +206,9 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
       ],
     };
 
-    if (typeof onAddToCart === "function") {
-      onAddToCart(cartProduct);
-    } else {
-      // If route didn’t pass handler, don’t silently fail
-      alert("A kosár funkció nincs bekötve ehhez az oldalhoz (onAddToCart hiányzik).");
-    }
-  }, [product, canAddToCart, qty, displayPrice, displayImage, isVariable, selectedVariation, onAddToCart]);
+    const cartHandler = onAddToCart || addProductsToCart;
+    cartHandler(cartProduct);
+  }, [product, canAddToCart, qty, displayPrice, displayImage, isVariable, selectedVariation, onAddToCart, addProductsToCart]);
 
   if (loading) {
     return (
@@ -273,7 +267,7 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
             <div className="flex flex-col gap-4">
               <h1 className="text-3xl font-bold">{product.name}</h1>
 
-              <div className="text-2xl font-semibold">€{displayPrice.toFixed(2)}</div>
+              <div className="text-2xl font-semibold">{formatPrice(displayPrice)}</div>
 
               <div className={`text-sm font-medium ${inStock ? "text-green-600" : "text-red-600"}`}>
                 {inStock ? "Készleten" : isVariable && !selectedVariation ? "Válassz változatot" : "Nincs készleten"}
@@ -315,7 +309,7 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
                       const stock = v.stock_status === "instock" ? "Készleten" : "Nincs készleten";
                       return (
                         <option key={v.id} value={v.id}>
-                          {attrs} — €{price.toFixed(2)} — {stock}
+                          {attrs} — {formatPrice(price)} — {stock}
                         </option>
                       );
                     })}
@@ -342,7 +336,7 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
                   </button>
                 </div>
 
-                <div className="text-sm text-foreground/70">Ingyenes szállítás: {moneyHuf(30000)} felett</div>
+                <div className="text-sm text-foreground/70">Ingyenes szállítás: {formatPrice(30000)} felett</div>
               </div>
 
               {/* Add */}

@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { formatWooPrice } from "@/lib/currency";
 
 // --- Types ---
 interface Product {
@@ -70,13 +71,14 @@ export const MyStoreProvider: React.FC<{ children: ReactNode }> = ({ children })
       return (
         <>
           <span className="text-muted text-decoration-line-through">
-            ${product.regular_price}
+            {formatWooPrice(parseFloat(product.regular_price || product.price || "0"))}
           </span>{" "}
-          <span className="text-danger">${product.sale_price}</span>
+          <span className="text-danger">{formatWooPrice(parseFloat(product.sale_price))}</span>
         </>
       );
     }
-    return <>{`$${product.regular_price || product.price}`}</>;
+    const priceValue = parseFloat(product.regular_price || product.price || "0");
+    return <>{formatWooPrice(priceValue)}</>;
   };
 
   const setUserLoggedInStatus = (status: boolean) => {
