@@ -11,6 +11,7 @@ interface Product {
   price: string;
   regular_price?: string;
   sale_price?: string;
+  price_html?: string;
   description?: string;
   short_description?: string;
   stock_status?: string;
@@ -26,6 +27,7 @@ interface Variation {
   price: string;
   regular_price?: string;
   sale_price?: string;
+  price_html?: string;
   stock_status?: string;
   image?: { src?: string };
   attributes?: { id: number; name: string; option: string }[];
@@ -41,12 +43,17 @@ const stripHtml = (html?: string) => {
   return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 };
 
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("hu-HU", {
-    style: "currency",
-    currency: "EUR",
-    minimumFractionDigits: 2,
-  }).format(value);
+const formatCurrency = (value: number, currency: string) => {
+  try {
+    return new Intl.NumberFormat("hu-HU", {
+      style: "currency",
+      currency,
+      minimumFractionDigits: 2,
+    }).format(value);
+  } catch {
+    return `${value.toFixed(2)} ${currency}`;
+  }
+};
 
 const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
   const { id } = useParams<{ id: string }>();
@@ -64,6 +71,7 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
   const [qty, setQty] = useState<number>(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
+  const [currency, setCurrency] = useState<string>("HUF");
 
   const isVariable = product?.type === "variable";
 
@@ -98,6 +106,12 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
     const variationPrice = selectedVariation ? parseFloat(selectedVariation.price || "0") : null;
     return variationPrice ?? base;
   }, [product, selectedVariation]);
+
+  const displayPriceLabel = useMemo(() => {
+    if (selectedVariation?.price_html) return stripHtml(selectedVariation.price_html);
+    if (product?.price_html) return stripHtml(product.price_html);
+    return formatCurrency(displayPrice, currency);
+  }, [currency, displayPrice, product?.price_html, selectedVariation?.price_html]);
 
   const inStock = useMemo(() => {
     if (!product) return false;
@@ -165,6 +179,17 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
         const data: Product = await res.json();
         if (cancelled) return;
 
+        const detectedCurrency =
+          data.meta_data?.find((meta) =>
+            ["currency", "_currency", "current_currency", "_order_currency"].includes(meta.key)
+          )?.value ||
+          // @ts-expect-error Store API compatibility
+          (data.prices?.currency_code as string | undefined) ||
+          // @ts-expect-error Optional WooCommerce currency field
+          (data.currency as string | undefined) ||
+          "HUF";
+
+        setCurrency(typeof detectedCurrency === "string" && detectedCurrency.trim() ? detectedCurrency : "HUF");
         setProduct(data);
 
         if (data.type === "variable") {
@@ -226,7 +251,7 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
   const renderDescription = (label: string, content?: string) => {
     if (!content) return null;
     return (
-      <section className="rounded-xl border bg-card p-4">
+      <section className="rounded-xl border bg-card p-5 shadow-sm">
         <h3 className="font-semibold mb-2">{label}</h3>
         <p className="text-sm leading-relaxed text-foreground/80">{stripHtml(content)}</p>
       </section>
@@ -269,14 +294,22 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
 
       <main className="flex-grow">
         <div className="max-w-7xl mx-auto p-4 md:p-10 space-y-6">
-          <div className="flex items-center gap-3 text-sm text-foreground/70">
-            <button
-              onClick={() => navigate(-1)}
-              className="inline-flex items-center gap-1 text-primary hover:underline"
-            >
-              ← Vissza
-            </button>
-            <span>•</span>
+          <div className="flex flex-wrap items-center gap-3 text-sm text-foreground/70">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => navigate(-1)}
+                className="inline-flex items-center gap-1 rounded-lg border px-3 py-1.5 text-primary hover:bg-primary/10"
+              >
+                ← Vissza
+              </button>
+              <button
+                onClick={() => navigate("/categories")}
+                className="inline-flex items-center gap-1 rounded-lg border px-3 py-1.5 text-primary hover:bg-primary/10"
+              >
+                Kategóriák
+              </button>
+            </div>
+            <span className="hidden sm:inline">•</span>
             <span>{product.categories?.map((c) => c.name).join(", ") || "Termék"}</span>
           </div>
 
@@ -296,7 +329,7 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
                   </div>
                 </div>
 
-                <div className="text-3xl font-semibold text-primary">{formatCurrency(displayPrice)}</div>
+                <div className="text-3xl font-semibold text-primary">{displayPriceLabel}</div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
                   <div className="rounded-lg border p-3 bg-background/60">
@@ -327,10 +360,13 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
                       {variations.map((v) => {
                         const attrs = v.attributes?.map((a) => `${a.name}: ${a.option}`).join(", ") || `#${v.id}`;
                         const price = parseFloat(v.price || "0");
+                        const formattedPrice = v.price_html
+                          ? stripHtml(v.price_html)
+                          : formatCurrency(price, currency);
                         const stock = v.stock_status === "instock" ? "Készleten" : "Nincs készleten";
                         return (
                           <option key={v.id} value={v.id}>
-                            {attrs} — {formatCurrency(price)} — {stock}
+                            {attrs} — {formattedPrice} — {stock}
                           </option>
                         );
                       })}
@@ -378,9 +414,11 @@ const ProductPage = ({ onAddToCart, setPageLoading }: ProductPageProps) => {
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {renderDescription("Rövid leírás", product.short_description)}
-                {renderDescription("Leírás", product.description)}
+              <div className="space-y-4">
+                {renderDescription(
+                  "Leírás",
+                  [product.short_description, product.description].filter(Boolean).join("\n\n")
+                )}
               </div>
 
               {!!product.categories?.length && (
