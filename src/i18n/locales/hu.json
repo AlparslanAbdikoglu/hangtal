@@ -152,6 +152,7 @@
     "addToCart": "Kosárba",
     "addedToCart": "Kosárba helyezve",
     "addedDescription": "{{title}} hozzáadva a kosárhoz.",
+    "secureStripe": "Biztonságos fizetés Stripe-pal",
     "removeConfirm": "Biztos törli a tételt?",
     "removed": "A termék eltávolítva a kosárból!"
   },

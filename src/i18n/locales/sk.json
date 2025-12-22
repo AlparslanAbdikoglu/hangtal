@@ -150,6 +150,7 @@
     "addToCart": "Pridať do košíka",
     "addedToCart": "Pridané do košíka",
     "addedDescription": "{{title}} bol pridaný do vášho košíka.",
+    "secureStripe": "Bezpečná platba cez Stripe",
     "removeConfirm": "Naozaj chcete túto položku odstrániť?",
     "removed": "Produkt bol odstránený z košíka!"
   },

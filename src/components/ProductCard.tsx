@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 import { Card, CardFooter, CardHeader, CardContent, CardTitle } from "./ui/card";
+import { CurrencyInfo, formatMoney } from "@/utils/currency";
 
 type ProductCardProps = {
   id: string;
@@ -12,6 +13,7 @@ type ProductCardProps = {
   available?: boolean;
   description?: string;
   onAddToCart: () => void;
+  currency?: CurrencyInfo;
 };
 
 export const ProductCard = ({
@@ -22,8 +24,11 @@ export const ProductCard = ({
   available = true,
   description,
   onAddToCart,
+  currency,
 }: ProductCardProps) => {
   const { t } = useTranslation();
+
+  const formattedPrice = currency ? formatMoney(price, currency) : `€${price.toFixed(2)}`;
 
   return (
     <Card className="overflow-hidden group transition-all duration-300 hover:shadow-lg relative">
@@ -38,7 +43,7 @@ export const ProductCard = ({
       </CardHeader>
       <CardContent className="p-4">
         <CardTitle className="text-lg font-medium line-clamp-2">{title}</CardTitle>
-        <p className="text-2xl font-bold mt-2">€{price.toFixed(2)}</p>
+        <p className="text-2xl font-bold mt-2">{formattedPrice}</p>
         {available && <p className="text-green-500 text-sm mt-1">{t("products.filters.stockAvailable")}</p>}
         {description && (
           <p

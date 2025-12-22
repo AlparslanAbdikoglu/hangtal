@@ -1,17 +1,19 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useTranslation } from "react-i18next";
+import { formatMoney, getCurrencyInfo } from "@/utils/currency";
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const [totalAmount, setTotalAmount] = useState<string | null>(null);
+  const [totalAmount, setTotalAmount] = useState<number | null>(null);
+  const [currencyCode, setCurrencyCode] = useState<string>("HUF");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,7 +33,10 @@ const PaymentSuccess = () => {
         }
         const data = await res.json();
         if (data.amount_total) {
-          setTotalAmount((data.amount_total / 100).toFixed(2));
+          setTotalAmount(data.amount_total / 100);
+          if (data.currency) {
+            setCurrencyCode(String(data.currency).toUpperCase());
+          }
         } else {
           throw new Error("No amount_total in session");
         }
@@ -49,6 +54,11 @@ const PaymentSuccess = () => {
       setLoading(false);
     }
   }, [sessionId, t]);
+
+  const currencyInfo = useMemo(
+    () => getCurrencyInfo({ currency: currencyCode, currency_symbol: undefined }),
+    [currencyCode]
+  );
 
   if (loading) return <div className="text-center mt-10">{t("paymentSuccess.loading", "Loading...")}</div>;
   if (error) return <div className="text-center text-red-500 mt-10">{error}</div>;
@@ -73,7 +83,9 @@ const PaymentSuccess = () => {
             </p>
             <div className="bg-gray-50 p-4 rounded-lg">
               <p className="font-semibold">
-                {t("paymentSuccess.amountPaid", "Fizetett összeg")}: {totalAmount} €
+                {t("paymentSuccess.amountPaid", "Fizetett összeg")}: {totalAmount !== null
+                  ? formatMoney(totalAmount, currencyInfo)
+                  : ""}
               </p>
             </div>
             <div className="space-y-2">

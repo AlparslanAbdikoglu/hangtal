@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { CATEGORY_ORDER_MAP, KNOWN_CATEGORIES } from "@/constants/categories";
 import { FaRegFrown } from "react-icons/fa";
 import { useProductSuggestions } from "@/hooks/useProductSuggestions";
+import { getCurrencyInfo } from "@/utils/currency";
 
 interface Product {
   id: number;
@@ -16,6 +17,7 @@ interface Product {
   featured?: boolean;
   regular_price?: string;
   sale_price?: string;
+  price_html?: string;
   description?: string;
   short_description?: string;
   stock_status?: string;
@@ -24,6 +26,10 @@ interface Product {
   attributes?: { id: number; name: string; options: string[] }[];
   date_created?: string;
   total_sales?: number;
+  currency?: string;
+  currency_symbol?: string;
+  currency_code?: string;
+  prices?: { currency_code?: string; currency_symbol?: string };
   meta_data?: { key: string; value: string }[];
 }
 
@@ -307,8 +313,18 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
           })
         );
 
-        setProducts(updatedData);
-        setCache(PRODUCT_CACHE_KEY, updatedData);
+        const normalizedProducts = updatedData.map((product) => {
+          const currency = getCurrencyInfo(product);
+          return {
+            ...product,
+            currency: product.currency || currency.code,
+            currency_symbol: product.currency_symbol || currency.symbol,
+            prices: product.prices || { currency_code: currency.code, currency_symbol: currency.symbol },
+          };
+        });
+
+        setProducts(normalizedProducts);
+        setCache(PRODUCT_CACHE_KEY, normalizedProducts);
         setLoading(false);
         setPageLoading(false);
       } catch (err) {
@@ -588,18 +604,22 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
                   <p>{t("products.noResults", "No products match your search.")}</p>
                 </div>
               ) : (
-                filteredProducts.slice(0, visibleCount).map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    title={product.name}
-                    price={parseFloat(product.price)}
-                    image={product.images?.[0]?.src || "/placeholder.jpg"}
-                    available={product.stock_status === "instock"}
-                    id={String(product.id)}
-                    description={product.short_description || product.description}
-                    onAddToCart={() => onAddToCart(product)}
-                  />
-                ))
+                filteredProducts.slice(0, visibleCount).map((product) => {
+                  const currency = getCurrencyInfo(product);
+                  return (
+                    <ProductCard
+                      key={product.id}
+                      title={product.name}
+                      price={parseFloat(product.price)}
+                      image={product.images?.[0]?.src || "/placeholder.jpg"}
+                      available={product.stock_status === "instock"}
+                      id={String(product.id)}
+                      description={product.short_description || product.description}
+                      onAddToCart={() => onAddToCart(product)}
+                      currency={currency}
+                    />
+                  );
+                })
               )}
             </div>
 
