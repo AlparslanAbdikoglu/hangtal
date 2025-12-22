@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import { useTranslation } from "react-i18next";
 import { CATEGORY_ORDER_MAP, KNOWN_CATEGORIES } from "@/constants/categories";
+import { FaRegFrown } from "react-icons/fa";
 
 interface Product {
   id: number;
@@ -202,6 +203,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
     async <T,>(endpoint: string) => {
       const allItems: T[] = [];
       let page = 1;
+      let totalPages: number | null = null;
       while (true) {
         const res = await fetch(`${apiUrl}/${endpoint}?per_page=100&page=${page}`, {
           headers: { Authorization: `Basic ${auth}` },
@@ -211,7 +213,16 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
         }
         const pageData: T[] = await res.json();
         allItems.push(...pageData);
-        if (pageData.length < 100) break;
+
+        if (totalPages === null) {
+          const headerPages = res.headers.get("X-WP-TotalPages");
+          totalPages = headerPages ? parseInt(headerPages, 10) || null : null;
+        }
+
+        const reachedLastPage =
+          (totalPages !== null && page >= totalPages) || pageData.length < 100;
+
+        if (reachedLastPage) break;
         page += 1;
       }
       return allItems;
@@ -519,18 +530,25 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
                 viewMode === "grid" ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" : "grid-cols-1"
               } p-1`}
             >
-              {filteredProducts.slice(0, visibleCount).map((product) => (
-                <ProductCard
-                  key={product.id}
-                  title={product.name}
-                  price={parseFloat(product.price)}
-                  image={product.images?.[0]?.src || "/placeholder.jpg"}
-                  available={product.stock_status === "instock"}
-                  id={String(product.id)}
-                  description={product.short_description || product.description}
-                  onAddToCart={() => onAddToCart(product)}
-                />
-              ))}
+              {filteredProducts.length === 0 ? (
+                <div className="col-span-full text-center text-gray-500 py-12 flex flex-col items-center gap-3">
+                  <FaRegFrown className="text-5xl" />
+                  <p>{t("products.noResults", "No products match your search.")}</p>
+                </div>
+              ) : (
+                filteredProducts.slice(0, visibleCount).map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    title={product.name}
+                    price={parseFloat(product.price)}
+                    image={product.images?.[0]?.src || "/placeholder.jpg"}
+                    available={product.stock_status === "instock"}
+                    id={String(product.id)}
+                    description={product.short_description || product.description}
+                    onAddToCart={() => onAddToCart(product)}
+                  />
+                ))
+              )}
             </div>
 
             {/* Load More Button */}
