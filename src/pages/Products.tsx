@@ -184,6 +184,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const urlCategory = params.get("category");
+    const urlSearch = params.get("search");
     if (urlCategory) {
       setSelectedCategory(urlCategory);
     } else if (defaultCategory) {
@@ -191,7 +192,32 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
       params.set("category", defaultCategory);
       window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
     }
+
+    if (urlSearch) {
+      setSearchTerm(urlSearch);
+    }
   }, [defaultCategory]);
+
+  const fetchPaginated = useCallback(
+    async <T,>(endpoint: string) => {
+      const allItems: T[] = [];
+      let page = 1;
+      while (true) {
+        const res = await fetch(`${apiUrl}/${endpoint}?per_page=100&page=${page}`, {
+          headers: { Authorization: `Basic ${auth}` },
+        });
+        if (!res.ok) {
+          throw new Error(`Failed to fetch ${endpoint} page ${page}`);
+        }
+        const pageData: T[] = await res.json();
+        allItems.push(...pageData);
+        if (pageData.length < 100) break;
+        page += 1;
+      }
+      return allItems;
+    },
+    [apiUrl, auth]
+  );
 
   // Fetch categories
   useEffect(() => {
@@ -211,11 +237,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
           );
         }
 
-        const res = await fetch(`${apiUrl}/products/categories`, {
-          headers: { Authorization: `Basic ${auth}` },
-        });
-
-        const data: ProductCategory[] = await res.json();
+        const data = await fetchPaginated<ProductCategory>("products/categories");
 
         setCategories(
           sortCategoriesByOrder([
@@ -234,7 +256,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
     };
 
     fetchCategories();
-  }, [apiUrl, auth, knownCategoryBySlug, sortCategoriesByOrder, t]);
+  }, [fetchPaginated, knownCategoryBySlug, sortCategoriesByOrder, t]);
 
   // Fetch products
   useEffect(() => {
@@ -248,12 +270,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
           setLoading(false);
         }
 
-        const res = await fetch(`${apiUrl}/products?per_page=100`, {
-          headers: { Authorization: `Basic ${auth}`, "Content-Type": "application/json" },
-        });
-        if (!res.ok) throw new Error("Failed to fetch products");
-
-        const data: Product[] = await res.json();
+        const data = await fetchPaginated<Product>("products");
 
         const updatedData = await Promise.all(
           data.map(async (product) => {
@@ -290,7 +307,7 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
     };
 
     fetchProducts();
-  }, [apiUrl, auth, setPageLoading, t]);
+  }, [apiUrl, auth, fetchPaginated, setPageLoading, t]);
 
   // Filtering logic
   useEffect(() => {
@@ -298,9 +315,11 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
 
     const filtered = products
       .filter((product) => {
+        const searchTermLower = searchTerm.toLowerCase();
         const matchesSearch =
-          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (product.description || "").toLowerCase().includes(searchTerm.toLowerCase());
+          product.name.toLowerCase().includes(searchTermLower) ||
+          (product.description || "").toLowerCase().includes(searchTermLower) ||
+          product.categories?.some((c) => c.name.toLowerCase().includes(searchTermLower));
 
         const matchesCategory =
           selectedCategory === "all" || product.categories?.some((c) => c.slug === selectedCategory);
@@ -358,12 +377,18 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
 
     setFilteredProducts(filtered);
 
-    // Update URL when category changes
+    // Update URL when category or search changes
     const params = new URLSearchParams(window.location.search);
     if (selectedCategory && selectedCategory !== "all") {
       params.set("category", selectedCategory);
     } else {
       params.delete("category");
+    }
+
+    if (searchTerm) {
+      params.set("search", searchTerm);
+    } else {
+      params.delete("search");
     }
     window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
   }, [

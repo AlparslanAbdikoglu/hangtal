@@ -1,3 +1,4 @@
+import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
@@ -5,7 +6,8 @@ import { CategoryCard } from "@/components/CategoryCard";
 import { Footer } from "@/components/Footer";
 import { Facebook, Instagram, Music2, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { Link, useNavigate } from "react-router-dom";
 import { HOMEPAGE_CATEGORY_IMAGE, KNOWN_CATEGORIES } from "@/constants/categories";
 
 const socialLinks = [
@@ -17,6 +19,8 @@ const socialLinks = [
 
 const Index = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
 
   const categories = KNOWN_CATEGORIES.map((category) => ({
     id: category.slug,
@@ -25,9 +29,32 @@ const Index = () => {
     image: category.image || HOMEPAGE_CATEGORY_IMAGE,
   }));
 
+  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const trimmedTerm = searchTerm.trim();
+
+    navigate(trimmedTerm ? `/products?search=${encodeURIComponent(trimmedTerm)}` : "/products");
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
+      <div className="bg-white shadow-sm">
+        <div className="container mx-auto px-4 py-4">
+          <form onSubmit={handleSearch} className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
+            <Input
+              type="search"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder={t("products.search") || "Search products..."}
+              className="flex-1"
+            />
+            <Button type="submit" className="md:w-auto w-full">
+              {t("products.search") || "Search products"}
+            </Button>
+          </form>
+        </div>
+      </div>
       <Hero />
 
       {/* Promo Section */}
