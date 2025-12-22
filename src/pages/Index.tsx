@@ -36,12 +36,31 @@ const Index = () => {
     event.preventDefault();
     const trimmedTerm = searchTerm.trim();
 
+    const categoryMatch = trimmedTerm ? findMatchingCategory(trimmedTerm) : null;
+
+    if (categoryMatch) {
+      navigate(`/categories?category=${encodeURIComponent(categoryMatch.slug)}`);
+      return;
+    }
+
     navigate(trimmedTerm ? `/products?search=${encodeURIComponent(trimmedTerm)}` : "/products");
   };
 
-  const handleSuggestionClick = (term: string) => {
-    setSearchTerm(term);
-    navigate(`/products?search=${encodeURIComponent(term)}`);
+  const handleSuggestionClick = (suggestion: { name: string; type: "product" | "category"; slug?: string }) => {
+    setSearchTerm(suggestion.name);
+
+    if (suggestion.type === "category" && suggestion.slug) {
+      navigate(`/categories?category=${encodeURIComponent(suggestion.slug)}`);
+      return;
+    }
+
+    navigate(`/products?search=${encodeURIComponent(suggestion.name)}`);
+  };
+
+  const findMatchingCategory = (term: string) => {
+    const normalized = term.toLowerCase();
+    return KNOWN_CATEGORIES.find((category) => category.name.toLowerCase() === normalized)
+      || KNOWN_CATEGORIES.find((category) => category.name.toLowerCase().includes(normalized));
   };
 
   return (
@@ -71,13 +90,20 @@ const Index = () => {
                         <li key={suggestion.id}>
                           <button
                             type="button"
-                            onClick={() => handleSuggestionClick(suggestion.name)}
+                            onClick={() => handleSuggestionClick(suggestion)}
                             className="w-full text-left px-3 py-2 hover:bg-gray-100"
                           >
-                            <div className="font-semibold">{suggestion.name}</div>
-                            {suggestion.price && (
-                              <div className="text-sm text-gray-500">{suggestion.price} Ft</div>
-                            )}
+                            <div className="flex items-center justify-between gap-2">
+                              <div>
+                                <div className="font-semibold">{suggestion.name}</div>
+                                {suggestion.price && (
+                                  <div className="text-sm text-gray-500">{suggestion.price} Ft</div>
+                                )}
+                              </div>
+                              {suggestion.type === "category" && (
+                                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">Kategória</span>
+                              )}
+                            </div>
                           </button>
                         </li>
                       ))}
@@ -104,10 +130,10 @@ const Index = () => {
 
       {/* Promo Section */}
       <section className="container py-16 bg-background w-full max-w-4xl mx-auto">
-        <h2 className="text-4xl font-bold mb-8 text-center">{t("promo.title", "Miért a Hangakadémia®?")}</h2>
+        <h2 className="text-4xl font-bold mb-8 text-center">{t("promo.title", "Miért a HangAkadémia®?")}</h2>
         <div className="mb-8 text-lg text-gray-700 space-y-2 leading-relaxed">
           <p>{t("promo.benefit1", "Prémium minőségű, gondosan válogatott hangszerek – szakmai háttérrel.")}</p>
-          <p>{t("promo.background1", "A Hangakadémia® nem csupán egy webshop.")}</p>
+          <p>{t("promo.background1", "A HangAkadémia® nem csupán egy webshop.")}</p>
           <p>
             {t(
               "promo.background2",
@@ -117,7 +143,7 @@ const Index = () => {
           <p>
             {t(
               "promo.partnership",
-              "A Hangakadémia® a Meinl Sonic Energy hivatalos szakmai partnere, alapítója, Pál Adrienn, Magyarország hivatalos Meinl Sonic Energy szakmai nagykövete."
+              "A HangAkadémia® a Meinl Sonic Energy hivatalos szakmai partnere, alapítója, Pál Adrienn, Magyarország hivatalos Meinl Sonic Energy szakmai nagykövete."
             )}
           </p>
           <p>{t("promo.value", "Nálunk nem csak eszközt vásárolsz – útmutatást, tudást és megbízható szakmai hátteret is kapsz.")}</p>
@@ -125,7 +151,7 @@ const Index = () => {
         <div className="text-center">
           <Link to="https://hangakademia.hu" target="_blank" rel="noopener noreferrer">
             <button className="bg-primary text-white px-8 py-4 rounded-lg text-xl font-semibold hover:bg-primary/90 transition">
-              {t("promo.cta", "👉 Ismerd meg a Hangakadémiát® és a Meinl Sonic Energy Magyarországi Nagykövetét")}
+              {t("promo.cta", "👉 Ismerd meg a HangAkadémiát® és a Meinl Sonic Energy Magyarországi Nagykövetét")}
             </button>
           </Link>
           {/* Guarantees */}

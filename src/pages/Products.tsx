@@ -480,13 +480,25 @@ const Products = ({ onAddToCart, setPageLoading, defaultCategory }: ProductsProp
                           <li key={suggestion.id}>
                             <button
                               type="button"
-                              onClick={() => setSearchTerm(suggestion.name)}
+                              onClick={() => {
+                                setSearchTerm(suggestion.name);
+                                if (suggestion.type === "category" && suggestion.slug) {
+                                  setSelectedCategory(suggestion.slug);
+                                }
+                              }}
                               className="w-full text-left px-3 py-2 hover:bg-gray-100"
                             >
-                              <div className="font-semibold">{suggestion.name}</div>
-                              {suggestion.price && (
-                                <div className="text-sm text-gray-500">{suggestion.price} Ft</div>
-                              )}
+                              <div className="flex items-center justify-between gap-2">
+                                <div>
+                                  <div className="font-semibold">{suggestion.name}</div>
+                                  {suggestion.price && (
+                                    <div className="text-sm text-gray-500">{suggestion.price} Ft</div>
+                                  )}
+                                </div>
+                                {suggestion.type === "category" && (
+                                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">Kategória</span>
+                                )}
+                              </div>
                             </button>
                           </li>
                         ))}

@@ -1,5 +1,5 @@
 {
-  "site": "Hangakadémia",
+  "site": "HangAkadémia",
   "navbar": {
     "home": "Főoldal",
     "products": "Termékek",
@@ -11,9 +11,9 @@
     "loginSignup": "Bejelentkezés / Regisztráció"
   },
   "hero": {
-    "title": "Hangakadémia® a hangok ereje a mindennapjaidban",
-    "subtitle": "Merülj el a hangok gyógyító rezgésében.",
-    "description": "Fedezd fel a hangtálak, hangszerek és rezgésalapú hangélmények különleges világát.\n\nA Hangakadémiánál® hiszünk abban, hogy a hang tudatos használata támogatja a belső egyensúlyt, a nyugalmat és a mélyebb jelenlétet.\nWebshopunkban gondosan válogatott Himalájai hangtálakat, professzionális Meinl Sonic Energy hangszereket és prémium kiegészítőket találsz – minden darabot személyesen kipróbálva, szakmai ajánlással.",
+    "title": "HangAkadémia® a hangok ereje a mindennapjaidban",
+    "subtitle": "Merülj el a hangok harmonizáló rezgésében.",
+    "description": "Fedezd fel a hangtálak, hangszerek és rezgésalapú hangélmények különleges világát.\n\nA HangAkadémiánál® hiszünk abban, hogy a hang tudatos használata támogatja a belső egyensúlyt, a nyugalmat és a mélyebb jelenlétet.\nWebshopunkban gondosan válogatott Himalájai hangtálakat, professzionális Meinl Sonic Energy hangszereket és prémium kiegészítőket találsz – minden darabot személyesen kipróbálva, szakmai ajánlással.",
     "imageAlt": "Hangterápiás hangszerek"
   },
   "categories": {
@@ -31,8 +31,8 @@
     "stands": "Állványok"
   },
   "products": {
-    "title": "Hanggyógyító hangszerek",
-    "subtitle": "Fedezd fel gondosan összeválogatott prémium hanggyógyító hangszereink kollekcióját. Minden darab harmóniát, békét és gyógyító rezgéseket hoz az életedbe.",
+    "title": "Hangélményt adó hangszerek",
+    "subtitle": "Fedezd fel gondosan összeválogatott prémium hangszereink kollekcióját. Minden darab harmóniát és békét hoz az életedbe.",
     "featured": "Kiemelt termékek",
     "search": "Hangszerek keresése...",
     "filters": {
@@ -210,7 +210,7 @@
           },
           {
             "title": "Oktatási háttér",
-            "description": "A Hangakadémia® mögött aktív oktatási tevékenység áll. Online és személyes képzéseinken strukturált rendszerben adjuk át a hangszerek tudatos használatához szükséges ismereteket."
+            "description": "A HangAkadémia® mögött aktív oktatási tevékenység áll. Online és személyes képzéseinken strukturált rendszerben adjuk át a hangszerek tudatos használatához szükséges ismereteket."
           },
           {
             "title": "Prémium minőség és biztonság",
@@ -219,7 +219,7 @@
         ]
       },
       {
-        "title": "A Hangakadémia® szemlélete",
+        "title": "A HangAkadémia® szemlélete",
         "paragraphs": [
           "A HangAkadémiánál® a hang egyszerre élmény és minőség.",
           "Lehet önfeledt, lehet elmélyítő, lehet inspiráló – számunkra azonban mindig fontos, hogyan szólal meg, milyen minőséget képvisel, és milyen kapcsolatot teremt az ember és a hangszer között.",
@@ -497,11 +497,11 @@
       "title": "HANGAKADÉMIA® – A hangok ereje a mindennapjaidban",
       "intro": "Fedezd fel a hangtálak, hangszerek és rezgésalapú hangélmények különleges világát.",
       "belief": "A Hangakadémiánál® hiszünk abban, hogy a hang tudatos használata támogatja a belső egyensúlyt, a nyugalmat és a mélyebb jelenlétet. Webshopunkban gondosan válogatott Himalájai hangtálakat, professzionális Meinl Sonic Energy hangszereket és prémium kiegészítőket találsz – minden darabot személyesen kipróbálva, szakmai ajánlással.",
-      "whyTitle": "Miért a Hangakadémia®?",
+      "whyTitle": "Miért a HangAkadémia®?",
       "benefit1": "Prémium minőségű, gondosan válogatott hangszerek – szakmai háttérrel.",
-      "background1": "A Hangakadémia® nem csupán egy webshop.",
+      "background1": "A HangAkadémia® nem csupán egy webshop.",
       "background2": "Minden hangtálat és hangszert személyesen válogatunk, kipróbálunk és szakmai szempontok alapján ajánlunk.",
-      "partnership": "A Hangakadémia® a Meinl Sonic Energy hivatalos szakmai partnere, alapítója, Pál Adrienn, Magyarország hivatalos Meinl Sonic Energy szakmai nagykövete.",
+      "partnership": "A HangAkadémia® a Meinl Sonic Energy hivatalos szakmai partnere, alapítója, Pál Adrienn, Magyarország hivatalos Meinl Sonic Energy szakmai nagykövete.",
       "value": "Nálunk nem csak eszközt vásárolsz – útmutatást, tudást és megbízható szakmai hátteret is kapsz.",
       "cta": "👉 Ismerd meg a Hangakadémiát® és a Meinl Sonic Energy Magyarországi Nagykövetét"
     }

@@ -1,10 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import { KNOWN_CATEGORIES } from "@/constants/categories";
+
+type SuggestionType = "product" | "category";
+
 interface ProductSuggestion {
-  id: number;
+  id: string;
   name: string;
   price?: string;
   images?: { id: number; src: string }[];
+  type: SuggestionType;
+  slug?: string;
 }
 
 interface UseProductSuggestionsResult {
@@ -67,8 +73,30 @@ export const useProductSuggestions = (
           throw new Error(`Failed to fetch suggestions for "${searchTerm}"`);
         }
 
-        const data: ProductSuggestion[] = await res.json();
-        setState({ suggestions: data, loading: false, error: "" });
+        const data = (await res.json()) as { id: number; name: string; price?: string }[];
+
+        const productSuggestions: ProductSuggestion[] = data.map((item) => ({
+          id: item.id.toString(),
+          name: item.name,
+          price: item.price,
+          type: "product",
+        }));
+
+        const normalizedTerm = searchTerm.toLowerCase();
+        const categorySuggestions: ProductSuggestion[] = KNOWN_CATEGORIES.filter((category) =>
+          category.name.toLowerCase().includes(normalizedTerm)
+        ).map((category) => ({
+          id: `category-${category.slug}`,
+          name: category.name,
+          type: "category",
+          slug: category.slug,
+        }));
+
+        setState({
+          suggestions: [...categorySuggestions, ...productSuggestions],
+          loading: false,
+          error: "",
+        });
       } catch (err) {
         if ((err as Error).name === "AbortError") return;
         setState({ suggestions: [], loading: false, error: (err as Error).message });
