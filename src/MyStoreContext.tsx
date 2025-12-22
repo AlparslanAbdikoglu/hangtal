@@ -3,6 +3,7 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useCallback,
   ReactNode,
 } from "react";
 import { toast } from "react-toastify";
@@ -63,7 +64,7 @@ export const MyStoreProvider: React.FC<{ children: ReactNode }> = ({ children })
   const { t } = useTranslation();
 
   // --- Setters ---
-  const setPageLoading = (status: boolean) => setLoader(status);
+  const setPageLoading = useCallback((status: boolean) => setLoader(status), []);
 
   const renderProductPrice = (product: Product): JSX.Element => {
     if (product.sale_price) {
@@ -96,22 +97,24 @@ export const MyStoreProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   // --- Cart Functions ---
-  const addProductsToCart = (product: Product) => {
+  const addProductsToCart = useCallback((product: Product) => {
     const cartFromStorage: Product[] = JSON.parse(localStorage.getItem("cart") || "[]");
 
-    const productExists = cartFromStorage.find((item) => item.id === product.id);
+    const existingIndex = cartFromStorage.findIndex((item) => item.id === product.id);
+    const updatedCart = [...cartFromStorage];
 
-    if (productExists) {
-      productExists.quantity = (productExists.quantity || 1) + (product.quantity || 1);
+    if (existingIndex >= 0) {
+      const existing = { ...updatedCart[existingIndex] };
+      existing.quantity = (existing.quantity || 1) + (product.quantity || 1);
+      updatedCart[existingIndex] = existing;
     } else {
-      product.quantity = product.quantity || 1;
-      cartFromStorage.push(product);
+      updatedCart.push({ ...product, quantity: product.quantity || 1 });
     }
 
-    setCart([...cartFromStorage]);
-    localStorage.setItem("cart", JSON.stringify(cartFromStorage));
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
     toast.success("Product added to Cart!");
-  };
+  }, []);
 
   const removeItemsFromCart = (product: Product) => {
     if (window.confirm(t("cart.removeConfirm", "Are you sure you want to remove this item?"))) {
@@ -125,24 +128,27 @@ export const MyStoreProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   // --- New addToCart function ---
-  const addToCart = (item: {
-    title: string;
-    price: number;
-    image: string;
-    product_id: number | string;
-    quantity?: number;
-    variants?: Record<string, string>;
-  }) => {
-    const productToAdd: Product = {
-      id: Number(item.product_id),
-      name: item.title,
-      regular_price: item.price.toString(),
-      quantity: item.quantity || 1,
-      images: [{ src: item.image }],
-      price: ""
-    };
-    addProductsToCart(productToAdd);
-  };
+  const addToCart = useCallback(
+    (item: {
+      title: string;
+      price: number;
+      image: string;
+      product_id: number | string;
+      quantity?: number;
+      variants?: Record<string, string>;
+    }) => {
+      const productToAdd: Product = {
+        id: Number(item.product_id),
+        name: item.title,
+        regular_price: item.price.toString(),
+        quantity: item.quantity || 1,
+        images: [{ src: item.image }],
+        price: ""
+      };
+      addProductsToCart(productToAdd);
+    },
+    [addProductsToCart]
+  );
 
   // --- Initial Load ---
   useEffect(() => {
