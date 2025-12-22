@@ -15,11 +15,12 @@ interface Product {
   description?: string;
   short_description?: string;
   stock_status?: string;
-  images: { id: number; src: string }[];
+  images?: { id?: number; src: string }[];
   attributes?: { id: number; name: string; options: string[] }[];
   meta_data?: { key: string; value: string }[];
   categories?: { id: number; name: string; slug: string }[];
   quantity?: number; // for cart
+  [key: string]: unknown; // keep compatible with MyStoreContext
 }
 
 interface Variation {
