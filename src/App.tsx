@@ -44,7 +44,15 @@ function App() {
             />
           }
         />
-        <Route path="/products/:id" element={<ProductPage />} />
+        <Route
+          path="/products/:id"
+          element={
+            <ProductPage
+              onAddToCart={addProductsToCart}
+              setPageLoading={setPageLoading}
+            />
+          }
+        />
         <Route path="/categories" element={<Categories />} />
 
         <Route path="/cart" element={<Cart />} />
