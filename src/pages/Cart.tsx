@@ -95,8 +95,8 @@ const Cart = () => {
         <h1 className="text-2xl font-bold mb-6">{t("cart.title")}</h1>
 
         {cartItems.length === 0 ? (
-          <div className="text-center text-gray-500">
-            <FaRegFrown className="mx-auto mb-4 text-6xl" />
+          <div className="text-center text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+            <FaRegFrown className="mx-auto mb-4 text-6xl text-gray-500" />
             <p>{t("cart.emptyMessage")}</p>
             <table className="min-w-full border mt-6">
               <thead>
@@ -110,7 +110,7 @@ const Cart = () => {
               </thead>
               <tbody>
                 <tr>
-                  <td className="p-3 text-center text-gray-400" colSpan={5}>
+                  <td className="p-3 text-center text-gray-500" colSpan={5}>
                     {t("cart.noItems")}
                   </td>
                 </tr>
@@ -118,10 +118,20 @@ const Cart = () => {
             </table>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto bg-white border border-gray-200 rounded-lg shadow-sm p-6 text-gray-900">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold">{t("cart.itemsSection")}</h2>
+              <div className="flex items-center gap-2 text-sm text-gray-700">
+                <span className="inline-flex items-center rounded-full bg-indigo-50 px-2 py-1 text-indigo-700 font-semibold border border-indigo-100">
+                  Stripe
+                </span>
+                <span>{t("cart.secureStripe", "Secure checkout powered by Stripe")}</span>
+              </div>
+            </div>
+
             <table className="min-w-full border">
               <thead>
-                <tr className="bg-gray-100 text-left">
+                <tr className="bg-gray-100 text-left text-gray-900">
                   <th className="p-3 border-b">{t("cart.image")}</th>
                   <th className="p-3 border-b">{t("cart.product")}</th>
                   <th className="p-3 border-b">{t("cart.unitPrice")}</th>
@@ -131,7 +141,7 @@ const Cart = () => {
               </thead>
               <tbody>
                 {cartItems.map((item, index) => (
-                  <tr key={item.id ?? index} className="border-t">
+                  <tr key={item.id ?? index} className="border-t text-gray-900">
                     <td className="p-3">
                       <img
                         src={item?.images?.[0]?.src || "/placeholder.svg"}
@@ -161,16 +171,11 @@ const Cart = () => {
             </table>
 
             <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center mt-6 gap-4">
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1 text-gray-900">
                 <h3 className="text-xl font-semibold">
                   {t("cart.total")}: {calculateTotalItemsPrice()}
                 </h3>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span className="inline-flex items-center rounded-full bg-indigo-50 px-2 py-1 text-indigo-700 font-semibold border border-indigo-100">
-                    Stripe
-                  </span>
-                  <span>{t("cart.secureStripe", "Secure checkout powered by Stripe")}</span>
-                </div>
+                <span className="text-sm text-gray-700">{t("cart.reviewItems")}</span>
               </div>
 
               <button

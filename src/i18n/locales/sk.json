@@ -142,6 +142,8 @@
     "action": "Akcia",
     "noItems": "Žiadne položky v košíku.",
     "remove": "Odstrániť",
+    "itemsSection": "Položky vo vašom košíku",
+    "reviewItems": "Skontrolujte nižšie svoje položky",
     "total": "Celkom",
     "checkout": "Pokračovať k pokladni",
     "processing": "Spracováva sa...",

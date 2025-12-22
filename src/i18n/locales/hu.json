@@ -144,6 +144,8 @@
     "action": "Művelet",
     "noItems": "Nincsenek tételek a kosárban.",
     "remove": "Eltávolítás",
+    "itemsSection": "Kosárban lévő termékek",
+    "reviewItems": "Ellenőrizd az alábbi tételeket",
     "total": "Összesen",
     "checkout": "Tovább a fizetéshez",
     "processing": "Feldolgozás...",

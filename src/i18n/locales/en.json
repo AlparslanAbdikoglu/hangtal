@@ -144,6 +144,8 @@
     "items": "{{count}} items",
     "empty": "Your cart is empty",
     "clearAll": "Clear All",
+    "itemsSection": "Items in your cart",
+    "reviewItems": "Review your items below",
     "total": "Total",
     "checkout": "Proceed to Checkout",
     "addToCart": "Add to Cart",

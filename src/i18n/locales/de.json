@@ -142,6 +142,8 @@
     "action": "Aktion",
     "noItems": "Keine Artikel im Warenkorb.",
     "remove": "Entfernen",
+    "itemsSection": "Artikel in deinem Warenkorb",
+    "reviewItems": "Überprüfe unten deine Artikel",
     "total": "Gesamt",
     "checkout": "Zur Kasse",
     "processing": "Wird verarbeitet...",
