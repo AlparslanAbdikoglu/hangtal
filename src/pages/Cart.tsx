@@ -104,7 +104,7 @@ const Cart = () => {
                   <th className="p-3 border-b">{t("cart.image")}</th>
                   <th className="p-3 border-b">{t("cart.product")}</th>
                   <th className="p-3 border-b">{t("cart.unitPrice")}</th>
-                  <th className="p-3 border-b">{t("cart.quantity")}</th>
+                  <th className="p-3 border-b text-center">{t("cart.quantity")}</th>
                   <th className="p-3 border-b">{t("cart.action")}</th>
                 </tr>
               </thead>
@@ -135,7 +135,7 @@ const Cart = () => {
                   <th className="p-3 border-b">{t("cart.image")}</th>
                   <th className="p-3 border-b">{t("cart.product")}</th>
                   <th className="p-3 border-b">{t("cart.unitPrice")}</th>
-                  <th className="p-3 border-b">{t("cart.quantity")}</th>
+                  <th className="p-3 border-b text-center">{t("cart.quantity")}</th>
                   <th className="p-3 border-b">{t("cart.action")}</th>
                 </tr>
               </thead>
@@ -149,10 +149,25 @@ const Cart = () => {
                         className="w-12 h-12 object-cover rounded"
                       />
                     </td>
-                    <td className="p-3">{item.name}</td>
-                    <td className="p-3">{renderProductPrice(item)}</td>
-                    <td className="p-3">{item.quantity || 1}</td>
                     <td className="p-3">
+                      <div className="flex items-center justify-between sm:block">
+                        <span>{item.name}</span>
+                        <button
+                          onClick={() =>
+                            removeItemsFromCart({
+                              ...item,
+                              price: item.price.toString(),
+                            })
+                          }
+                          className="text-red-600 hover:text-red-800 sm:hidden ml-2"
+                        >
+                          {t("cart.remove")}
+                        </button>
+                      </div>
+                    </td>
+                    <td className="p-3">{renderProductPrice(item)}</td>
+                    <td className="p-3 text-center">{item.quantity || 1}</td>
+                    <td className="p-3 hidden sm:table-cell">
                       <button
                         onClick={() =>
                           removeItemsFromCart({

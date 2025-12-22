@@ -43,7 +43,7 @@ export const Navbar = () => {
             <img
               src="/images/PalAdri-logo-light.png"
               alt="HangAkadémia logó"
-              className="h-20 md:h-24 w-auto"
+              className="h-20 md:h-32 lg:h-40 w-auto"
             />
           </div>
     
